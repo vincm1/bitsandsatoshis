@@ -2,22 +2,25 @@
 import SignupForm from "./SignupForm.astro";
 
 interface Props {
-  /** Überschrift des CTA-Blocks. */
   title?: string;
-  /** Begleittext unter der Überschrift. */
   text?: string;
 }
 
 const {
-  title = "Bitcoin verstehen — einmal pro Woche",
-  text = "Trag dich ein und bekomme die nächste Ausgabe direkt in dein Postfach. Kostenlos, jederzeit kündbar, kein Spam.",
+  title = "Fang an, Bitcoin wirklich zu verstehen.",
+  text = "Jede Woche eine ruhige, klare Ausgabe — kostenlos in dein Postfach. Kein Hype, kein Spam, jederzeit kündbar.",
 } = Astro.props;
 ---
 
-<div class="rounded-box border border-base-300 bg-base-200 p-8 text-center sm:p-10">
-  <h2 class="text-2xl font-bold sm:text-3xl">{title}</h2>
-  <p class="mx-auto mt-3 max-w-md text-base-content/70">{text}</p>
-  <div class="mx-auto mt-6 max-w-md">
-    <SignupForm />
+<section class="border-t border-base-content/15 bg-base-200/40">
+  <div class="mx-auto max-w-3xl px-6 py-16 text-center sm:py-20">
+    <p class="eyebrow mb-4">Kostenlos abonnieren</p>
+    <h2 class="font-display text-3xl font-semibold leading-tight sm:text-4xl">
+      {title}
+    </h2>
+    <p class="mx-auto mt-4 max-w-md text-base-content/65">{text}</p>
+    <div class="mx-auto mt-8 max-w-md text-left">
+      <SignupForm variant="inline" />
+    </div>
   </div>
-</div>
+</section>

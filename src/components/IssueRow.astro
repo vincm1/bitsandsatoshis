@@ -1,0 +1,44 @@
+---
+import type { NewsletterPost } from "../lib/beehiiv";
+import { formatDate } from "../lib/format";
+
+interface Props {
+  post: NewsletterPost;
+  /** Laufende Ausgabennummer, z.B. "014". Optional. */
+  nr?: string;
+}
+
+const { post, nr } = Astro.props;
+const href = `/newsletter/${post.slug}`;
+---
+
+<a
+  href={href}
+  class="group grid grid-cols-[1fr_auto] items-baseline gap-x-5 gap-y-1 border-b border-base-content/12 py-6 transition-colors hover:bg-base-200/50 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+>
+  {
+    nr && (
+      <span class="font-display order-1 text-lg font-semibold text-primary/80 sm:text-2xl">
+        Nº {nr}
+      </span>
+    )
+  }
+  <span class="order-3 min-w-0 sm:order-2">
+    <span class="font-display block text-2xl font-medium leading-snug sm:text-3xl">
+      {post.title}
+    </span>
+    {
+      (post.publishedAt || post.teaser) && (
+        <span class="mt-1 block text-sm text-base-content/55">
+          {post.publishedAt && formatDate(post.publishedAt)}
+          {post.publishedAt && post.teaser && " — "}
+          {post.teaser}
+        </span>
+      )
+    }
+  </span>
+  <span
+    class="order-2 text-xl text-base-content/30 transition-all group-hover:translate-x-1 group-hover:text-primary sm:order-3"
+    aria-hidden="true">→</span
+  >
+</a>

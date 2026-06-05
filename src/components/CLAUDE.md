@@ -55,15 +55,14 @@ interface Props {
   und wird zu einer zentrierten, **runden** Leiste mit `bg-base-100/80` +
   `backdrop-blur` + `shadow-lg` — **ohne Border**. Logo & Padding schrumpfen
   leicht. Der Seitenabstand entsteht aus Header-`px` + schmalerer `max-width`.
-- Logo-Lockup: `/logo.svg` (größer, `h-14`→`h-11` beim Scrollen, dreht sich
-  leicht bei Hover) + zweizeiliger Schriftzug — Wortmarke (`Bits&Satoshis`,
-  `&` in `primary`) über dem Untertitel „Der Bitcoin Newsletter" in
-  Playfair-Kursiv (`.accent`, gedämpft).
+- Logo: nur `/logo.svg`, groß integriert (`h-16 sm:h-20` oben → `h-12 sm:h-14`
+  beim Scrollen, dreht sich leicht bei Hover). Kein Text-Schriftzug daneben —
+  das Emblem enthält den Namen; barrierefrei über `alt`.
 - **Ästhetik:** editoriale Masthead. Nav-Links als Kapitälchen (`uppercase`,
   `tracking-[0.14em]`) mit animierter Orange-Unterstreichung (`after:scale-x`);
   Active-Link über die `currentPath`-Prop (kein Hydration-Flash, SSR-korrekt).
-- **CTA:** Orange Pille mit Pfeil-Icon (gleitet bei Hover), warmem Glow
-  (`shadow-primary/30`, kein Hex) und sanftem Anheben.
+- **CTA:** „Kostenlos abonnieren" — orange Pille mit Pfeil-Icon (gleitet bei
+  Hover), warmem Glow (`shadow-primary/30`, kein Hex) und sanftem Anheben.
 - **Einblenden:** gestaffelte Lade-Animation (`nav-rise`/`nav-fade`, scoped
   Styles) mit `prefers-reduced-motion`-Fallback.
 - Mobile: Burger (`lg:hidden`) öffnet ein Panel (Vue-`transition`); zentrierte

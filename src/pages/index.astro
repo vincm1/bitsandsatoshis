@@ -1,57 +1,50 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
-import PostCard from "../components/PostCard.astro";
+import IssueRow from "../components/IssueRow.astro";
 import SignupCta from "../components/SignupCta.astro";
 import { getPosts } from "../lib/beehiiv";
 
-const posts = await getPosts({ limit: 3 });
+const posts = await getPosts({ limit: 4 });
+const total = posts.length;
 ---
 
 <Layout>
   <Hero />
 
-  {/* Positionierung */}
-  <section class="border-y border-base-300 bg-base-200">
-    <div class="mx-auto max-w-3xl px-4 py-16 text-center">
-      <h2 class="text-2xl font-bold sm:text-3xl">
-        Verstehen <span class="accent text-primary">statt</span> spekulieren
-      </h2>
-      <p class="mx-auto mt-4 max-w-2xl text-base-content/70">
-        Bits&Satoshis nimmt sich Zeit. Statt täglicher Kurspanik bekommst du
-        einmal pro Woche eine ruhige, gut recherchierte Einordnung — für alle,
-        die Bitcoin wirklich begreifen wollen, vom Einsteiger bis zum
-        Fortgeschrittenen.
-      </p>
-    </div>
-  </section>
-
-  {/* Letzte Ausgaben */}
-  <section class="mx-auto max-w-5xl px-4 py-16">
-    <div class="mb-8 flex items-end justify-between">
-      <h2 class="text-2xl font-bold sm:text-3xl">Letzte Ausgaben</h2>
-      <a href="/archiv" class="text-sm font-semibold text-primary hover:underline">
+  {/* Letzte Ausgaben — editoriale Liste */}
+  <section class="mx-auto max-w-5xl px-6 pb-20">
+    <div
+      class="mb-2 flex items-baseline justify-between border-t border-base-content/15 pt-8"
+    >
+      <h2 class="eyebrow">Letzte Ausgaben</h2>
+      <a
+        href="/archiv"
+        class="text-xs font-semibold uppercase tracking-[0.14em] text-primary hover:underline"
+      >
         Alle ansehen →
       </a>
     </div>
 
     {
       posts.length > 0 ? (
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <PostCard post={post} />
+        <ul>
+          {posts.map((post, i) => (
+            <li>
+              <IssueRow
+                post={post}
+                nr={String(total - i).padStart(3, "0")}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
-        <p class="text-base-content/60">
+        <p class="py-6 text-base-content/60">
           Noch keine Ausgaben veröffentlicht. Bald geht es los!
         </p>
       )
     }
   </section>
 
-  {/* Abschließender Signup-CTA */}
-  <section class="mx-auto max-w-3xl px-4 pb-16">
-    <SignupCta />
-  </section>
+  <SignupCta />
 </Layout>

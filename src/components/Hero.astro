@@ -1,33 +1,70 @@
 ---
 import SignupForm from "./SignupForm.astro";
+
+const valueProps = [
+  {
+    title: "Fünf Minuten",
+    text: "Eine Ausgabe pro Woche, klar und kompakt — kein Zeitfresser.",
+  },
+  {
+    title: "Kein Hype",
+    text: "Keine Kurse, keine Prognosen, kein Trading. Nur Substanz.",
+  },
+  {
+    title: "Zum Verstehen",
+    text: "Vom ersten Satoshi bis zur Selbstverwahrung — Schritt für Schritt.",
+  },
+];
 ---
 
-<section class="relative overflow-hidden">
-  {/* dezenter Orange-Schimmer im Hintergrund */}
-  <div
-    class="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
-    aria-hidden="true">
+<section class="mx-auto max-w-5xl px-6 pb-16 pt-16 sm:pt-24">
+  <!-- Eyebrow mit redaktionellem Strich -->
+  <div class="mb-7 flex items-center gap-3">
+    <span class="h-px w-8 bg-primary"></span>
+    <p class="eyebrow">Der ruhige Bitcoin-Newsletter</p>
   </div>
 
-  <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:py-28">
-    <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
-      Bitcoin-Newsletter
-    </p>
-    <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-      Der ruhige Bitcoin-Newsletter für Menschen,<br class="hidden sm:block" />
-      <span class="accent text-primary">die verstehen wollen</span> — nicht
-      spekulieren.
-    </h1>
-    <p class="mx-auto mt-6 max-w-xl text-lg text-base-content/70">
-      Einmal pro Woche ein klarer Gedanke zu Bitcoin. Ohne Kursgeschrei, ohne
-      Hype — nur das, was wirklich zählt.
+  <h1
+    class="font-display font-semibold leading-[0.96] text-[clamp(2.75rem,7.5vw,5.75rem)]"
+  >
+    Verstehen statt<br />
+    <span class="accent text-primary">spekulieren.</span>
+  </h1>
+
+  <div class="mt-10 grid gap-10 md:grid-cols-[1.25fr_1fr] md:items-end">
+    <p class="max-w-xl text-lg leading-relaxed text-base-content/75 sm:text-xl">
+      Die meisten Bitcoin-Inhalte schreien, prognostizieren und wollen dir etwas
+      verkaufen. <span class="accent text-base-content">Wir nicht.</span> Jede Woche
+      eine ruhige E-Mail, die Bitcoin Schritt für Schritt erklärt — verständlich,
+      ehrlich und in fünf Minuten gelesen.
     </p>
 
-    <div class="mx-auto mt-10 max-w-md">
-      <SignupForm />
+    <div>
+      <SignupForm variant="inline" />
       <p class="mt-3 text-xs text-base-content/50">
-        Kostenlos. Jederzeit kündbar. Kein Spam.
+        Kostenlos · jede Woche · jederzeit kündbar · kein Spam
+      </p>
+      <p class="mt-2 flex items-center gap-2 text-sm text-base-content/60">
+        <span class="text-primary">★★★★★</span>
+        Schon <span class="font-semibold text-base-content">4.200 Leser</span> lesen
+        mit
       </p>
     </div>
+  </div>
+
+  <!-- Value Props, redaktionell als Spalten -->
+  <div
+    class="mt-16 grid gap-8 border-t border-base-content/12 pt-8 sm:grid-cols-3"
+  >
+    {
+      valueProps.map((vp) => (
+        <div>
+          <p class="font-display text-lg font-semibold">{vp.title}</p>
+          <p class="mt-1 text-sm leading-relaxed text-base-content/60">
+            {vp.text}
+          </p>
+        </div>
+      ))
+    }
   </div>
 </section>
