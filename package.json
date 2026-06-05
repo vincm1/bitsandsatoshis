@@ -12,6 +12,23 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.4.4"
+    "@astrojs/vercel": "^10.0.8",
+    "@astrojs/vue": "^6.0.1",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.4",
+    "daisyui": "^5.5.20",
+    "tailwindcss": "^4.3.0",
+    "vue": "^3.5.35"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19"
   }
 }

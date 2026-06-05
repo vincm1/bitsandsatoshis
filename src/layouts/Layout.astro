@@ -1,23 +1,48 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/inter/800.css";
+import "@fontsource/playfair-display/400-italic.css";
+import "@fontsource/playfair-display/500-italic.css";
+import "@fontsource/playfair-display/600-italic.css";
+import "../styles/global.css";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+import Navbar from "../components/Navbar.vue";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Bits&Satoshis — Der ruhige Bitcoin-Newsletter",
+  description = "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen — nicht spekulieren.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-base-100 text-base-content antialiased">
+    <Navbar client:load currentPath={Astro.url.pathname} />
+    <main class="flex-1 pt-24 sm:pt-28">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

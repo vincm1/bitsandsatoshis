@@ -1,0 +1,38 @@
+---
+import SignupForm from "./SignupForm.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-base-300 bg-base-200">
+  <div class="mx-auto max-w-5xl px-4 py-12">
+    <div class="grid gap-10 md:grid-cols-2">
+      <div>
+        <div class="flex items-center gap-2 text-lg font-extrabold tracking-tight">
+          <span
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-extrabold text-primary-content"
+            aria-hidden="true">₿</span>
+          <span>Bits<span class="text-primary">&</span>Satoshis</span>
+        </div>
+        <p class="mt-3 max-w-sm text-sm text-base-content/70">
+          Der ruhige Bitcoin-Newsletter für Menschen,
+          <span class="accent">die verstehen wollen</span> — nicht spekulieren.
+        </p>
+      </div>
+
+      <div id="newsletter" class="scroll-mt-28">
+        <p class="mb-2 text-sm font-semibold">Newsletter abonnieren</p>
+        <SignupForm compact />
+      </div>
+    </div>
+
+    <div
+      class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-base-300 pt-6 text-sm text-base-content/60 sm:flex-row">
+      <p>© {year} Bits&Satoshis</p>
+      <nav class="flex gap-4">
+        <a href="/impressum" class="hover:text-primary">Impressum</a>
+        <a href="/datenschutz" class="hover:text-primary">Datenschutz</a>
+      </nav>
+    </div>
+  </div>
+</footer>

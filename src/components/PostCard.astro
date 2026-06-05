@@ -1,0 +1,49 @@
+---
+import type { NewsletterPost } from "../lib/beehiiv";
+import { formatDate } from "../lib/format";
+
+interface Props {
+  post: NewsletterPost;
+}
+
+const { post } = Astro.props;
+const href = `/newsletter/${post.slug}`;
+---
+
+<article
+  class="group card relative border border-base-300 bg-base-100 transition-shadow hover:shadow-md">
+  {
+    post.thumbnailUrl && (
+      <figure class="aspect-[16/9] overflow-hidden">
+        <img
+          src={post.thumbnailUrl}
+          alt={post.title}
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      </figure>
+    )
+  }
+  <div class="card-body gap-2">
+    {
+      post.publishedAt && (
+        <time
+          datetime={post.publishedAt.toISOString()}
+          class="text-xs font-medium uppercase tracking-wide text-base-content/50">
+          {formatDate(post.publishedAt)}
+        </time>
+      )
+    }
+    <h3 class="text-lg font-bold leading-snug">
+      <a href={href} class="after:absolute after:inset-0">
+        {post.title}
+      </a>
+    </h3>
+    {
+      post.teaser && (
+        <p class="line-clamp-3 text-sm text-base-content/70">{post.teaser}</p>
+      )
+    }
+    <span class="mt-1 text-sm font-semibold text-primary">Weiterlesen →</span>
+  </div>
+</article>

@@ -1,0 +1,75 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SignupCta from "../../components/SignupCta.astro";
+import { getPost } from "../../lib/beehiiv";
+import { formatDate } from "../../lib/format";
+
+const { slug } = Astro.params;
+
+const post = slug ? await getPost(slug) : null;
+
+if (!post) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+---
+
+<Layout
+  title={`${post.title} — Bits&Satoshis`}
+  description={post.teaser || post.subtitle}>
+  <article class="mx-auto max-w-2xl px-4 py-16">
+    <a
+      href="/archiv"
+      class="mb-8 inline-block text-sm font-semibold text-primary hover:underline">
+      ← Zurück zum Archiv
+    </a>
+
+    <header class="mb-10">
+      {
+        post.publishedAt && (
+          <time
+            datetime={post.publishedAt.toISOString()}
+            class="text-sm font-medium uppercase tracking-wide text-base-content/50">
+            {formatDate(post.publishedAt)}
+          </time>
+        )
+      }
+      <h1 class="mt-2 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+        {post.title}
+      </h1>
+      {
+        post.subtitle && (
+          <p class="mt-3 text-lg text-base-content/70">{post.subtitle}</p>
+        )
+      }
+    </header>
+
+    {
+      post.contentHtml ? (
+        <div class="prose prose-neutral max-w-none prose-a:text-primary prose-headings:font-bold" set:html={post.contentHtml} />
+      ) : (
+        <div class="rounded-box border border-base-300 bg-base-200 p-6">
+          <p class="text-base-content/70">
+            Der vollständige Inhalt dieser Ausgabe ist hier noch nicht
+            verfügbar.
+          </p>
+          {post.webUrl && post.webUrl !== "#" && (
+            <a
+              href={post.webUrl}
+              class="btn btn-primary mt-4"
+              target="_blank"
+              rel="noopener">
+              Auf beehiiv lesen →
+            </a>
+          )}
+        </div>
+      )
+    }
+
+    <div class="mt-16">
+      <SignupCta
+        title="Noch nicht abonniert?"
+        text="Erhalte die nächste Ausgabe direkt in dein Postfach — einmal pro Woche, ruhig und klar."
+      />
+    </div>
+  </article>
+</Layout>

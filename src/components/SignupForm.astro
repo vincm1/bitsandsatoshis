@@ -1,0 +1,61 @@
+---
+import { actions, isInputError } from "astro:actions";
+
+interface Props {
+  /** Kompakte Variante (z.B. im Footer): nur eine Zeile. */
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
+const result = Astro.getActionResult(actions.subscribe);
+const inputError = result?.error && isInputError(result.error)
+  ? result.error.fields.email?.[0]
+  : undefined;
+const failed = result?.error && !inputError;
+const success = result && !result.error;
+---
+
+<form
+  method="POST"
+  action={actions.subscribe}
+  class:list={[
+    "w-full",
+    compact ? "flex gap-2" : "flex flex-col gap-3 sm:flex-row",
+  ]}>
+  <div class="flex-1">
+    <label class="sr-only" for={compact ? "email-footer" : "email-hero"}>
+      E-Mail-Adresse
+    </label>
+    <input
+      id={compact ? "email-footer" : "email-hero"}
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      placeholder="deine@email.de"
+      class="input input-bordered w-full bg-base-100"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary whitespace-nowrap">
+    Abonnieren
+  </button>
+</form>
+
+{
+  success && (
+    <p class="mt-2 text-sm font-medium text-success">{result.data.message}</p>
+  )
+}
+{
+  inputError && (
+    <p class="mt-2 text-sm font-medium text-error">{inputError}</p>
+  )
+}
+{
+  failed && (
+    <p class="mt-2 text-sm font-medium text-error">
+      Da ist etwas schiefgelaufen. Bitte versuche es später erneut.
+    </p>
+  )
+}
