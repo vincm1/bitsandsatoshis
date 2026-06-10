@@ -1,10 +1,4 @@
 ---
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/inter/800.css";
-import "@fontsource-variable/fraunces";
 import "../styles/global.css";
 
 import Navbar from "../components/Navbar.vue";
@@ -35,10 +29,17 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Chaney + Satoshi Variable — Fontshare CDN -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=chaney@400&f[]=satoshi@900,700,500,400,300&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class="flex min-h-screen flex-col bg-base-100 text-base-content antialiased">
     <Navbar client:load currentPath={Astro.url.pathname} />
-    <main class="flex-1 pt-28 sm:pt-32">
+    <!-- pt berücksichtigt Announcement Bar (~40px) + Nav (~56px) -->
+    <main class="flex-1 pt-32 sm:pt-36">
       <slot />
     </main>
     <Footer />

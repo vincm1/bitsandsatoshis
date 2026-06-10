@@ -24,6 +24,14 @@ getPosts(opts?: { limit?: number }): Promise<NewsletterPost[]>   // neueste zuer
 getPost(slugOrId: string): Promise<NewsletterPost | null>        // inkl. contentHtml
 subscribe(email: string): Promise<{ ok: boolean; message: string }>
 ```
+
+### contentHtml — Bereinigung
+`getPost` lädt `free_rss_content` (bevorzugt, sauber) + `free_web_content`
+(Fallback, Artikel steckt in `#content-blocks`). `extractArticleHtml()` strippt
+beehiiv-Chrome (Header/Byline/Share-Buttons), `<script>`/`<style>` sowie alle
+`style=`/`class=`-Attribute — Typografie kommt allein aus `.article-prose` der
+Detailseite. Bei reinen E-Mail-Posts ohne RSS-Inhalt ist `contentHtml` null
+(Seite zeigt dann den Fallback-Block).
 `NewsletterPost` ist die für die UI normalisierte Form (id, slug, title,
 subtitle, teaser, publishedAt, thumbnailUrl, webUrl, contentHtml).
 

@@ -1,38 +1,218 @@
 ---
-import SignupForm from "./SignupForm.astro";
+import FooterSignup from "./FooterSignup.vue";
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-24 border-t border-base-300 bg-base-200">
-  <div class="mx-auto max-w-5xl px-4 py-12">
-    <div class="grid gap-10 md:grid-cols-2">
-      <div>
-        <div class="flex items-center gap-2 text-lg font-extrabold tracking-tight">
-          <span
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-extrabold text-primary-content"
-            aria-hidden="true">₿</span>
-          <span>Bits<span class="text-primary">&</span>Satoshis</span>
-        </div>
-        <p class="mt-3 max-w-sm text-sm text-base-content/70">
-          Der ruhige Bitcoin-Newsletter für Menschen,
-          <span class="accent">die verstehen wollen</span> — nicht spekulieren.
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <!-- ── Haupt-Grid: Brand | Signup ──────────────── -->
+    <div class="footer-main">
+
+      <!-- Brand-Seite -->
+      <div class="footer-brand">
+        <a href="/" class="footer-logo-link" aria-label="Bits&Satoshis — Startseite">
+          <img src="/logo.svg" alt="Bits&Satoshis" class="footer-logo" />
+        </a>
+        <p class="footer-statement">BITCOIN<br />VERSTEHEN.</p>
+        <p class="footer-tagline">
+          Der ruhige Newsletter für den deutschsprachigen Raum.<br />
+          Kein Trading, kein Hype, kein Lärm.
         </p>
       </div>
 
-      <div id="newsletter" class="scroll-mt-28">
-        <p class="mb-2 text-sm font-semibold">Newsletter abonnieren</p>
-        <SignupForm variant="compact" />
+      <!-- Signup-Seite -->
+      <div id="newsletter" class="footer-signup scroll-mt-28">
+        <p class="footer-signup-eyebrow">Newsletter abonnieren</p>
+        <FooterSignup client:visible />
+        <p class="footer-signup-note">
+          Jede Woche · kostenlos · jederzeit kündbar
+        </p>
       </div>
+
     </div>
 
-    <div
-      class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-base-300 pt-6 text-sm text-base-content/60 sm:flex-row">
-      <p>© {year} Bits&Satoshis</p>
-      <nav class="flex gap-4">
-        <a href="/impressum" class="hover:text-primary">Impressum</a>
-        <a href="/datenschutz" class="hover:text-primary">Datenschutz</a>
+    <!-- ── Bottom-Bar ────────────────────────────────── -->
+    <div class="footer-bottom">
+      <p class="footer-copy">© {year} Bits&Satoshis</p>
+      <nav class="footer-nav" aria-label="Rechtliches">
+        <a href="/impressum">Impressum</a>
+        <a href="/datenschutz">Datenschutz</a>
       </nav>
     </div>
+
   </div>
 </footer>
+
+<style>
+  /* ── Grundstruktur ───────────────────────────────── */
+  .footer {
+    margin-top: 6rem;
+    background: var(--c-orange);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtiles Raster-Muster für Tiefe */
+  .footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(253,250,245,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(253,250,245,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Großes typografisches Wasserzeichen rechts */
+  .footer::after {
+    content: "₿";
+    position: absolute;
+    right: -0.05em;
+    bottom: -0.15em;
+    font-family: var(--f-display);
+    font-size: clamp(14rem, 28vw, 22rem);
+    font-weight: 400;
+    line-height: 1;
+    color: rgba(34, 26, 15, 0.07);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+
+  .footer-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2rem;
+  }
+
+  /* ── Haupt-Grid ──────────────────────────────────── */
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(253, 250, 245, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    .footer-main {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  /* ── Brand-Seite ─────────────────────────────────── */
+  .footer-logo-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    transition: opacity 160ms ease;
+  }
+
+  .footer-logo-link:hover {
+    opacity: 0.8;
+  }
+
+  .footer-logo {
+    height: 52px;
+    width: auto;
+    /* Invert to white for orange background */
+    filter: brightness(0) invert(1);
+  }
+
+  .footer-statement {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 0.9;
+    color: #fdfaf5;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-tagline {
+    font-family: var(--f-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: rgba(253, 250, 245, 0.65);
+    max-width: 34ch;
+  }
+
+  /* ── Signup-Seite ────────────────────────────────── */
+  .footer-signup {
+    padding-top: 0.125rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .footer-signup-eyebrow {
+    font-family: var(--f-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(253, 250, 245, 0.55);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-signup-note {
+    margin-top: 0.875rem;
+    font-family: var(--f-body);
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(253, 250, 245, 0.45);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Bottom-Bar ──────────────────────────────────── */
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  .footer-copy {
+    font-family: var(--f-body);
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(253, 250, 245, 0.4);
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-nav a {
+    font-family: var(--f-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(253, 250, 245, 0.45);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .footer-nav a:hover {
+    color: #fdfaf5;
+  }
+</style>

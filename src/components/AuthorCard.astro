@@ -1,0 +1,162 @@
+---
+/**
+ * Autorenbox „Aus der Redaktion" — Zeitungs-Konzept.
+ * Einsatz: Homepage (nach Ausgaben-Liste) + /ueber (oben, ohne Selbst-Link).
+ */
+interface Props {
+  /** Link „Mehr über mich" ausblenden (auf /ueber selbst). */
+  showLink?: boolean;
+}
+
+const { showLink = true } = Astro.props;
+---
+
+<section class="author-section">
+  <div class="author-card">
+    {
+      showLink ? (
+        <a href="/ueber" class="author-photo-link" aria-label="Mehr über Vincent">
+          <img
+            src="/author.png"
+            alt="Vincent — Autor von Bits&Satoshis"
+            class="author-photo"
+            width="120"
+            height="120"
+            loading="lazy"
+          />
+        </a>
+      ) : (
+        <span class="author-photo-link">
+          <img
+            src="/author.png"
+            alt="Vincent — Autor von Bits&Satoshis"
+            class="author-photo"
+            width="120"
+            height="120"
+            loading="lazy"
+          />
+        </span>
+      )
+    }
+
+    <div class="author-text">
+      <p class="author-eyebrow">Aus der Redaktion</p>
+      <h2 class="author-headline">HALLO, ICH BIN VINCENT.</h2>
+      <p class="author-body">
+        Bits&Satoshis ist mein Versuch, Bitcoin so zu erklären, wie ich es mir
+        selbst am Anfang gewünscht hätte: ruhig, ehrlich und ohne Kursgeschrei.
+        Hier geht es ums Verstehen — nicht um Preise, Prognosen oder Panik.
+      </p>
+      {
+        showLink && (
+          <a href="/ueber" class="author-link">
+            Mehr über mich <span class="author-arrow" aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .author-section {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  /* Clipping-Karte: weiß, harte Ink-Border, leicht rotiert */
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: var(--c-white);
+    border: var(--bd-strong);
+    padding: 1.75rem 2rem;
+    transform: rotate(-1deg);
+  }
+
+  @media (max-width: 640px) {
+    .author-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
+  .author-photo-link {
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .author-photo {
+    width: 120px;
+    height: 120px;
+    display: block;
+    /* Foto bringt seinen orangenen Ring im Asset mit */
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .author-photo-link:hover .author-photo {
+    transform: rotate(3deg);
+  }
+
+  .author-eyebrow {
+    font-family: var(--f-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-dust);
+    margin-bottom: 0.5rem;
+  }
+
+  .author-headline {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+    line-height: 1.05;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    letter-spacing: 0;
+    margin-bottom: 0.625rem;
+  }
+
+  .author-body {
+    font-family: var(--f-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.72;
+    color: var(--c-stone);
+    max-width: 56ch;
+    margin-bottom: 0.875rem;
+  }
+
+  .author-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--f-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-orange);
+    text-decoration: none;
+  }
+
+  .author-arrow {
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .author-link:hover .author-arrow {
+    transform: translateX(2px);
+  }
+
+  /* ── Reduced motion ──────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .author-photo,
+    .author-arrow {
+      transition: none;
+    }
+  }
+</style>

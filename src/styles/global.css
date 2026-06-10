@@ -2,45 +2,63 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
-/* Bits&Satoshis Custom-Theme — Bitcoin Orange auf Cremeweiß */
+/* Bits&Satoshis Custom-Theme v4.0 — Bitcoin Orange auf Zeitungsdruck-Paper */
 @plugin "daisyui/theme" {
   name: "bitsandsatoshis";
   default: true;
   prefersdark: false;
   color-scheme: light;
 
-  --color-base-100: #faf7f2; /* Cremeweiß */
-  --color-base-200: #f1ece2;
-  --color-base-300: #e6ddcf;
-  --color-base-content: #2d2d2d; /* Dunkelgrau */
+  --color-base-100: #F4EDE0;
+  --color-base-200: #EBE1CF;
+  --color-base-300: #DDD1BC;
+  --color-base-content: #221A0F;
 
-  --color-primary: #f7931a; /* Bitcoin Orange */
+  --color-primary: #E8832A;
   --color-primary-content: #ffffff;
 
-  --color-secondary: #2d2d2d;
-  --color-secondary-content: #faf7f2;
+  --color-secondary: #221A0F;
+  --color-secondary-content: #F4EDE0;
 
-  --color-accent: #f7931a;
+  --color-accent: #E8832A;
   --color-accent-content: #ffffff;
 
-  --color-neutral: #2d2d2d;
-  --color-neutral-content: #faf7f2;
+  --color-neutral: #221A0F;
+  --color-neutral-content: #F4EDE0;
 
   --color-info: #3b82f6;
   --color-success: #16a34a;
-  --color-warning: #f7931a;
+  --color-warning: #E8832A;
   --color-error: #dc2626;
 
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.75rem;
+  --radius-selector: 0rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
   --border: 1px;
 }
 
-/* Schrift-Tokens: Inter für Fließtext/UI, Fraunces als redaktionelle Display-Serif */
+/* Font tokens — Tailwind utilities: font-sans, font-display */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: "Fraunces Variable", "Fraunces", ui-serif, Georgia, serif;
+  --font-display: 'Chaney', sans-serif;
+  --font-sans:    'Satoshi Variable', 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Design system custom properties — source of truth for component CSS */
+:root {
+  --c-paper:  #F4EDE0;
+  --c-orange: #E8832A;
+  --c-ink:    #221A0F;
+  --c-stone:  #5C4F3A;
+  --c-dust:   #A89880;
+  --c-rule:   #C8BAA8;
+  --c-white:  #FDFAF5;
+
+  --f-display: 'Chaney', sans-serif;
+  --f-body:    'Satoshi Variable', 'Satoshi', sans-serif;
+
+  --bd:        1px solid #C8BAA8;
+  --bd-strong: 2px solid #221A0F;
+  --bd-orange: 2px solid #E8832A;
 }
 
 html {
@@ -48,27 +66,26 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--f-body);
 }
 
-/* Redaktionelle Display-Headlines (Fraunces) */
+/* Chaney display headlines */
 .font-display {
-  font-family: var(--font-serif);
-  font-optical-sizing: auto;
-  letter-spacing: -0.02em;
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
-/* Akzent-Helper: Fraunces-Kursiv für Akzentworte */
+/* Satoshi italic accent */
 .accent {
-  font-family: var(--font-serif);
   font-style: italic;
-  font-optical-sizing: auto;
 }
 
-/* Kapitälchen-Label (Eyebrows, Rubriken) */
+/* Eyebrow labels — Satoshi 700 small caps */
 .eyebrow {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: color-mix(in oklab, var(--color-base-content) 50%, transparent);

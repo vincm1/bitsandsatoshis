@@ -12,6 +12,12 @@ Hero.astro        ← Homepage-Hero mit Headline + SignupForm
 SignupForm.astro  ← E-Mail-Formular → Astro Action `subscribe`
 SignupCta.astro   ← Wiederverwendbarer Signup-CTA-Block (Box + SignupForm), Props: title/text
 PostCard.astro    ← Vorschau einer Newsletter-Ausgabe (Karte), Link auf /newsletter/[slug]
+AuthorCard.astro  ← „Aus der Redaktion"-Box: author.png + Chaney-Zeile + Link zu /ueber;
+                    Prop showLink={false} auf /ueber (kein Selbst-Link)
+Testimonials.astro← „Leserbriefe": 3 Zitate als asymmetrische Papier-Schnipsel
+                    (weiß/ink/weiß-strong), nur Dark-Card rotiert
+Faq.astro         ← „Noch Fragen?": natives <details>-Q&A im Zeitungsspalten-Stil,
+                    +→× Marker, Antwort-fadeIn nur beim Öffnen
 ```
 
 ## Design-Regeln für alle Komponenten

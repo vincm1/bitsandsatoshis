@@ -1,70 +1,431 @@
 ---
 import SignupForm from "./SignupForm.astro";
-
-const valueProps = [
-  {
-    title: "Fünf Minuten",
-    text: "Eine Ausgabe pro Woche, klar und kompakt — kein Zeitfresser.",
-  },
-  {
-    title: "Kein Hype",
-    text: "Keine Kurse, keine Prognosen, kein Trading. Nur Substanz.",
-  },
-  {
-    title: "Zum Verstehen",
-    text: "Vom ersten Satoshi bis zur Selbstverwahrung — Schritt für Schritt.",
-  },
-];
 ---
 
-<section class="mx-auto max-w-5xl px-6 pb-16 pt-16 sm:pt-24">
-  <!-- Eyebrow mit redaktionellem Strich -->
-  <div class="mb-7 flex items-center gap-3">
-    <span class="h-px w-8 bg-primary"></span>
-    <p class="eyebrow">Der ruhige Bitcoin-Newsletter</p>
-  </div>
+<section class="hero">
+  <div class="hero-inner">
 
-  <h1
-    class="font-display font-semibold leading-[0.96] text-[clamp(2.75rem,7.5vw,5.75rem)]"
-  >
-    Verstehen statt<br />
-    <span class="accent text-primary">spekulieren.</span>
-  </h1>
+    <!-- ── Masthead: Dateline + Vollbreite-Headline ── -->
+    <!-- Zeitungs-Titelseite: Headline dominiert die volle Breite -->
+    <header class="hero-masthead">
 
-  <div class="mt-10 grid gap-10 md:grid-cols-[1.25fr_1fr] md:items-end">
-    <p class="max-w-xl text-lg leading-relaxed text-base-content/75 sm:text-xl">
-      Die meisten Bitcoin-Inhalte schreien, prognostizieren und wollen dir etwas
-      verkaufen. <span class="accent text-base-content">Wir nicht.</span> Jede Woche
-      eine ruhige E-Mail, die Bitcoin Schritt für Schritt erklärt — verständlich,
-      ehrlich und in fünf Minuten gelesen.
-    </p>
+      <div class="hero-dateline">
+        <span class="dateline-left">
+          <span class="hero-dot"></span>
+          Der Bitcoin-Newsletter
+        </span>
+        <span class="dateline-right">Jeden Montag · Kostenlos</span>
+      </div>
 
-    <div>
-      <SignupForm variant="inline" />
-      <p class="mt-3 text-xs text-base-content/50">
-        Kostenlos · jede Woche · jederzeit kündbar · kein Spam
-      </p>
-      <p class="mt-2 flex items-center gap-2 text-sm text-base-content/60">
-        <span class="text-primary">★★★★★</span>
-        Schon <span class="font-semibold text-base-content">4.200 Leser</span> lesen
-        mit
-      </p>
+      <h1 class="hero-headline">
+        BITCOIN FÜR<br />
+        <span class="hero-accent">DENKER.</span>
+      </h1>
+
+    </header>
+
+    <!-- ── Zweispaltige Reihe: Pitch + Collage ──────── -->
+    <div class="hero-row">
+
+      <div class="hero-text">
+        <p class="hero-body">
+          Kein Hype, kein Trading, kein Schreien. Einmal pro Woche
+          ein klarer Gedanke — Bitcoin verstehen statt spekulieren.
+        </p>
+
+        <div class="hero-form-wrap">
+          <SignupForm />
+          <div class="hero-proof">
+            <span class="hero-stars">★★★★★</span>
+            <span>Schon <strong>4.200 Leser</strong> · jederzeit kündbar</span>
+          </div>
+        </div>
+      </div>
+
+      <!--
+        Collage — Papierstapel: Elemente überlappen bewusst
+        wie echtes Papier auf einem Schreibtisch.
+        Flow-Layout (Höhe content-getrieben), kein toter Raum.
+        Stapel-Reihenfolge: clip-card(1) < reader-card(2) < stamp(3)
+      -->
+      <div class="hero-collage" aria-hidden="true">
+
+        <div class="clip-card">
+          <p class="clip-kicker">Diese Woche</p>
+          <h3 class="clip-headline">
+            Warum Strategy Bitcoin kauft — und was das für dich bedeutet.
+          </h3>
+          <p class="clip-body">
+            Michael Saylor kauft wieder. Die meisten Schlagzeilen erklären
+            das falsch. Was wirklich dahintersteckt.
+          </p>
+          <div class="clip-footer">
+            <span class="clip-meta">5 Min. · Juni 2025</span>
+            <span class="clip-cta">Lesen →</span>
+          </div>
+          <div class="clip-issue-label">Ausgabe #47</div>
+
+          <!-- Stempel klebt auf der Karten-Ecke — wie eine Briefmarke -->
+          <div class="stamp">
+            <span class="stamp-num">21</span>
+            <span class="stamp-unit">MIO.</span>
+            <span class="stamp-label">LIMIT</span>
+          </div>
+
+          <!-- Bitcoin-Münze an der unteren Karten-Ecke -->
+          <div class="btc-coin">
+            <span class="btc-glyph">₿</span>
+          </div>
+        </div>
+
+        <!-- Quote-Karte liegt auf dem Stapel, überlappt die Clip-Karte -->
+        <div class="reader-card">
+          <div class="reader-quote-mark">"</div>
+          <p class="reader-quote">
+            Endlich ein Newsletter, der Bitcoin erklärt — ohne mich für dumm zu verkaufen.
+          </p>
+          <p class="reader-attr">Thomas K., Wien</p>
+        </div>
+
+      </div>
     </div>
   </div>
-
-  <!-- Value Props, redaktionell als Spalten -->
-  <div
-    class="mt-16 grid gap-8 border-t border-base-content/12 pt-8 sm:grid-cols-3"
-  >
-    {
-      valueProps.map((vp) => (
-        <div>
-          <p class="font-display text-lg font-semibold">{vp.title}</p>
-          <p class="mt-1 text-sm leading-relaxed text-base-content/60">
-            {vp.text}
-          </p>
-        </div>
-      ))
-    }
-  </div>
 </section>
+
+<style>
+  /* ── Hero Layout ──────────────────────────────────── */
+  .hero {
+    background: var(--c-paper);
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 4rem;
+  }
+
+  /* ── Masthead: Dateline ──────────────────────────── */
+  /* Zeitungskopf: Markenzeile links, Erscheinungsinfo rechts */
+  .hero-dateline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 0.625rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--f-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-stone);
+  }
+
+  .dateline-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dateline-right {
+    color: var(--c-dust);
+  }
+
+  @media (max-width: 480px) {
+    .dateline-right { display: none; }
+  }
+
+  .hero-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-orange);
+    flex-shrink: 0;
+  }
+
+  /* ── Masthead: Headline (Chaney, Vollbreite) ─────── */
+  /* DESIGN.md Display-H1-Skala: füllt den Viewport, kein Schrumpfen */
+  .hero-headline {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 8.5vw, 6rem);
+    line-height: 0.92;
+    letter-spacing: 0;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    text-wrap: balance;
+    margin-bottom: 2rem;
+  }
+
+  .hero-accent { color: var(--c-orange); }
+
+  /* ── Zweispaltige Reihe ──────────────────────────── */
+  .hero-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .hero-row {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+  }
+
+  /* ── Pitch-Spalte ────────────────────────────────── */
+  .hero-body {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--c-stone);
+    max-width: 44ch;
+    margin-bottom: 1.5rem;
+    text-wrap: pretty;
+  }
+
+  .hero-proof {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.65rem;
+    font-family: var(--f-body);
+    font-size: 12px;
+    color: var(--c-stone);
+  }
+
+  .hero-stars {
+    color: var(--c-orange);
+    letter-spacing: -0.05em;
+    font-size: 11px;
+  }
+
+  .hero-proof strong {
+    color: var(--c-ink);
+    font-weight: 700;
+  }
+
+  /* ══════════════════════════════════════════════════
+     COLLAGE — Papierstapel (Flow-Layout)
+     Höhe content-getrieben, Überlappungen via negativem
+     Margin — wie übereinander gelegtes Papier.
+     ══════════════════════════════════════════════════ */
+
+  .hero-collage {
+    position: relative;
+    /* Platz für den überstehenden Stempel oben rechts */
+    padding-top: 30px;
+    opacity: 0;
+    animation: collageIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  }
+
+  /* ── Clipping-Karte: Basis des Stapels ───────────── */
+  .clip-card {
+    position: relative;
+    background: var(--c-white);
+    border: var(--bd-strong);
+    padding: 1.25rem 1.25rem 0;
+    /* Rechts schmaler, damit die Quote-Karte versetzt wirkt */
+    margin-right: 1.5rem;
+    transform: rotate(-1.5deg);
+    transform-origin: top left;
+    z-index: 1;
+  }
+
+  .clip-issue-label {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    background: var(--c-orange);
+    color: #fff;
+    font-family: var(--f-body);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+  }
+
+  .clip-kicker {
+    font-family: var(--f-body);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-dust);
+    margin-bottom: 0.375rem;
+  }
+
+  .clip-headline {
+    font-family: var(--f-display);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .clip-body {
+    font-family: var(--f-body);
+    font-size: 11.5px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--c-stone);
+    padding-bottom: 0.625rem;
+  }
+
+  .clip-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--c-rule);
+    padding: 0.4rem 0 0.625rem;
+  }
+
+  .clip-meta {
+    font-family: var(--f-body);
+    font-size: 9.5px;
+    font-weight: 500;
+    color: var(--c-dust);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .clip-cta {
+    font-family: var(--f-body);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-orange);
+  }
+
+  /* ── Reader-Karte: liegt oben auf dem Stapel ─────── */
+  /* Negativer Margin zieht sie über die Clip-Karten-Ecke */
+  .reader-card {
+    position: relative;
+    background: var(--c-ink);
+    padding: 1rem 1.125rem;
+    transform: rotate(2deg);
+    width: min(70%, 250px);
+    margin: -2.75rem 0 0 auto;
+    z-index: 2;
+  }
+
+  .reader-quote-mark {
+    font-family: var(--f-display);
+    font-size: 2rem;
+    line-height: 0.75;
+    color: var(--c-orange);
+    margin-bottom: 0.25rem;
+  }
+
+  .reader-quote {
+    font-family: var(--f-body);
+    font-style: italic;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(244, 237, 224, 0.82);
+    margin-bottom: 0.4rem;
+  }
+
+  .reader-attr {
+    font-family: var(--f-body);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(244, 237, 224, 0.55);
+  }
+
+  /* ── Stempel: klebt auf der Karten-Ecke ──────────── */
+  /* Wie eine Briefmarke halb über dem Kartenrand */
+  .stamp {
+    position: absolute;
+    top: -26px;
+    right: -14px;
+    width: 72px;
+    height: 72px;
+    border: 2.5px solid var(--c-orange);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(10deg);
+    background: var(--c-paper);
+    z-index: 3;
+  }
+
+  .stamp-num {
+    font-family: var(--f-display);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--c-ink);
+    letter-spacing: 0;
+  }
+
+  .stamp-unit {
+    font-family: var(--f-body);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--c-orange);
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  .stamp-label {
+    font-family: var(--f-body);
+    font-size: 6px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--c-dust);
+    text-transform: uppercase;
+  }
+
+  /* ── Bitcoin-Münze: untere Karten-Ecke ───────────── */
+  /* Diagonal gegenüber dem Stempel — balanciert den Stapel */
+  .btc-coin {
+    position: absolute;
+    bottom: -18px;
+    left: -16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--c-orange);
+    border: 2px solid var(--c-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .btc-glyph {
+    font-family: var(--f-body);
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    /* Die typische 14°-Neigung des Bitcoin-Logos */
+    transform: rotate(14deg);
+  }
+
+  /* ── Keyframes ───────────────────────────────────── */
+  @keyframes collageIn {
+    from { opacity: 0; transform: translateX(28px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── Reduced motion ──────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-collage {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

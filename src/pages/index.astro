@@ -2,6 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import IssueRow from "../components/IssueRow.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+import Testimonials from "../components/Testimonials.astro";
+import Faq from "../components/Faq.astro";
 import SignupCta from "../components/SignupCta.astro";
 import { getPosts } from "../lib/beehiiv";
 
@@ -45,6 +48,12 @@ const total = posts.length;
       )
     }
   </section>
+
+  <AuthorCard />
+
+  <Testimonials />
+
+  <Faq />
 
   <SignupCta />
 </Layout>

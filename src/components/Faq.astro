@@ -1,0 +1,167 @@
+---
+/**
+ * „Noch Fragen?" — Q&A als Zeitungsspalte mit Trennlinien.
+ * Native <details>/<summary>: kein JS, tastaturbedienbar.
+ */
+const faqs = [
+  {
+    q: "Kostet das was?",
+    a: "Nein. Bits&Satoshis ist kostenlos und bleibt es. Keine Paywall, keine Premium-Stufe, keine versteckten Angebote.",
+  },
+  {
+    q: "Wie oft kommt der Newsletter?",
+    a: "Einmal pro Woche, jeden Montag. Eine Ausgabe liest sich in etwa fünf Minuten — mehr Zeit braucht ein klarer Gedanke nicht.",
+  },
+  {
+    q: "Muss ich schon etwas über Bitcoin wissen?",
+    a: "Nein. Der Newsletter ist für Einsteiger geschrieben, die verstehen wollen. Jedes Konzept wird erklärt, bevor es benutzt wird.",
+  },
+  {
+    q: "Gibt es Kaufempfehlungen?",
+    a: "Nein — und das ist Absicht. Bits&Satoshis ist keine Anlageberatung. Es geht ums Verstehen, nicht ums Spekulieren.",
+  },
+  {
+    q: "Warum nur Bitcoin und keine anderen Coins?",
+    a: "Weil Bitcoin und „Krypto“ zwei verschiedene Dinge sind. Bitcoin ist ein offenes, dezentrales Geldsystem — die meisten anderen Projekte sind es nicht. Diese Klarheit ist Teil des Newsletters.",
+  },
+  {
+    q: "Wie kündige ich?",
+    a: "Mit einem Klick. In jeder E-Mail findest du ganz unten einen Abmelde-Link — keine Rückfragen, kein Schuldgefühl.",
+  },
+] as const;
+---
+
+<section class="faq-section">
+  <header class="faq-header">
+    <h2 class="faq-headline">NOCH FRAGEN?</h2>
+    <div class="faq-accent" aria-hidden="true"></div>
+  </header>
+
+  <div class="faq-list">
+    {
+      faqs.map((faq) => (
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{faq.q}</span>
+            <span class="faq-marker" aria-hidden="true">+</span>
+          </summary>
+          <p class="faq-answer">{faq.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .faq-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .faq-headline {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    color: var(--c-ink);
+    text-transform: uppercase;
+    letter-spacing: 0;
+    margin-bottom: 0.625rem;
+  }
+
+  .faq-accent {
+    width: 44px;
+    height: 2px;
+    background: var(--c-orange);
+  }
+
+  /* ── Liste: Zeitungsspalte mit Trennlinien ───────── */
+  .faq-list {
+    border-top: 2px solid var(--c-ink);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--c-ink);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  /* Default-Dreieck der summary entfernen */
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question:focus-visible {
+    outline: 2px solid var(--c-orange);
+    outline-offset: 2px;
+  }
+
+  /* ── Marker: + dreht zu × ────────────────────────── */
+  .faq-marker {
+    flex-shrink: 0;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--c-orange);
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  details[open] .faq-marker {
+    transform: rotate(45deg);
+  }
+
+  /* ── Antwort: blendet beim Öffnen ein ────────────── */
+  .faq-answer {
+    font-family: var(--f-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.72;
+    color: var(--c-stone);
+    max-width: 65ch;
+    padding: 0 0.25rem 1.125rem;
+    margin: 0;
+  }
+
+  /* Nur Öffnen animieren — Schließen instant (häufiger Toggle) */
+  details[open] .faq-answer {
+    animation: answerIn 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes answerIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ── Reduced motion ──────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .faq-marker {
+      transition: none;
+    }
+    details[open] .faq-answer {
+      animation: none;
+    }
+  }
+</style>

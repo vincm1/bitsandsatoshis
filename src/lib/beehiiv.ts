@@ -45,7 +45,7 @@ interface BeehiivPost {
   preview_text?: string | null;
   meta_default_description?: string | null;
   content?: {
-    free?: { web?: string | null };
+    free?: { web?: string | null; rss?: string | null };
   };
 }
 
@@ -74,6 +74,86 @@ function toUnixDate(value?: number | null): Date | null {
   return new Date(value * 1000);
 }
 
+/**
+ * Liefert den Inner-HTML eines <div>, dessen öffnender Tag bei `startIdx`
+ * beginnt — per Tiefenzählung, da Regex verschachtelte Divs nicht kann.
+ */
+function extractDivInner(html: string, startIdx: number): string | null {
+  const openEnd = html.indexOf(">", startIdx);
+  if (openEnd === -1) return null;
+
+  const re = /<div\b|<\/div>/gi;
+  re.lastIndex = openEnd + 1;
+  let depth = 1;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    depth += m[0].toLowerCase() === "</div>" ? -1 : 1;
+    if (depth === 0) return html.slice(openEnd + 1, m.index);
+  }
+  return null;
+}
+
+/** Inner-HTML des ersten Divs, auf das `marker` passt (id/class-Selektor). */
+function extractByMarker(html: string, marker: RegExp): string | null {
+  const m = marker.exec(html);
+  if (!m) return null;
+  return extractDivInner(html, m.index);
+}
+
+/**
+ * Entfernt beehiiv-Chrome: Scripts, Style-Blöcke und sämtliche
+ * Inline-Styles/Klassen. Die Typografie kommt vollständig aus
+ * `.article-prose` auf der Detailseite.
+ */
+function sanitizeContentHtml(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/\s(?:style|class)=(?:"[^"]*"|'[^']*')/gi, "")
+    .trim();
+}
+
+/** True, wenn das HTML sichtbaren Inhalt enthält (Text oder Bilder). */
+function hasVisibleContent(html: string): boolean {
+  if (/<img\b/i.test(html)) return true;
+  return html.replace(/<[^>]+>/g, "").trim().length >= 40;
+}
+
+/**
+ * Extrahiert den reinen Artikel-Inhalt aus den beehiiv-Content-Varianten.
+ *
+ * Der RSS-Content ist die sauberste Quelle (kein Header, keine Share-Buttons).
+ * Web-Content dient als Fallback — dort liegt der Artikel in
+ * `#content-blocks`; bei reinen E-Mail-Posts (platform: email) ist dieser
+ * Container leer, dann gibt es nichts zu zeigen.
+ */
+function extractArticleHtml(
+  free?: { web?: string | null; rss?: string | null },
+): string | null {
+  const rss = free?.rss ?? null;
+  if (rss) {
+    const body =
+      extractByMarker(rss, /<div\b[^>]*class=['"][^'"]*beehiiv__body[^'"]*['"]/i) ??
+      rss;
+    const clean = sanitizeContentHtml(body);
+    if (hasVisibleContent(clean)) return clean;
+  }
+
+  const web = free?.web ?? null;
+  if (web) {
+    const blocks = extractByMarker(
+      web,
+      /<div\b[^>]*id=['"]content-blocks['"]/i,
+    );
+    if (blocks) {
+      const clean = sanitizeContentHtml(blocks);
+      if (hasVisibleContent(clean)) return clean;
+    }
+  }
+
+  return null;
+}
+
 function mapPost(raw: BeehiivPost): NewsletterPost {
   return {
     id: raw.id,
@@ -84,7 +164,7 @@ function mapPost(raw: BeehiivPost): NewsletterPost {
     publishedAt: toUnixDate(raw.publish_date ?? raw.displayed_date),
     thumbnailUrl: raw.thumbnail_url ?? null,
     webUrl: raw.web_url ?? null,
-    contentHtml: raw.content?.free?.web ?? null,
+    contentHtml: extractArticleHtml(raw.content?.free),
   };
 }
 
@@ -143,6 +223,9 @@ export async function getPost(
   }
 
   const params = new URLSearchParams();
+  // RSS ist die sauberste Inhaltsquelle (ohne beehiiv-Header/Share-Chrome);
+  // Web dient als Fallback für Posts, die nur im Web publiziert wurden.
+  params.append("expand[]", "free_rss_content");
   params.append("expand[]", "free_web_content");
 
   const res = await fetch(
