@@ -21,12 +21,38 @@ Astro.response.headers.set(
   "Cache-Control",
   "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
 );
+
+// Strukturierte Daten: die Ausgabe als Artikel — Datum, Autor und Bild für
+// die Suchergebnis-Darstellung.
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.title,
+  description: post.teaser || post.subtitle,
+  ...(post.publishedAt
+    ? { datePublished: post.publishedAt.toISOString() }
+    : {}),
+  author: {
+    "@type": "Person",
+    name: "Vincent Michler",
+    url: new URL("/ueber", Astro.site).href,
+  },
+  image: post.thumbnailUrl ?? new URL("/og-default.jpg", Astro.site).href,
+  mainEntityOfPage: new URL(`/newsletter/${post.slug}`, Astro.site).href,
+  inLanguage: "de",
+};
 ---
 
 <Layout
   title={`${post.title} · Bits&Satoshis`}
   description={post.teaser || post.subtitle}
-  ogImage={post.thumbnailUrl ?? undefined}>
+  ogImage={post.thumbnailUrl ?? undefined}
+  article={{ publishedTime: post.publishedAt }}>
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(articleSchema)}
+  />
   <article class="article">
     <a href="/archiv" class="article-back">← Zurück zum Archiv</a>
 

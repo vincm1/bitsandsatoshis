@@ -13,13 +13,20 @@ interface Props {
   description?: string;
   /** Pfad zu einem seiten-spezifischen OG-Bild (Default: /og-default.jpg). */
   ogImage?: string;
+  /** Gesetzt auf Ausgabenseiten: schaltet og:type=article + Artikel-Tags. */
+  article?: {
+    publishedTime: Date | null;
+  };
 }
 
 const {
   title = "Bits&Satoshis · Der ruhige Bitcoin-Newsletter",
   description = "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen, nicht spekulieren.",
   ogImage = "/og-default.jpg",
+  article,
 } = Astro.props;
+
+const AUTHOR = "Vincent Michler";
 
 // Absolute URLs für Canonical und og:* — Basis ist `site` aus astro.config.mjs.
 // `new URL()` lässt bereits absolute ogImage-Werte (beehiiv-Thumbnails) intakt.
@@ -27,6 +34,23 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 // Maße sind nur für das eigene Default-Bild bekannt.
 const isDefaultOgImage = ogImage === "/og-default.jpg";
+
+// Strukturierte Daten: WebSite auf jeder Seite — Google versteht darüber
+// Name, Sprache und Herausgeber der Site.
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Bits&Satoshis",
+  url: Astro.site?.href,
+  description:
+    "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen, nicht spekulieren.",
+  inLanguage: "de",
+  publisher: {
+    "@type": "Person",
+    name: AUTHOR,
+    url: new URL("/ueber", Astro.site).href,
+  },
+};
 ---
 
 <!doctype html>
@@ -49,7 +73,16 @@ const isDefaultOgImage = ogImage === "/og-default.jpg";
     <meta property="og:site_name" content="Bits&Satoshis" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    {
+      article?.publishedTime && (
+        <meta
+          property="article:published_time"
+          content={article.publishedTime.toISOString()}
+        />
+      )
+    }
+    {article && <meta property="article:author" content={AUTHOR} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     {isDefaultOgImage && <meta property="og:image:width" content="1200" />}
@@ -59,6 +92,11 @@ const isDefaultOgImage = ogImage === "/og-default.jpg";
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(websiteSchema)}
+    />
     <!-- Cabinet Grotesk (Überschriften) + Satoshi (Fließtext) werden von der
          eigenen Domain ausgeliefert und vorgeladen. Mono trägt nur Meta-Text
          und braucht kein preload. -->

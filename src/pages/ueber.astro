@@ -10,12 +10,33 @@ Astro.response.headers.set(
   "Cache-Control",
   "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
 );
+
+// Strukturierte Daten: der Autor als Person — verknüpft die Artikel-Schemas
+// der Ausgaben mit dieser Seite (E-E-A-T-Signal).
+const profileSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    name: "Vincent Michler",
+    url: new URL("/ueber", Astro.site).href,
+    image: new URL("/author.png", Astro.site).href,
+    description:
+      "Autor von Bits&Satoshis, dem ruhigen deutschsprachigen Bitcoin-Newsletter.",
+    knowsAbout: ["Bitcoin"],
+  },
+};
 ---
 
 <Layout
   title="Über mich · Bits&Satoshis"
   description="Wer Bits&Satoshis schreibt, warum es den Newsletter gibt und was er bewusst nicht ist."
 >
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(profileSchema)}
+  />
   {/* Gleicher Container und gleiche linke Kante wie alle Seiten (§4).
       Längere Fassung des Autoren-Absatzes (§7): erste Person, kein Lebenslauf,
       keine Qualifikationsbehauptung. Das Foto ist eine der drei erlaubten

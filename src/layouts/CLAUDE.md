@@ -14,8 +14,15 @@ interface Props {
   title?: string;        // <title> + og:title (Default: Marken-Titel)
   description?: string;  // Meta-Description + og:description (Default: Positionierung)
   ogImage?: string;      // og:image-Pfad/URL (Default: /og-default.jpg)
+  article?: {            // nur Ausgabenseiten: og:type=article +
+    publishedTime: Date | null;  // article:published_time/author
+  };
 }
 ```
+
+Das Layout emittiert außerdem ein `WebSite`-JSON-LD auf jeder Seite;
+`/newsletter/[slug]` ergänzt ein `Article`-, `/ueber` ein
+`ProfilePage`-Schema in der jeweiligen Seite.
 
 ### Standard-Titel-Format
 ```

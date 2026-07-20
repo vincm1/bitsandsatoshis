@@ -10,6 +10,13 @@ export default defineConfig({
   // absolute og:*-URLs (Astro.site).
   site: 'https://bitsandsatoshis.com',
 
+  // beehiiv-Altlasten: die bisherige beehiiv-Website nutzt /p/<slug>. Die
+  // 301er reichen die Google-Signale der bereits indexierten URLs an die
+  // neuen /newsletter/-URLs weiter — wichtig für den DNS-Umzug.
+  redirects: {
+    '/p/[slug]': { status: 301, destination: '/newsletter/[slug]' },
+  },
+
   // Hybrid: `output: 'hybrid'` wurde in Astro 5 entfernt — seitdem ist
   // 'static' + Adapter das Hybrid-Modell. Statisch ist der Default,
   // Seiten/Endpoints mit `export const prerender = false` laufen serverseitig
