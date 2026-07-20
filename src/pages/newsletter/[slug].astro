@@ -1,4 +1,7 @@
 ---
+// SSR: Ausgaben kommen live von beehiiv — neue Ausgaben ohne Redeploy.
+export const prerender = false;
+
 import Layout from "../../layouts/Layout.astro";
 import SignupCta from "../../components/SignupCta.astro";
 import { getPost } from "../../lib/beehiiv";
@@ -14,7 +17,7 @@ if (!post) {
 ---
 
 <Layout
-  title={`${post.title} — Bits&Satoshis`}
+  title={`${post.title} · Bits&Satoshis`}
   description={post.teaser || post.subtitle}>
   <article class="article">
     <a href="/archiv" class="article-back">← Zurück zum Archiv</a>
@@ -60,10 +63,8 @@ if (!post) {
     }
 
     <div class="mt-16">
-      <SignupCta
-        title="Noch nicht abonniert?"
-        text="Erhalte die nächste Ausgabe direkt in dein Postfach — einmal pro Woche, ruhig und klar."
-      />
+      {/* Spec-Default (§6.6): kein neuer Verkaufstext, identische Wiederholung */}
+      <SignupCta />
     </div>
   </article>
 </Layout>

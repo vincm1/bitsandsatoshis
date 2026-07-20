@@ -27,15 +27,22 @@ Die offizielle Website für den deutschsprachigen Bitcoin-Newsletter **Bits&Sato
 > Actions), der API-Key bleibt dadurch automatisch geheim.
 
 ## Branding
+> **Verbindlich ist `/DESIGN.md` (v5.0).** Hier nur die Kurzfassung.
+
 ```
-Orange (Primär):   #F7931A   ← Bitcoin Orange, für CTAs und Highlights
-Cremeweiß (BG):    #FAF7F2   ← Hintergrund, warm nicht steril
-Dunkelgrau (Text): #2D2D2D
-Hellgrau:          #E8E4DF
+Paper (BG):     #F4EDE0   ← einziger Seitenhintergrund
+Ink (Text):     #221A0F   ← Fließtext UND Headlines
+Rule (Linien):  #C8BAA8   ← Haarlinien statt Karten
+Dust (Meta):    #A89880   ← Datum, Labels
+Orange:         #E8832A   ← nur die zwei Signup-Buttons
 ```
-**Schriften:** Inter (Bold für Headlines), Playfair Display Italic (Akzente).
-Akzent-Helper: CSS-Klasse `.accent` (Playfair, kursiv). DaisyUI-Theme heißt
-`bitsandsatoshis` (definiert in `src/styles/global.css`).
+
+**Schriften:** Chaney (H1–H3, UPPERCASE, nie unter 17px), Satoshi (Fließtext),
+IBM Plex Mono (Datum, Lesezeit, Label — nie Prosa).
+
+**Kernregeln:** linksbündig, eine Spalte, 620px Satzbreite · Haarlinien statt
+Karten · Abstände nur 8/16/24/40/64 · 0px Radius · keine Bilder · kein Dark
+Mode. DaisyUI-Theme heißt `bitsandsatoshis` (in `src/styles/global.css`).
 
 ## Projektstruktur
 ```

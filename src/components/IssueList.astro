@@ -1,0 +1,60 @@
+---
+/**
+ * IssueList — Ausgabenliste für Startseite (§6.3) und Archiv (§7).
+ *
+ * Bringt bewusst keinen Container und keine Außenabstände mit: Breite und
+ * Sektionsabstand bestimmt die einbindende Seite. Sonst ließe sich die
+ * Komponente nicht auf beiden Seiten mit unterschiedlichem Layout nutzen.
+ */
+import type { NewsletterPost } from "../lib/beehiiv";
+import IssueRow from "./IssueRow.astro";
+
+interface Props {
+  posts: NewsletterPost[];
+  eyebrow: string;
+  empty?: string;
+}
+
+const {
+  posts,
+  eyebrow,
+  empty = "Noch keine Ausgaben veröffentlicht. Bald geht es los.",
+} = Astro.props;
+---
+
+{/* h2 statt p: die IssueRow-Titel sind h3, ohne diese Ebene wäre die
+    Heading-Hierarchie h1 → h3 gebrochen (a11y). Optik bleibt .eyebrow. */}
+<h2 class="eyebrow">{eyebrow}</h2>
+<hr class="rule issue-list__rule" />
+
+{
+  posts.length > 0 ? (
+    <ul class="issue-list" role="list">
+      {posts.map((post) => (
+        <li>
+          <IssueRow post={post} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="issue-list__empty">{empty}</p>
+  )
+}
+
+<style>
+  .issue-list__rule {
+    margin-top: var(--sp-2);
+  }
+
+  .issue-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .issue-list__empty {
+    padding: var(--sp-4) 0;
+    font-size: 15px;
+    color: var(--c-stone);
+  }
+</style>

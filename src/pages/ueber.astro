@@ -1,50 +1,112 @@
 ---
+// SSR wie die übrigen inhaltlichen Seiten (§9) — SignupCta reicht UTM durch.
+export const prerender = false;
+
 import Layout from "../layouts/Layout.astro";
-import SignupForm from "../components/SignupForm.astro";
-import AuthorCard from "../components/AuthorCard.astro";
+import SignupCta from "../components/SignupCta.astro";
 ---
 
 <Layout
-  title="Über — Bits&Satoshis"
-  description="Wer hinter Bits&Satoshis steckt und worum es geht.">
-  <div class="pt-4">
-    <AuthorCard showLink={false} />
-  </div>
+  title="Über mich · Bits&Satoshis"
+  description="Wer Bits&Satoshis schreibt, warum es den Newsletter gibt und was er bewusst nicht ist."
+>
+  {/* Gleicher Container und gleiche linke Kante wie alle Seiten (§4).
+      Längere Fassung des Autoren-Absatzes (§7): erste Person, kein Lebenslauf,
+      keine Qualifikationsbehauptung. Das Foto ist eine der drei erlaubten
+      Bild-Ausnahmen (§5). Kein Orange außer dem Signup-Button am Ende (§2). */}
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
+    <img
+      src="/author.png"
+      alt="Vincent, Autor von Bits&Satoshis"
+      class="about__photo"
+      width="112"
+      height="112"
+      loading="eager"
+    />
 
-  <section class="mx-auto max-w-2xl px-4 pb-16">
-    <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
-      Über <span class="accent text-primary">Bits&Satoshis</span>
-    </h1>
-
-    <div class="prose prose-neutral mt-8 max-w-none prose-headings:font-bold prose-a:text-primary">
-      <p class="lead text-lg">
-        Hallo, ich bin Vincent. Bits&Satoshis ist mein Versuch, Bitcoin so zu
-        erklären, wie ich es mir selbst am Anfang gewünscht hätte: ruhig,
-        ehrlich und ohne Kursgeschrei.
-      </p>
-
-      <h2>Die Mission</h2>
-      <p>
-        Die meisten Inhalte über Bitcoin drehen sich um Preise, Prognosen und
-        Panik. Bits&Satoshis macht das Gegenteil. Hier geht es ums Verstehen:
-        wie Bitcoin funktioniert, warum es so gebaut ist, wie es ist, und was
-        das für dich bedeutet — ganz ohne Spekulation.
-      </p>
-
-      <h2>Was dich erwartet</h2>
-      <ul>
-        <li>Einmal pro Woche eine klare, kompakte Ausgabe.</li>
-        <li>Konzepte verständlich erklärt — vom Satoshi bis zur Selbstverwahrung.</li>
-        <li>Kein Hype, keine Kaufempfehlungen, keine Angstmache.</li>
-      </ul>
-
-      <p>
-        Wenn das nach dir klingt: Trag dich unten ein und lies in Ruhe mit.
-      </p>
+    <div class="measure">
+      <h1 class="h1 about__title">Ich bin Vincent.</h1>
+        <p class="about__body">
+          Bits&amp;Satoshis gibt es, weil ich Bitcoin verstehen wollte und
+          fast alles auf Deutsch entweder etwas verkaufen oder ein Video sein
+          wollte. Jetzt schreibe ich jede Woche das, was ich damals gern
+          gelesen hätte.
+        </p>
     </div>
 
-    <div class="mt-12 max-w-md">
-      <SignupForm />
+    <div class="measure">
+      <h2 class="h2 about__heading">Wie ich arbeite</h2>
+      <p class="about__body">
+        Ich bin kein Analyst. Ich lese mich in ein Thema ein, rechne nach, wo
+        sich etwas nachrechnen lässt, und schreibe auf, was dabei rauskommt.
+        Auch wenn es gegen das läuft, was ich vorher gedacht habe.
+      </p>
+      <p class="about__body">
+        Jeden Freitag nehme ich mir ein Thema aus Bitcoin, Geld und Politik
+        vor und denke es zu Ende. Ich sage dir, was ich davon halte, und
+        markiere, wo ich mir nicht sicher bin. Eine Ausgabe liest sich in
+        etwa vier Minuten.
+      </p>
+
+      <h2 class="h2 about__heading">Was der Newsletter nicht ist</h2>
+      <p class="about__body">
+        Keine Kursprognosen. Keine Altcoins. Keine Trading-Signale. Kein
+        Sponsoring. Keine tägliche Mail.
+      </p>
+      <p class="about__body">
+        Ich verdiene auch nichts daran, wenn du kaufst. Keine
+        Affiliate-Links, keine Kurse, kein Coaching. Der Newsletter ist
+        kostenlos, und du kannst dich mit einem Klick wieder abmelden.
+      </p>
+
+      <h2 class="h2 about__heading">Schreib mir</h2>
+      <p class="about__body">
+        Der direkteste Weg: Antworte auf eine Ausgabe. Die Mails gehen in
+        mein Postfach, nicht in ein Ticketsystem, und ich lese jede Antwort.
+      </p>
     </div>
   </section>
+
+  {/* Formular am Ende (§7), Spec-Text „Nächste Ausgabe: Freitag." (§6.6).
+      SignupCta bringt den #newsletter-Anker für die Navbar-Links mit. */}
+  <SignupCta />
 </Layout>
+
+<style>
+  /* Foto über der Überschrift: eine Spalte, eine linke Kante (§4). */
+  .about__photo {
+    width: 112px;
+    height: 112px;
+    display: block;
+    object-fit: cover;
+    /* Kreis ist erlaubt: Portrait, kein UI-Element (§6.4) */
+    border-radius: 50%;
+    margin-bottom: var(--sp-3);
+  }
+
+  .about__body {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--c-ink);
+  }
+
+  /* Raster (§4): 16px innerhalb einer Textgruppe, 24px zwischen Absätzen,
+     40px vor einer neuen Zwischenüberschrift. */
+  .h1 + .about__body {
+    margin-top: var(--sp-2);
+  }
+
+  .about__heading {
+    margin-top: var(--sp-4);
+  }
+
+  .about__heading + .about__body {
+    margin-top: var(--sp-2);
+  }
+
+  .about__body + .about__body {
+    margin-top: var(--sp-3);
+  }
+</style>

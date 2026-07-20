@@ -1,639 +1,630 @@
-# Bits&Satoshis — Design System v4.0
+# Bits&Satoshis — Design-, Copy- und SEO-Spezifikation
 
-> **Leitbild:** Druckwerk, das zufällig im Browser läuft.
-> Retro-Editorial. Kein Hype. Kein SaaS-Template.
+**Verbindliche Entscheidungsgrundlage für bitsandsatoshis.com.**
 
----
-
-## Stil-Prinzip
-
-Inspiriert von Arnold's Pump Club — das strukturelle Prinzip übernommen, die Lautstärke weggelassen. Bitcoin-Daten ersetzen die Persönlichkeit als visuelles Anker-Element. Jede Entscheidung kommt von einem einzigen Standpunkt: **Zeitungsdruck**.
+Wenn im Code etwas von dieser Datei abweicht, ist der Code falsch.
+Wenn eine Frage hier nicht beantwortet ist, gilt die Regel aus Abschnitt 11.
 
 ---
 
-## 01 Farben
+## 1. Kontext und Ziel
 
-### Palette
+**Produkt:** Bits&Satoshis, deutschsprachiger Bitcoin-Newsletter, eine Ausgabe
+pro Woche, freitags.
 
-| Token | Hex | Name | Verwendung |
-|---|---|---|---|
-| `--c-paper` | `#F4EDE0` | Paper | **Einziger** Seitenhintergrund |
-| `--c-orange` | `#E8832A` | Orange | CTAs · Akzente · Highlights |
-| `--c-ink` | `#221A0F` | Warm Brown | Headlines · Sidebar · Ticker-BG |
-| `--c-stone` | `#5C4F3A` | Stone | Fließtext · Body Copy |
-| `--c-dust` | `#A89880` | Dust | Labels · Captions · Meta |
-| `--c-rule` | `#C8BAA8` | Rule | Borders · Divider · Trennlinien |
-| `--c-white` | `#FDFAF5` | White | Card-Hintergründe |
+**Autor:** Vincent Michler. Eine Person, kein Team. Auf der gesamten Seite gilt
+die Ich-Form.
 
-### Orange-Skala
+**Einziges Ziel der Website:** Besucher gibt seine E-Mail-Adresse ein.
 
-| Stufe | Wert | Einsatz |
+Es gibt keine sekundären Ziele. Keine Verweildauer, keine Seitenaufrufe, keine
+Social-Follows. Jede Designentscheidung wird daran gemessen, ob sie diese eine
+Konversion wahrscheinlicher macht.
+
+**Zielgruppe:** Deutschsprachige Erwachsene, 28 bis 45, die Bitcoin bereits
+besitzen oder kurz davor stehen. Sie haben die Grundlagen und suchen
+Einordnung, nicht Erklärung. Sie lesen lieber, als Videos zu schauen. Ihr
+Interesse ist ökonomisch, nicht technisch.
+
+**Nicht die Zielgruppe:** Trader, Altcoin-Interessierte, komplette Neulinge.
+
+**Positionierung in einem Satz:** Blocktrainer erklärt, Bits&Satoshis bewertet.
+
+**Langfristig:** Der thematische Schwerpunkt verschiebt sich über Jahre von
+Bitcoin zu Geldsystem und Geldpolitik. Die Seite muss das aushalten, ohne
+umgebaut zu werden. Deshalb heißt es überall „Bitcoin, Geld und Politik",
+nicht nur „Bitcoin".
+
+---
+
+## 2. Design-Tokens
+
+Diese Werte sind gesetzt und werden nicht ergänzt.
+
+| Token | Hex | Verwendung |
 |---|---|---|
-| Hintergrund | `rgba(232,131,42,0.10)` | Badge-BG |
-| Border | `rgba(232,131,42,0.35)` | Badge-Rand |
-| **Primary** | `#E8832A` | CTAs · Akzentlinien |
-| Dark | `#B85A10` | Text auf Orange-BG |
-
-### Regeln
-
-- **Orange ist Signal, nie Fläche** — kein orangener Nav, kein orangener Section-BG
-- **Paper ist der einzige Seitenhintergrund** — nie reines `#fff`
-- **Stone für Fließtext** — nie reines Schwarz
-- Orange erscheint maximal **3–4× pro Seite**: CTA, Headline-Akzent, Divider, Pullquote-Border
-- Keine zwei verschiedenen Orangen mischen
-
----
-
-## 02 Typografie
-
-### Font-Duo
-
-| Rolle | Font | Quelle | Gewichte | Aufgabe |
-|---|---|---|---|---|
-| **Display** | Chaney | Fontshare | 400 (regular) | H1 · H2 · Hero-Titel · UPPERCASE |
-| **Text & UI** | Satoshi Variable | @fontsource | 300 · 400 · 500 · **700** | Body · Buttons · Labels · Nav · Pullquotes italic |
-
-Chaney ist ausschließlich über Fontshare erhältlich (kein @fontsource). Satoshi Variable als npm-Paket via `@fontsource-variable/satoshi`. Kein dritter Serif nötig — Satoshi Italic übernimmt die Akzent-Rolle.
-
-### Font-Loading
-
-**In `Layout.astro` `<head>` (Fontshare CDN für Chaney):**
-```html
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-<link href="https://api.fontshare.com/v2/css?f[]=chaney@400&display=swap" rel="stylesheet" />
-```
-
-**In `Layout.astro` Frontmatter (Satoshi selbst-gehostet):**
-```ts
-import "@fontsource-variable/satoshi";
-// Gewicht-Utilities: 300/400/500/700 sind im Variable-Font abgedeckt
-```
-
-**pnpm install:**
-```bash
-pnpm add @fontsource-variable/satoshi
-pnpm remove @fontsource/inter @fontsource/playfair-display @fontsource-variable/fraunces
-```
-
-### Typografie-Skala
-
-| Rolle | Font | Größe | Besonderheit |
-|---|---|---|---|
-| Display H1 | Chaney 400 | `clamp(3.5rem, 9vw, 6rem)` | UPPERCASE · letter-spacing 0 |
-| H2 Abschnitt | Chaney 400 | 24–32px | UPPERCASE |
-| H3 Artikel | Satoshi 700 | 15–17px | Sentence case |
-| Body | Satoshi 400 | 15px | line-height 1.75 · color: `--c-stone` |
-| Pullquote | Satoshi 400 Italic | 18–20px | Orange 3px left-border |
-| Eyebrow / Label | Satoshi 700 | 8–9px | UPPERCASE · letter-spacing 0.16em |
-
-### Typografie-Regeln
-
-- **Chaney UPPERCASE** für alle H1 und H2 — nie in Kleinschrift
-- **Satoshi Sentence case** für H3, Body, Buttons — nie UPPERCASE
-- **Satoshi Italic** für Pullquotes und redaktionelle Akzente — nie für strukturelles UI
-- **Eyebrows in 8–9px**, nicht in 12px — klein und präzise, nicht dekorativ
-- Chaney füllt den Container von Natur aus breit — kein `letter-spacing` nötig
-
----
-
-## 03 Abstände
-
-### Spacing Scale — 4px Basis
-
-| Token | Wert | Verwendung |
-|---|---|---|
-| `--sp-1` | 4px | Icon-Gap, Dot-Abstände |
-| `--sp-2` | 8px | Badge-Padding |
-| `--sp-3` | 12px | Card-interner Gap |
-| `--sp-4` | 16px | Card-Padding Standard |
-| `--sp-6` | 24px | Sektion-Padding, Nav |
-| `--sp-10` | 40px | Hero-Padding |
-| `--sp-16` | 64px | Sektion-Abstand groß |
-| `--sp-24` | 96px | Page-Top-Padding |
-
-### Border Radius
-
-| Wert | Token | Verwendung |
-|---|---|---|
-| **0px** | Standard | Buttons · Cards · Inputs — alles |
-| 2px | minimal | Tags · Code-Labels |
-| 9999px | pill | Badges · Status-Pills |
-| 50% | circle | Stamps |
-
-> Zeitungsdruck hat keine weichen Ecken. **0px ist der Standard.** 4px+ lässt alles nach SaaS aussehen.
-
----
-
-## 04 CSS Tokens
-
-```css
-/* Bits&Satoshis — Design Tokens v3.0 */
-
-:root {
-
-  /* ── Farben ─────────────────────────────── */
-  --c-paper:   #F4EDE0;   /* Seitenhintergrund */
-  --c-orange:  #E8832A;   /* Akzent · CTA */
-  --c-ink:     #221A0F;   /* Headlines · Sidebar */
-  --c-stone:   #5C4F3A;   /* Fließtext */
-  --c-dust:    #A89880;   /* Labels · Meta */
-  --c-rule:    #C8BAA8;   /* Borders · Divider */
-  --c-white:   #FDFAF5;   /* Card-BG */
-
-  /* ── Fonts ──────────────────────────────── */
-  --f-display: 'Chaney', sans-serif;
-  --f-body:    'Satoshi Variable', 'Satoshi', sans-serif;
-
-  /* ── Spacing ────────────────────────────── */
-  --sp-1:  4px;   --sp-2:  8px;   --sp-3:  12px;
-  --sp-4:  16px;  --sp-6:  24px;  --sp-10: 40px;
-  --sp-16: 64px;  --sp-24: 96px;
-
-  /* ── Borders ────────────────────────────── */
-  --bd:        1px solid #C8BAA8;
-  --bd-strong: 2px solid #221A0F;
-  --bd-orange: 2px solid #E8832A;
-}
-
-/* ── Base ────────────────────────────────── */
-body {
-  font-family: var(--f-body);
-  background: var(--c-paper);
-  color: var(--c-ink);
-  font-size: 15px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-}
-```
-
----
-
-## 05 Buttons
-
-### Varianten
-
-| Variante | BG | Text | Border | Einsatz |
-|---|---|---|---|---|
-| **Primary** | `--c-orange` | `#fff` | — | Hauptaktion — 1× pro Viewport |
-| Secondary | transparent | `--c-ink` | 1.5px `--c-ink` | Zweite Aktion |
-| Ghost | transparent | `--c-orange` | 1.5px `--c-orange` | Tertiäre Aktion |
-
-### Größen
-
-| Name | Padding | Font-Size |
-|---|---|---|
-| Small | `6px 14px` | 11px |
-| Default | `10px 22px` | 13px |
-| Large | `13px 30px` | 15px · letter-spacing 0.04em |
-
-```css
-.btn {
-  font-family: var(--f-body);
-  font-weight: 600;
-  border-radius: 0;           /* immer 0 */
-  cursor: pointer;
-  border: none;
-  outline: none;
-  letter-spacing: 0.02em;
-  transition: opacity .12s, transform .08s;
-}
-
-.btn-primary   { background: var(--c-orange); color: #fff; }
-.btn-secondary { background: transparent; color: var(--c-ink);    border: 1.5px solid var(--c-ink); }
-.btn-ghost     { background: transparent; color: var(--c-orange); border: 1.5px solid var(--c-orange); }
-
-.btn:active { transform: scale(0.98); }
-.btn-primary:hover { opacity: 0.88; }
-```
-
----
-
-## 06 Badges
-
-| Variante | BG | Text | Border | Radius | Einsatz |
-|---|---|---|---|---|---|
-| Orange | `rgba(232,131,42,0.1)` | `#9A5010` | `rgba(232,131,42,0.35)` | pill | Primäre Kategorie |
-| Ink | `--c-ink` | `--c-paper` | — | 0 | Neuigkeiten · Ausgabe |
-| Subtle | `rgba(168,152,128,0.12)` | `--c-stone` | `--c-rule` | 0 | Sekundäre Info |
-
-```css
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-.badge-orange {
-  background: rgba(232,131,42,0.1);
-  color: #9A5010;
-  border: 1px solid rgba(232,131,42,0.35);
-  padding: 3px 9px;
-  border-radius: 9999px;
-}
-
-.badge-ink {
-  background: var(--c-ink);
-  color: var(--c-paper);
-  padding: 3px 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 9px;
-}
-
-.badge-subtle {
-  background: rgba(168,152,128,0.12);
-  color: var(--c-stone);
-  border: 1px solid var(--c-rule);
-  padding: 3px 9px;
-}
-```
-
----
-
-## 07 Formulare
-
-```css
-.input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid var(--c-rule);
-  background: var(--c-white);
-  font-family: var(--f-body);
-  font-size: 14px;
-  color: var(--c-ink);
-  border-radius: 0;
-  outline: none;
-  transition: border-color .12s;
-}
-
-.input::placeholder { color: var(--c-dust); }
-.input:focus        { border-color: var(--c-orange); }
-```
-
-**Input-Group (Anmeldeformular):**
-
-```html
-<div style="display:flex;">
-  <input class="input" type="email" placeholder="deine@email.de"
-         style="border-right:none;" />
-  <button class="btn btn-primary">Abonnieren</button>
-</div>
-<p style="font-size:11px; color:var(--c-dust); margin-top:6px;">
-  Unabhängig · Werbefrei · Jederzeit abbestellbar
-</p>
-```
-
----
-
-## 08 Cards
-
-### Standard Card
-
-```html
-<div style="height:2px; background:var(--c-orange);"></div><!-- Akzent-Bar -->
-<div class="card">
-  <div class="card-label">Ausgabe #47</div>
-  <div class="card-title">Titel des Artikels</div>
-  <div class="card-body">Kurze Beschreibung...</div>
-  <div class="card-foot">
-    <span class="card-meta">5 Min. · Jun 2025</span>
-    <span class="card-link">Lesen →</span>
-  </div>
-</div>
-```
-
-```css
-.card {
-  background: var(--c-white);
-  border: 1px solid var(--c-rule);
-  border-radius: 0;
-  padding: 1.25rem;
-}
-.card-label  { font-size: 8px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-orange); }
-.card-title  { font-size: 14px; font-weight: 600; color: var(--c-ink); letter-spacing: -0.01em; line-height: 1.3; }
-.card-body   { font-size: 12px; color: var(--c-stone); line-height: 1.7; }
-.card-link   { font-size: 11px; font-weight: 600; color: var(--c-orange); }
-```
-
-### Clipping Card (Zeitungsschnitt)
-
-Schwarze 2px-Border. Orangener Stempel oben links. Im Hero leicht rotiert (`transform: rotate(-1.5deg)`).
-
-```css
-.card-clip {
-  border: 2px solid var(--c-ink);
-  background: var(--c-white);
-  padding: 1rem 1.25rem;
-  border-radius: 0;
-  position: relative;
-}
-
-.card-clip-stamp {
-  position: absolute;
-  top: -9px; left: 10px;
-  background: var(--c-orange);
-  color: #fff;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 2px 8px;
-}
-```
-
-### Dark Card (Kurs & Daten)
-
-```css
-.card-dark {
-  background: var(--c-ink);
-  border-radius: 0;
-  padding: 1.25rem;
-}
-/* Label: --c-orange · Title: --c-paper · Body: --c-dust */
-```
-
----
-
-## 09 Divider
-
-| Typ | CSS | Einsatz |
-|---|---|---|
-| Orange Akzentlinie | `height:2px; background:var(--c-orange); width:44px;` | Sektions-Opener unter Headlines |
-| Standard | `border-top:1px solid var(--c-rule);` | Abschnitts-Trenner |
-| Stark | `border-top:2px solid var(--c-ink); opacity:0.2;` | Haupt-Trennlinie |
-
----
-
-## 10 Pullquote
-
-```css
-.pullquote {
-  border-left: 3px solid var(--c-orange);
-  padding: 0.25rem 0 0.25rem 1.25rem;
-}
-
-.pullquote-text {
-  font-family: var(--f-body);
-  font-style: italic;
-  font-size: 19px;
-  color: var(--c-ink);
-  line-height: 1.5;
-}
-
-.pullquote-source {
-  font-family: var(--f-body);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--c-dust);
-  margin-top: 6px;
-}
-```
-
----
-
-## 11 Stamps
-
-Kreisförmige Retro-Elemente. **Im echten Einsatz immer rotiert** (`transform: rotate(±8–12deg)`).
-
-```css
-.stamp {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2.5px solid var(--c-orange);
-  border-radius: 50%;
-  width: 72px;
-  height: 72px;
-  text-align: center;
-}
-
-.stamp-num {
-  font-family: var(--f-display);
-  font-weight: 400;
-  font-size: 22px;
-  color: var(--c-ink);
-  line-height: 1;
-}
-```
-
-**Beispiele:** `seit 2009` · `#47 Jun 2025` · `21 Mio. Limit`
-
----
-
-## 12 Ticker
-
-Immer auf `--c-ink`-Hintergrund. Über dem Nav. Monospace-Orange für Werte.
-
-```css
-.ticker {
-  background: var(--c-ink);
-  padding: 6px 1.25rem;
-  display: flex;
-  gap: 1.25rem;
-  align-items: center;
-}
-
-.ticker-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(244,237,224,0.3);
-}
-
-.ticker-val {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--c-orange);
-  font-family: 'Courier New', monospace;
-}
-```
-
-**Inhalt:** BTC-Kurs · Ausgabennummer · Leseranzahl · Thema der Woche
-
----
-
-## 13 Navigation
-
-**Aufbau von oben nach unten:**
-
-1. **Ticker** — `--c-ink`-BG, Daten in Orange-Monospace
-2. **Nav** — `--c-paper`-BG, starker `2px --c-ink` Top-Border, Logo links, Links mitte, CTA rechts
-
-```css
-.nav {
-  background: var(--c-paper);
-  border-top: 2px solid var(--c-ink);
-  border-bottom: 1px solid var(--c-rule);
-  padding: 0 1.5rem;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-```
-
-**Regeln:**
-- Nav-Hintergrund: immer `--c-paper`, nie Orange
-- Orange nur für CTA-Button und aktive Link-Unterstreichung — nie Nav-BG
-- Kein Hamburger-Menü auf Desktop
-- Aktueller Stand: Logo ist `/logo.svg` (SVG-Emblem, kein Text-Schriftzug im Nav)
-
----
-
-## 14 Redaktioneller Stil
-
-### 5 Kern-Prinzipien
-
-**01 — Paper ist die Bühne, Orange ist das Spotlight**
-Orange erscheint maximal 3–4× pro Seite. Nie als Fläche. Immer als Signal.
-
-**02 — Typografie ist die Grafik**
-Chaney in 50–96px übernimmt die Rolle der visuellen Hauptfigur. Die Font-Wahl ist die Persönlichkeit — kein dekoratives Beiwerk nötig.
-
-**03 — Bitcoin-Daten als Collage-Elemente**
-Kurs-Charts als Zeitungsausschnitte (2px Ink-Border, leicht rotiert). Preiszahlen auf Dark-Cards. Stamps mit Bitcoin-Jahreszahlen. Das Thema selbst wird zur Illustration.
-
-**04 — Asymmetrie — kontrolliert**
-Clipping-Cards `rotate(-1.5deg)`. Stamps `rotate(10deg)`. Nie mehr als 2–3 Elemente rotieren. Sonst chaotisch statt editorial.
-
-**05 — 0px Radius überall**
-Zeitungsdruck hat keine weichen Ecken. 4px+ lässt alles nach SaaS aussehen.
-
-**Foto-Prinzip (wenn ein Foto eingebaut wird):**
-Schwarz-weiß, freigestellt (kein rechteckiger Rahmen), leicht rotiert, auf Paper. Kein Hintergrund, keine weichen Schatten — wie aus einer Zeitung ausgeschnitten.
-
-### Pump Club — Was wir übernehmen, was nicht
-
-**Übernehmen:**
-- Warmer Papierhintergrund als einzige Seitenbasis
-- Ein einziger Akzent-Farb-Einsatz
-- **Chaney** als ultra-breite Display-Type — keine Angst vor 70–96px
-- **Satoshi Variable** als cleanem Body-Sans
-- B&W Cut-Out-Fotos mit farbiger Rahmen-Bordüre
-- Zeitungsschnitt-Ästhetik: Clippings, Stempel, Rotationen
-- Schwarze harte Borders statt Schatten
-- Asymmetrische Komposition links/rechts im Hero
-- Daten-Ticker am oberen Rand
-- 0px Radius
-
-**Nicht übernehmen:**
-- Kein Vollfarb-Orange als Section-Hintergrund
-- Keine Comic-Blitze oder dekorativen Grafiken
-- Kein Personenkult
-- Kein Uppercase-Schreien im Fließtext
-- Keine Collage-Fotos von Motorsport-Utensilien o.ä.
-- Kein aggressiver Energie-Ton — ruhige Autorität
-
-### Redaktionelle Stimme — Ton
-
-**Do:**
-> „Strategy hat verkauft. Die meisten Schlagzeilen erklären das falsch."
-
-Direkte These. Klare Meinung. Keine Hedges.
-
-**Don't:**
-> „In der heutigen Ausgabe schauen wir uns gemeinsam an, was das vielleicht bedeuten könnte..."
-
-Zu weich. Keine Haltung. Wirkt wie jeder andere Newsletter.
-
----
-
-## 15 Do / Don't
-
-### Do ✓
-
-- Paper `#F4EDE0` als einzige Seiten-Hintergrundfarbe
-- Orange maximal 3–4× pro Seite — nie als Fläche
-- **Chaney** für alle H1 und H2 in UPPERCASE
-- **Satoshi Variable** für Body, Buttons, Labels, Nav
-- Satoshi Italic für Pullquotes und redaktionelle Akzente
-- 0px Radius auf Buttons, Cards, Inputs — alles
-- Ticker (Ink-BG) über dem Nav (Paper-BG)
-- Clippings und Stamps für Retro-Editorial-Energie
-- Focus-Ring immer Orange — kein Browser-Default-Blau
-- Borders für Tiefe — kein `box-shadow` auf Karten
-
-### Don't ✗
-
-- Kein Orange als Sektion- oder Nav-Hintergrund
-- Kein reines `#fff` als Seitenhintergrund — `--c-paper` verwenden
-- Keine weichen Ecken (4px+) auf Buttons oder Cards
-- Satoshi nicht in UPPERCASE für Fließtext oder Buttons
-- Keine zwei verschiedenen Orangen mischen
-- Nie mehr als einen Primary-Button pro Viewport
-- Kein Uppercase für Text unter 20px außer Eyebrows (8–9px)
-- Keine Comic-Blitze oder dekorativen Zier-Elemente
-- Kein `box-shadow` auf Karten — nur Borders
-
----
-
-## Astro-Integration
-
-### Font-Setup in `Layout.astro`
-
-**Frontmatter:**
-```ts
-import "@fontsource-variable/satoshi";   // selbst-gehostet via @fontsource
-// import "@fontsource/inter/400.css";   // entfernen
-// import "@fontsource-variable/fraunces"; // entfernen
-```
-
-**`<head>` (Fontshare CDN für Chaney):**
-```html
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-<link href="https://api.fontshare.com/v2/css?f[]=chaney@400&display=swap" rel="stylesheet" />
-```
-
-**pnpm:**
-```bash
-pnpm add @fontsource-variable/satoshi
-pnpm remove @fontsource/inter @fontsource/playfair-display @fontsource-variable/fraunces
-```
-
-### `src/styles/global.css` — Tokens
+| Paper | `#F4EDE0` | Seitenhintergrund, immer |
+| Ink | `#221A0F` | Fließtext, Überschriften, Rahmen von Eingabefeldern |
+| Orange | `#E8832A` | Ausschließlich Button-Hintergrund |
+| Stone | `#5C4F3A` | Sekundärtext, Metadaten, Bildunterschriften |
+| Dust | `#A89880` | Trennlinien, Platzhaltertext in Eingabefeldern |
+
+### Tailwind-Konfiguration
+
+Tailwind v4 wird **CSS-first** konfiguriert. Es gibt **keine**
+`tailwind.config.mjs`. Alle Tokens leben in `src/styles/global.css`:
 
 ```css
 @theme {
   --font-display: 'Chaney', sans-serif;
-  --font-sans:    'Satoshi Variable', 'Satoshi', sans-serif;
+  --font-sans:    'Satoshi Variable', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
 }
 
 :root {
-  --c-paper:   #F4EDE0;
-  --c-orange:  #E8832A;
-  --c-ink:     #221A0F;
-  --c-stone:   #5C4F3A;
-  --c-dust:    #A89880;
-  --c-rule:    #C8BAA8;
-  --c-white:   #FDFAF5;
+  --c-paper:  #F4EDE0;
+  --c-ink:    #221A0F;
+  --c-orange: #E8832A;
+  --c-stone:  #5C4F3A;
+  --c-dust:   #A89880;
 
-  --f-display: 'Chaney', sans-serif;
-  --f-body:    'Satoshi Variable', 'Satoshi', sans-serif;
-
-  --bd:        1px solid #C8BAA8;
-  --bd-strong: 2px solid #221A0F;
-  --bd-orange: 2px solid #E8832A;
-}
-
-body {
-  font-family: var(--f-body);
-  background: var(--c-paper);
-  color: var(--c-ink);
-  font-size: 15px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
+  --sp-1: 8px;  --sp-2: 16px;  --sp-3: 24px;  --sp-4: 40px;  --sp-5: 64px;
+  --measure: 620px;
 }
 ```
 
-> **Hinweis:** DaisyUI-Theme-Tokens (`--color-base-100`, `--color-primary` etc.) in `global.css` separat pflegen und auf die `--c-*`-Werte abstimmen. Die `--c-*`-Tokens sind die kanonische Quelle; DaisyUI-Tokens sind Proxies davon.
+`border-radius` wird global auf `0` gesetzt (DaisyUI: `--radius-selector`,
+`--radius-field`, `--radius-box` alle `0rem`). Es gibt keine Ausnahme, auch
+nicht für Buttons, Eingabefelder oder Bilder.
+
+### Orange-Budget
+
+**Maximal zwei orange UI-Elemente pro Seite.** Das sind die beiden
+Anmelde-Buttons. Sonst nichts.
+
+Kein oranger Link, kein oranger Unterstrich, kein oranges Icon, kein oranger
+Hover-State auf Text, kein oranger Border-Akzent. Wenn Orange irgendwo außer
+auf einem Button-Hintergrund auftaucht, ist es ein Fehler.
+
+Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
+
+> **Dokumentierte Ausnahmen** (zählen nicht gegen das Budget):
+>
+> 1. der Fokus-Ring (`:focus-visible`) — Barrierefreiheit, nicht Gestaltung;
+> 2. das Wort „Bitcoin" im Hero-H1 der Startseite — Markenzeichen-Akzent,
+>    genau einmal, nie auf Unterseiten;
+> 3. die Angebotskurve im Hero — Datengrafik nach §5, Orange ist dort
+>    Datenfarbe, nicht UI-Farbe;
+> 4. das Logo-Emblem in Header und Foto-Ring — Bestandteil der Assets.
+>
+> Alles darüber hinaus bleibt ein Fehler. Neue Ausnahmen werden hier
+> eingetragen, nicht stillschweigend eingeführt.
+
+> **Konsequenz für den Header:** Der „Abonnieren"-Link im Header ist ein
+> Textlink in Stone-Mono, kein Button. Sonst wäre er ein drittes oranges
+> Element.
+
+### Farbverwendung, konkret
+
+- **Fließtext ist immer Ink, nie Stone.** Stone bei 15px über mehrere Absätze
+  ermüdet und liegt beim Kontrast grenzwertig.
+- **Stone ist für Metadaten:** Datum, Lesezeit, Eyebrow-Labels, Microcopy
+  unter dem Button, Untertitel in Ausgabenlisten.
+- **Dust ist ausschließlich Linie und Placeholder.** Nie Text, den jemand
+  lesen soll.
+- **Textlinks haben genau eine Affordanz:** Unterstrich in Dust
+  (`text-underline-offset: 3px`), beim Hover wird der Unterstrich Ink.
+  Gilt überall — Header, Footer, Listen-Titel, Fließtext-Links. Keine
+  animierten Linien, keine Farbwechsel des Textes selbst.
+- **Kein Dark Mode.** Paper ist die Identität. Ein dunkler Modus verdoppelt
+  den Aufwand und macht die Seite optisch zu einer weiteren Krypto-Seite.
+  Keine `@media (prefers-color-scheme: dark)`-Blöcke, kein Theme-Toggle.
 
 ---
 
-*Bits&Satoshis Design System · v4.0 · Retro-Editorial · 2026*
+## 3. Typografie
+
+### Rollen
+
+| Rolle | Schrift | Größe | Zeilenhöhe | Einsatz |
+|---|---|---|---|---|
+| H1 | Chaney | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
+| H2 | Chaney | 22–24px | 1.25 | Sektionsüberschriften |
+| H3 | Chaney | 17–19px | 1.3 | Ausgabentitel in Listen |
+| Fließtext | Satoshi Variable | 15–16px | 1.65 | Alles, was ein Satz ist |
+| Meta | IBM Plex Mono | 11–12px | 1.4 | Datum, Label, Lesezeit, Microcopy |
+
+### Regeln
+
+- **Chaney nie unter 17px.** Display-Schriften brechen bei kleinen Graden weg.
+- **Chaney nie für Fließtext.** Maximal eine Zeile am Stück.
+- **Mono nie für Prosa.** Nur Daten und Etiketten. Mono für einen ganzen Absatz
+  lässt die Seite technisch statt editorial wirken. Das ist der wichtigste
+  einzelne Hebel, damit die Seite nach Publikation und nicht nach Krypto-Tool
+  aussieht.
+- **Nur zwei Gewichte in Satoshi:** 400 für Text, 500 für Button-Labels und
+  Hervorhebungen. Kein 600, kein 700.
+- **Satzbau in Überschriften:** normale Groß- und Kleinschreibung. Kein
+  Versalsatz, kein Title Case.
+- **Kein Gedankenstrich (Em-Dash) in der gesamten Copy.** Punkt oder Komma.
+- **Mono-Labels** bekommen `letter-spacing: 0.04em`.
+
+### Schrift-Einbindung
+
+Chaney, Satoshi Variable und IBM Plex Mono werden **lokal als woff2 in
+`/public/fonts/`** gehostet, nicht über einen externen Dienst. Gründe:
+Ladezeit, keine Drittanbieter-Requests, DSGVO.
+
+```css
+@font-face {
+  font-family: 'Satoshi Variable';
+  src: url('/fonts/Satoshi-Variable.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-display: swap;
+}
+```
+
+Alle drei Schriften mit `<link rel="preload">` im `<head>`.
+
+> **Offener Punkt:** Aktuell laufen Chaney und Satoshi über die
+> Fontshare-CDN, IBM Plex Mono self-hosted über `@fontsource`. Das
+> widerspricht dieser Regel. Die woff2-Dateien müssen von Fontshare
+> heruntergeladen und nach `/public/fonts/` gelegt werden, danach fällt der
+> externe Request weg. Siehe Abschnitt 13.
+
+---
+
+## 4. Layout
+
+- **Eine Spalte. Linksbündig. Nicht zentriert.** Zentrierte Hero-Blöcke sind
+  das visuelle Signal für Marketingseite, linksbündiger Satz das Signal für
+  Text, der gelesen werden will.
+- **Satzbreite maximal 620px.** Auch auf großen Bildschirmen. Längere Zeilen
+  werden nicht gelesen.
+- **Seitenrand:** 32px Desktop, 20px Mobil.
+- **Kein Grid mit Karten.** Trennung durch Haarlinien in Dust, 1px. Bei 0px
+  Radius sehen Karten wie Boxen aus und Boxen sehen wie ein Dashboard aus.
+  Linien sehen wie eine Zeitungsseite aus.
+
+### Abstandsraster
+
+Nur diese Werte: **8 / 16 / 24 / 40 / 64.**
+
+Bei einem so reduzierten Design trägt Weißraum die gesamte Gestaltung, weil
+sonst nichts da ist. Ein inkonsistentes Raster ist der Unterschied zwischen
+„gesetzt" und „selbst zusammengeschoben".
+
+| Wert | Einsatz |
+|---|---|
+| 8 | innerhalb einer Textgruppe (Datum zu Titel) |
+| 16 | zwischen zusammengehörigen Elementen |
+| 24 | zwischen Textblöcken |
+| 40 | innerhalb einer Sektion |
+| 64 | zwischen Sektionen |
+
+### Mobil
+
+Single-Column ist bereits responsiv. Die einzige echte Anforderung: **Das
+Anmeldeformular muss bei 375px Breite ohne Scrollen sichtbar sein.** Das
+begrenzt H1 auf maximal zwei Zeilen und die Subline auf maximal drei. Alles,
+was zusätzlich in den Hero soll, konkurriert mit dieser Regel und verliert.
+
+Auf Mobil steht der Button unter dem Eingabefeld, nicht daneben.
+
+---
+
+## 5. Bildregeln
+
+**Keine Bilder.** Kein Unsplash, kein Stockfoto, keine Illustration, keine
+Icons, keine dekorativen Grafiken.
+
+Genau drei Ausnahmen:
+
+1. Ein echtes Foto von Vincent im Autoren-Block
+2. Die Canva-Banner als `og:image` pro Ausgabe (nicht auf der Seite selbst)
+3. Selbst gebaute Datengrafiken in Ausgaben, wenn sie einen Sachverhalt zeigen
+
+Eine Seite ohne Bilder wirkt in dieser Kategorie souverän, nicht arm.
+Stockfotografie ist der schnellste Weg, generisch auszusehen.
+
+---
+
+## 6. Startseite
+
+Sieben Sektionen in dieser Reihenfolge. Nicht mehr.
+
+### 6.1 Header
+
+Logo-Wortmarke links (Chaney, 15px, Ink). Rechts ein einziges Element:
+„Abonnieren" (Mono, 12px, Stone), Ankerlink auf das Hero-Formular.
+
+**Keine Navigation.** Wer schon Leser ist, kommt über die E-Mail, nicht über
+die Seite.
+
+Darunter Haarlinie in Dust.
+
+### 6.2 Hero
+
+Eyebrow (Mono, 12px, Stone):
+
+```
+Bitcoin, Geld und Politik · jeden Freitag
+```
+
+H1 (Chaney, Umbruch gesetzt, „Bitcoin" in Orange als dokumentierte
+Markenzeichen-Ausnahme, siehe §2):
+
+```
+Bitcoin besitzen ist einfach.
+Verstehen nicht.
+```
+
+Subline (Satoshi, 15px, Ink, max 480px):
+
+```
+Ein Thema pro Woche, zu Ende gedacht. Ich sage dir, was ich davon
+halte, und wo ich mir nicht sicher bin.
+```
+
+Rechts neben dem Textblock (ab `lg`, darunter gestapelt nach dem Formular):
+die interaktive Angebotskurve (`Angebotskurve.vue`) — die einzige Grafik der
+Marke, Datengrafik nach §5.
+
+Formular: ein Feld, Placeholder `deine@email.de`, Rahmen 1px Ink. Button
+direkt anschließend ohne Lücke, Hintergrund Orange, **Text Weiß**, Gewicht 500.
+
+> Text Weiß ist eine bewusste Entscheidung gegen die frühere Ink-Vorgabe
+> (Kontrast auf Orange: Weiß 2,7:1, Ink 6,3:1 — WCAG AA verlangt 4,5:1).
+> Wer das ändert, ändert es hier und in `SignupIsland.vue` zugleich.
+
+Button-Label:
+
+```
+Freitags lesen
+```
+
+Nicht „Jetzt kostenlos abonnieren". Das beschreibt eine Transaktion.
+„Freitags lesen" beschreibt ein Ergebnis und konvertiert besser, weil es keine
+Verpflichtung suggeriert.
+
+Microcopy (Mono, 11px, Stone):
+
+```
+Eine Mail pro Woche · 4 Minuten · Abmelden mit einem Klick
+```
+
+**Keine Abonnentenzahl.** Nirgends auf der Seite. Die Abwesenheit einer Zahl
+fällt niemandem auf, eine falsche Zahl kostet alles.
+
+### 6.3 Die letzten drei Ausgaben
+
+Eyebrow (Mono, 12px, Stone): `Die letzten drei Ausgaben`
+
+Drei Einträge untereinander, getrennt durch Haarlinien in Dust. Kein Grid,
+keine Karten.
+
+Pro Eintrag:
+
+- Datum (Mono, 11px, Stone)
+- Titel (Chaney, 17px, Ink), verlinkt auf `/p/slug`
+- Untertitel (Satoshi, 14px, Stone)
+
+Wird aus der beehiiv-API gezogen, nicht hartkodiert.
+
+Diese Sektion **ersetzt Testimonials**. Sie ist überprüfbarer Beweis statt
+Behauptung: der Besucher kann klicken und selbst urteilen.
+
+### 6.4 Autor
+
+Portrait links (kreisförmig ist hier erlaubt, weil es kein UI-Element ist),
+Text rechts. Auf Mobil untereinander.
+
+```
+Ich bin Vincent. Ich habe angefangen zu schreiben, weil ich Bitcoin verstehen
+wollte und fast alles auf Deutsch entweder Verkauf oder Video war. Jetzt
+schreibe ich, was ich damals lesen wollen hätte.
+```
+
+Drei Sätze. Kein Lebenslauf, keine Qualifikationsbehauptung.
+
+### 6.5 Was das hier nicht ist
+
+Eyebrow (Mono): `Was das hier nicht ist`
+
+```
+Keine Kursprognosen. Keine Altcoins. Keine Trading-Signale.
+Kein Sponsoring. Keine tägliche Mail.
+```
+
+Diese Sektion ist die **Churn-Bremse**. Sie hält die falschen Abonnenten ab.
+Ein Abonnent, der nicht kommt, kostet nichts. Einer, der kommt und wieder
+geht, kostet Zustellbarkeit.
+
+### 6.6 Zweiter CTA
+
+Überschrift (Chaney, 22px):
+
+```
+Nächste Ausgabe: Freitag.
+```
+
+Darunter identisches Formular, identisches Button-Label, identische Microcopy.
+Kein neuer Verkaufstext.
+
+### 6.7 Footer
+
+Archiv · Über mich · Impressum · Datenschutz · Kontakt. Social-Links optional,
+klein, Stone.
+
+Disclaimer (keine Anlageberatung) in Mono, 11px.
+
+---
+
+## 7. Weitere Seiten
+
+### `/p/[slug]` — Ausgaben
+
+**Verifiziert:** Die Live-Seite nutzt `/p/`, zum Beispiel
+`/p/gold-vs-bitcoin-2026`, `/p/deutschland-will-geduld-besteuern`. Diese Slugs
+sind indexiert und in versendeten E-Mails verlinkt und müssen **exakt erhalten
+bleiben**.
+
+Aufbau: Datum (Mono), Titel (Chaney), Untertitel, Fließtext, danach das
+Formular, danach drei Links auf verwandte Ausgaben.
+
+Der Prose-Content aus der API kommt mit beehiiv-eigenem Markup und muss
+normalisiert werden. **Das ist der aufwendigste Teil des Projekts, nicht die
+Startseite.** Dafür einen eigenen `.prose`-Style schreiben, der die Tokens aus
+Abschnitt 2 und 3 anwendet.
+
+### Wissensseiten
+
+Bestehende URLs 1:1 übernehmen:
+
+```
+/was-ist-bitcoin
+/bitcoin-vs-gold
+/bitcoin-mythen
+/bitcoin-kaufen
+/bitcoin-verwahren
+```
+
+Als Markdown-Dateien in `src/content/`. Rolle: **Eingänge, keine Durchgänge.**
+Ein Besucher soll dort konvertieren, nicht zur Startseite weiterklicken.
+
+Pro Seite: mindestens 1.500 Wörter, ein klarer Standpunkt statt neutraler
+Erklärung, das Formular nach dem ersten Drittel und am Ende, drei interne
+Links auf passende Ausgaben.
+
+Die internen Links von Wissensseiten auf Ausgaben sind wichtig. Sie geben den
+Ausgaben Autorität und halten Leser im System.
+
+### `/archiv`
+
+Alle Ausgaben, chronologisch, gleiche Listendarstellung wie Sektion 6.3. Kein
+Filter, keine Suche, keine Tags. Am Ende das Formular.
+
+### `/ueber-mich`
+
+Längere Fassung des Autoren-Absatzes. Warum es den Newsletter gibt, was er
+nicht ist, wie man Vincent erreicht. Erste Person. Formular am Ende.
+
+---
+
+## 8. SEO
+
+### Grundannahme
+
+Die Seite hatte in zwölf Monaten zwei organische Google-Besucher. SEO ist hier
+kein Optimierungs-, sondern ein Aufbauprojekt und der langsamste verfügbare
+Hebel. **Einmal richtig aufsetzen, dann laufen lassen. Nicht zum Projekt
+machen.**
+
+### Welche Suchanfragen
+
+**Nicht anvisieren:** „was ist bitcoin", „bitcoin kaufen", „bitcoin kurs".
+Dominiert von Blocktrainer, Coinbase, BISON, jeder Börse mit Budget. Und wer
+„bitcoin kurs" sucht, will keinen Newsletter über Geldpolitik.
+
+**Anvisieren:** Anfragen, bei denen jemand bereits verstehen will und keine
+gute deutschsprachige Antwort findet.
+
+```
+bitcoin steuer haltefrist 2026
+stock to flow modell kritik
+ist bitcoin volatiler als gold
+warum kein altcoin statt bitcoin
+bitcoin gegen inflation sinnvoll
+```
+
+Wenig Volumen, kaum Wettbewerb, und der Suchende ist bereits in der
+Zielgruppe. Fünfzig solcher Besucher im Monat mit 20 Prozent Konversion sind
+mehr wert als fünftausend auf „bitcoin kurs" mit null.
+
+### Titel und Slug trennen
+
+Der E-Mail-Betreff und der Suchbegriff sind zwei verschiedene Dinge. Astro
+erlaubt die Trennung, beehiiv nicht.
+
+| Feld | Beispiel |
+|---|---|
+| H1 auf der Seite | Deutschland will Geduld besteuern |
+| Slug | `/p/bitcoin-haltefrist-steuer-2026` |
+| `<title>` | Bitcoin-Haltefrist und die geplante Steuer 2026 |
+| Meta-Description | Der Untertitel der Ausgabe |
+
+**Achtung:** Für bereits veröffentlichte Ausgaben bleibt der bestehende Slug.
+Die Trennung gilt ab jetzt für neue.
+
+### Technische Checkliste
+
+- [ ] `@astrojs/sitemap` eingebunden, Sitemap in der Search Console eingereicht
+- [ ] RSS-Feed selbst gebaut (`/rss.xml`), beehiiv liefert ihn nicht mehr
+- [ ] JSON-LD `Article` auf jeder Ausgabe, `Person` auf `/ueber-mich`
+- [ ] `og:image` pro Ausgabe aus den Canva-Bannern
+- [ ] Canonical-Tags auf allen Seiten
+- [ ] `robots.txt`
+- [ ] Search Console überhaupt eingerichtet
+- [ ] Alle bestehenden `/p/`-URLs verifiziert erreichbar
+
+---
+
+## 9. Technik
+
+**Stack:** Astro 6 + Tailwind v4 (CSS-first) + DaisyUI v5. beehiiv bleibt für
+Abonnentenverwaltung, Versand, Automations und Statistik. Astro übernimmt nur
+den Website-Layer.
+
+> **Hosting ist noch nicht entschieden** und deshalb hier bewusst
+> nicht spezifiziert. Aktuell läuft das Repo mit `@astrojs/vercel` und
+> `output: 'server'`. Alle Regeln unten gelten plattformunabhängig.
+
+### Anmeldeformular
+
+Das Formular (Vue-Island `SignupIsland.vue`) postet per fetch an den
+API-Endpoint **`POST /api/subscribe`** (`src/pages/api/subscribe.ts`,
+`prerender = false`). Der Endpoint ruft **serverseitig** die beehiiv
+Subscriptions-API über `src/lib/beehiiv.ts` auf. Ohne JS greift der native
+Form-POST an denselben Endpoint (303 zurück mit `?anmeldung=ok|fehler`).
+Der API-Key liegt in Umgebungsvariablen und taucht **nie im Client-Bundle**
+auf. `BEEHIIV_*` ohne `PUBLIC_`-Präfix ist nie im Browser sichtbar.
+Footer- und CTA-Formulare laufen noch über die Astro Action `subscribe`
+(gleicher beehiiv-Client dahinter).
+
+**UTM-Parameter aus der URL mitgeben.** Sonst bricht die Akquise-Statistik in
+beehiiv ab, und genau die ist die Datengrundlage für alle Kanalentscheidungen.
+
+**Erfolgsfall:** kein Redirect auf eine Danke-Seite, sondern Inline-Bestätigung
+an Ort und Stelle:
+
+```
+Fast fertig. Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist.
+```
+
+**Fehlerfall:** benennen, was passiert ist, und was zu tun ist. Kein
+„Fehler:"-Präfix, keine Entschuldigung, keine Rohfehler aus der API.
+
+### Rendering
+
+Hybrid: `astro.config.mjs` steht auf `output: 'static'` + Adapter — das ist
+seit Astro 5 das Hybrid-Modell (`output: 'hybrid'` existiert nicht mehr).
+Statisch: `/impressum`, `/datenschutz`. SSR (`prerender = false`): `/`,
+`/archiv`, `/newsletter/[slug]`, `/ueber`, `/api/subscribe` — damit erscheinen
+neue beehiiv-Ausgaben ohne Redeploy. Ausgaben und Archiv sollten mit
+Cache-Headern oder ISR ausgeliefert werden, damit nicht jeder Aufruf die
+beehiiv-API trifft.
+
+### Domains
+
+`bitsandsatoshis.com` ist kanonisch. `bitsandsatoshis.de` per **301** darauf
+weiterleiten.
+
+**Kein Spiegeln.** Beide Domains mit identischem Inhalt erreichbar wäre
+Duplicate Content.
+
+### Migrationsreihenfolge
+
+Der Wechsel ist nicht schrittweise möglich, die Domain zeigt entweder auf
+beehiiv oder auf die neue Seite. Vor dem DNS-Umzug:
+
+1. Vollständige Seite auf einer Preview-URL gebaut, inklusive Archiv
+2. Anmeldung mit echter Adresse getestet, Ankunft in beehiiv und korrektes
+   Quellen-Tag geprüft
+3. Redirect-Liste gegen die alte beehiiv-Sitemap abgeglichen, jede bestehende
+   URL hat eine Route oder einen 301
+4. Erst dann DNS umlegen
+5. `.de`-Weiterleitung einrichten
+6. Sitemap in der Search Console neu einreichen
+
+**Schritt 2 ist der, an dem es üblicherweise klemmt.** Testen, bevor die Domain
+umgezogen ist.
+
+### Was beehiiv nicht mehr liefert
+
+RSS-Feed, Sitemap, Impressum, Datenschutz, Cookie-Banner. Alles selbst
+nachbauen. **Der RSS-Feed wird am häufigsten vergessen.**
+
+---
+
+## 10. Verbotsliste
+
+Nicht bauen, auch wenn es naheliegt:
+
+- Popup oder Exit-Intent-Overlay
+- Zweites Formularfeld (Vorname wird nach der Anmeldung erhoben, nicht davor)
+- Abonnentenzahlen, Leserzahlen, „über X Menschen lesen"
+- Testimonials, solange keine echten aus der Beta-Kohorte vorliegen
+- Stockfotos, Icons, dekorative Illustrationen
+- Dark Mode
+- Karten mit Rahmen und Schatten
+- Mega-Navigation im Header
+- Scroll-Animationen, Fade-Ins, Parallax
+- CMS-Anbindung
+- Cookie-Banner, solange keine Tracking-Cookies gesetzt werden
+- Vimi oder ein zweites Produkt auf der Startseite. Der Weg dahin läuft über
+  die Willkommensmail, nicht über die Landingpage.
+- Das Satoshi-Zitat
+- Das Wort „wir" in jeglicher Form
+
+---
+
+## 11. Entscheidungsregel
+
+Für alles, was hier nicht geregelt ist:
+
+> **Wenn du dich fragst, ob etwas rein soll: es soll nicht.**
+
+Die Gefahr bei dieser Seite ist nicht, dass sie zu schlicht wird. Sie ist, dass
+sie beim Bauen gefüllt wird. Ein Icon hier, ein Akzent dort, noch eine
+Sektion. Jede Ergänzung schwächt das Einzige, was die Seite leisten muss.
+
+---
+
+## 12. Definition of Done
+
+- [ ] Formular über der Falte bei 375px Breite, ohne Scrollen
+- [ ] Genau zwei orange Elemente auf der Startseite
+- [ ] Keine Zahl über Abonnenten irgendwo im Markup
+- [ ] Kein „wir" im gesamten Text
+- [ ] Alle bestehenden `/p/`-Slugs erreichbar
+- [ ] Anmeldung getestet, Eintrag kommt in beehiiv an, Quelle korrekt getaggt
+- [ ] Lighthouse Performance und Accessibility über 95
+- [ ] Sichtbarer Fokus-Ring auf allen interaktiven Elementen
+- [ ] `prefers-reduced-motion` respektiert (falls überhaupt Motion vorhanden
+      ist, siehe Abschnitt 10)
+- [ ] RSS-Feed validiert
+
+---
+
+## 13. Abstand zwischen Spec und Code
+
+Aktualisiert Juli 2026. Erledigt und aus der Liste raus: Hero, AuthorCard,
+Archiv, Über-Seite, Navbar, Footer, Testimonials (gestrichen), Faq (auf der
+Startseite durch die Sektion „Bevor du dich einträgst" ersetzt), Copy-Prüfung
+auf Em-Dashes.
+
+### Struktur
+
+| Punkt | Ist | Soll |
+|---|---|---|
+| Ausgaben-Route | `/newsletter/[slug]` | `/p/[slug]` (verifiziert live) |
+| Über-Seite | `/ueber` | `/ueber-mich` |
+| Wissensseiten | fehlen komplett | 5 Seiten in `src/content/` |
+| RSS, Sitemap, JSON-LD, robots.txt | fehlen | Abschnitt 8 |
+
+### Komponenten
+
+| Datei | Verstoß |
+|---|---|
+| `components/PostCard.astro` | Karten-Darstellung; ungenutzt, streichen oder auf Listeneintrag umbauen |
+| `pages/newsletter/[slug].astro` | Route; Prose-Styles gegen §2/§3 prüfen |
+| `pages/impressum.astro`, `datenschutz.astro` | Platzhalter mit Tailwind-Prose statt Tokens; Datenschutz-Text enthält „wir" |
+
+### Schriften
+
+Chaney und Satoshi laufen über die Fontshare-CDN statt lokal aus
+`/public/fonts/`. Widerspricht Abschnitt 3 (DSGVO, Drittanbieter-Requests).
+
+---
+
+*Bits&Satoshis · Design-, Copy- und SEO-Spezifikation · 2026*

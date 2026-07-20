@@ -1,7 +1,8 @@
 ---
 /**
- * Autorenbox „Aus der Redaktion" — Zeitungs-Konzept.
+ * Autoren-Sektion (§6.4) — Portrait links, Text rechts, auf Mobil untereinander.
  * Einsatz: Homepage (nach Ausgaben-Liste) + /ueber (oben, ohne Selbst-Link).
+ * Keine Karte, keine Rotation, kein Orange: Gliederung nur über Weißraum.
  */
 interface Props {
   /** Link „Mehr über mich" ausblenden (auf /ueber selbst). */
@@ -11,46 +12,49 @@ interface Props {
 const { showLink = true } = Astro.props;
 ---
 
-<section class="author-section">
-  <div class="author-card">
+<section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
+  <div class="author">
     {
       showLink ? (
-        <a href="/ueber" class="author-photo-link" aria-label="Mehr über Vincent">
+        <a href="/ueber" class="author__photo-frame" aria-label="Mehr über Vincent">
           <img
             src="/author.png"
-            alt="Vincent — Autor von Bits&Satoshis"
-            class="author-photo"
-            width="120"
-            height="120"
+            alt="Vincent, Autor von Bits&Satoshis"
+            class="author__photo"
+            width="112"
+            height="112"
             loading="lazy"
           />
         </a>
       ) : (
-        <span class="author-photo-link">
+        <span class="author__photo-frame">
           <img
             src="/author.png"
-            alt="Vincent — Autor von Bits&Satoshis"
-            class="author-photo"
-            width="120"
-            height="120"
+            alt="Vincent, Autor von Bits&Satoshis"
+            class="author__photo"
+            width="112"
+            height="112"
             loading="lazy"
           />
         </span>
       )
     }
 
-    <div class="author-text">
-      <p class="author-eyebrow">Aus der Redaktion</p>
-      <h2 class="author-headline">HALLO, ICH BIN VINCENT.</h2>
-      <p class="author-body">
-        Bits&Satoshis ist mein Versuch, Bitcoin so zu erklären, wie ich es mir
-        selbst am Anfang gewünscht hätte: ruhig, ehrlich und ohne Kursgeschrei.
-        Hier geht es ums Verstehen — nicht um Preise, Prognosen oder Panik.
+    <div class="author__text measure">
+      <h2 class="h2">Ich bin Vincent.</h2>
+      <p class="author__body">
+        Bits&amp;Satoshis gibt es, weil ich Bitcoin verstehen wollte und fast
+        alles auf Deutsch entweder etwas verkaufen oder ein Video sein wollte.
+      </p>
+      <p class="author__body">
+        Ich bin kein Analyst. Ich lese mich in ein Thema ein, rechne nach, wo
+        sich etwas nachrechnen lässt, und schreibe auf, was dabei rauskommt.
+        Auch wenn es gegen das läuft, was ich vorher gedacht habe.
       </p>
       {
         showLink && (
-          <a href="/ueber" class="author-link">
-            Mehr über mich <span class="author-arrow" aria-hidden="true">→</span>
+          <a href="/ueber" class="author__link">
+            Mehr über mich
           </a>
         )
       }
@@ -59,104 +63,59 @@ const { showLink = true } = Astro.props;
 </section>
 
 <style>
-  .author-section {
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 0 1.5rem 5rem;
-  }
-
-  /* Clipping-Karte: weiß, harte Ink-Border, leicht rotiert */
-  .author-card {
+  .author {
     display: flex;
-    align-items: center;
-    gap: 2rem;
-    background: var(--c-white);
-    border: var(--bd-strong);
-    padding: 1.75rem 2rem;
-    transform: rotate(-1deg);
+    align-items: flex-start;
+    gap: var(--sp-4);
   }
 
   @media (max-width: 640px) {
-    .author-card {
+    .author {
       flex-direction: column;
-      align-items: flex-start;
-      gap: 1.25rem;
-      padding: 1.5rem 1.25rem;
+      gap: var(--sp-3);
     }
   }
 
-  .author-photo-link {
+  .author__photo-frame {
     flex-shrink: 0;
     display: block;
   }
 
-  .author-photo {
-    width: 120px;
-    height: 120px;
+  .author__photo {
+    width: 112px;
+    height: 112px;
     display: block;
-    /* Foto bringt seinen orangenen Ring im Asset mit */
-    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+    object-fit: cover;
+    /* Kreis ist hier erlaubt: Portrait, kein UI-Element (§6.4) */
+    border-radius: 50%;
   }
 
-  .author-photo-link:hover .author-photo {
-    transform: rotate(3deg);
-  }
-
-  .author-eyebrow {
+  .author__body {
     font-family: var(--f-body);
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--c-dust);
-    margin-bottom: 0.5rem;
-  }
-
-  .author-headline {
-    font-family: var(--f-display);
+    font-size: 15px;
     font-weight: 400;
-    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
-    line-height: 1.05;
+    line-height: 1.65;
     color: var(--c-ink);
-    text-transform: uppercase;
-    letter-spacing: 0;
-    margin-bottom: 0.625rem;
   }
 
-  .author-body {
+  .h2 + .author__body,
+  .author__body + .author__body {
+    margin-top: var(--sp-2);
+  }
+
+  .author__link {
+    display: inline-block;
+    margin-top: var(--sp-2);
     font-family: var(--f-body);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.72;
-    color: var(--c-stone);
-    max-width: 56ch;
-    margin-bottom: 0.875rem;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
   }
 
-  .author-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: var(--f-body);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--c-orange);
-    text-decoration: none;
-  }
-
-  .author-arrow {
-    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .author-link:hover .author-arrow {
-    transform: translateX(2px);
-  }
-
-  /* ── Reduced motion ──────────────────────────────── */
-  @media (prefers-reduced-motion: reduce) {
-    .author-photo,
-    .author-arrow {
-      transition: none;
-    }
+  .author__link:hover {
+    text-decoration-color: var(--c-ink);
   }
 </style>

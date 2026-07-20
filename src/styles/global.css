@@ -2,7 +2,8 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
-/* Bits&Satoshis Custom-Theme v4.0 — Bitcoin Orange auf Zeitungsdruck-Paper */
+/* Bits&Satoshis Custom-Theme v5.0 — Bitcoin Orange auf Zeitungsdruck-Paper
+   Kein Dark Mode: Paper ist die Identität, nicht ein Modus. */
 @plugin "daisyui/theme" {
   name: "bitsandsatoshis";
   default: true;
@@ -14,14 +15,15 @@
   --color-base-300: #DDD1BC;
   --color-base-content: #221A0F;
 
+  /* Button-Text ist Ink auf Orange, nicht Weiß. */
   --color-primary: #E8832A;
-  --color-primary-content: #ffffff;
+  --color-primary-content: #221A0F;
 
   --color-secondary: #221A0F;
   --color-secondary-content: #F4EDE0;
 
   --color-accent: #E8832A;
-  --color-accent-content: #ffffff;
+  --color-accent-content: #221A0F;
 
   --color-neutral: #221A0F;
   --color-neutral-content: #F4EDE0;
@@ -37,24 +39,54 @@
   --border: 1px;
 }
 
-/* Font tokens — Tailwind utilities: font-sans, font-display */
+/* Font tokens — Tailwind utilities: font-sans, font-display, font-mono.
+   Die Werte kommen aus der Astro-Fonts-API (astro.config.mjs), die
+   --font-brand-* in :root setzt. Hier wird nur darauf gezeigt, damit es
+   genau eine Quelle für die Schriftfamilien gibt. */
 @theme {
-  --font-display: 'Chaney', sans-serif;
-  --font-sans:    'Satoshi Variable', 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-brand-display);
+  --font-sans:    var(--font-brand-body);
+  --font-mono:    var(--font-brand-mono);
+
+  /* Palette als Utilities: text-ink, bg-orange, border-dust, … */
+  --color-paper:  #F4EDE0;
+  --color-ink:    #221A0F;
+  --color-orange: #E8832A;
+  --color-stone:  #5C4F3A;
+  --color-dust:   #A89880;
 }
 
 /* Design system custom properties — source of truth for component CSS */
 :root {
+  /* Die Palette hat fünf Tokens und wird nicht ergänzt.
+     Ink = Fließtext · Stone = Meta · Dust = Linie + Placeholder · Orange = nur Button-BG */
   --c-paper:  #F4EDE0;
-  --c-orange: #E8832A;
   --c-ink:    #221A0F;
+  --c-orange: #E8832A;
   --c-stone:  #5C4F3A;
   --c-dust:   #A89880;
-  --c-rule:   #C8BAA8;
-  --c-white:  #FDFAF5;
 
-  --f-display: 'Chaney', sans-serif;
-  --f-body:    'Satoshi Variable', 'Satoshi', sans-serif;
+  /* Veraltet — nur noch für nicht migrierte Komponenten. Nicht neu verwenden. */
+  --c-rule:   #A89880;
+  --c-white:  #F4EDE0;
+
+  /* Aliase auf die Astro-Fonts-Variablen. Komponenten-CSS (Navbar.vue u.a.)
+     nutzt --f-*; die Familien selbst stehen nur in astro.config.mjs. */
+  --f-display: var(--font-brand-display);
+  --f-body:    var(--font-brand-body);
+  --f-mono:    var(--font-brand-mono);
+
+  /* ── Abstandsraster — 8 / 16 / 24 / 40 / 64 ────────
+     Verbindlich. Zwischenwerte sind keine Option. */
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 40px;
+  --sp-5: 64px;
+
+  /* ── Satzbreite ────────────────────────────────────
+     Eine Spalte, linksbündig. Nie zentriert. */
+  --measure: 620px;
 
   --bd:        1px solid #C8BAA8;
   --bd-strong: 2px solid #221A0F;
@@ -65,28 +97,93 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Fließtext: Ink, nie Stone. Stone ermüdet über mehrere Absätze. */
 body {
   font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--c-ink);
 }
 
-/* Chaney display headlines */
+/* ── Layout-Primitive ───────────────────────────────
+   Satzbreite links im Viewport, nicht mittig auf der Seite.
+   Zentriert wird nur der Container, nicht der Text darin. */
+.measure {
+  max-width: var(--measure);
+  text-align: left;
+}
+
+/* Haarlinie in Dust — ersetzt Karten als Gliederungsmittel */
+.rule {
+  border: 0;
+  border-top: 1px solid var(--c-dust);
+  margin: 0;
+}
+
+/* Cabinet Grotesk display headlines — nie unter 17px, nie für Fließtext.
+   Satzschreibung, kein Versalsatz, kein Title Case.
+   Gewicht 700: die Familie wird nur in 700 und 800 geladen. */
 .font-display {
   font-family: var(--f-display);
-  font-weight: 400;
-  text-transform: uppercase;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
-/* Satoshi italic accent */
+/* H1 — genau einmal pro Seite. 30–34px mobil, 38–44px Desktop. */
+.h1 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.875rem, 5vw, 2.75rem);
+  line-height: 1.12;
+  color: var(--c-ink);
+}
+
+/* H2 — Sektionsüberschriften, 22–24px */
+.h2 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.375rem, 2.5vw, 1.5rem);
+  line-height: 1.25;
+  color: var(--c-ink);
+}
+
+/* H3 — Ausgabentitel in Listen, 17–19px. 17px ist die untere Grenze. */
+.h3 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+  line-height: 1.3;
+  color: var(--c-ink);
+}
+
+/* Satoshi italic accent — redaktionell, nie strukturelles UI */
 .accent {
   font-style: italic;
 }
 
-/* Eyebrow labels — Satoshi 700 small caps */
+/* Meta — Datum, Lesezeit, Microcopy. Nie für Prosa.
+   Stone, nicht Dust: Dust ist ausschließlich Linie und Placeholder. */
+.meta {
+  font-family: var(--f-mono);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--c-stone);
+}
+
+/* Eyebrow labels — Mono, Satzschreibung. Kein Versalsatz. */
 .eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+  font-family: var(--f-mono);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--c-stone);
+}
+
+/* Fokus immer Orange — zählt nicht gegen das Orange-Budget */
+:focus-visible {
+  outline: 2px solid var(--c-orange);
+  outline-offset: 2px;
 }

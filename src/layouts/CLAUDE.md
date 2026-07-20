@@ -23,15 +23,22 @@ Beispiel: "Archiv — Bits&Satoshis"
 Homepage: "Bits&Satoshis — Der ruhige Bitcoin-Newsletter"
 ```
 
-### Fonts (wichtig: self-hosted, kein Google-CDN)
-Im Frontmatter von `Layout.astro` per `@fontsource` importiert:
+### Fonts (kein Google-CDN)
+**Chaney + Satoshi** — Fontshare-CDN im `<head>`. Chaney gibt es nur dort,
+Satoshi läuft aus demselben Request mit.
+
+**IBM Plex Mono** — self-hosted, im Frontmatter:
 ```ts
-import "@fontsource/inter/400.css";        // …500, 600, 700, 800
-import "@fontsource/playfair-display/400-italic.css"; // …500, 600 italic
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 ```
+
 Die Font-Families sind als Tailwind-Tokens in `src/styles/global.css`
-(`@theme { --font-sans / --font-serif }`) hinterlegt → Utilities `font-sans` /
-`font-serif`. Playfair nur kursiv für Akzente (`.accent`).
+(`@theme { --font-display / --font-sans / --font-mono }`) hinterlegt →
+Utilities `font-display` / `font-sans` / `font-mono`.
+
+Rollen sind strikt getrennt (siehe `/DESIGN.md` §03): Chaney nur H1–H3 und
+nie unter 17px, Mono nur für Meta und nie für Prosa.
 
 ### Meta-Tags die immer gesetzt sind
 `charset`, `viewport`, `description`, `og:title`, `og:description`,

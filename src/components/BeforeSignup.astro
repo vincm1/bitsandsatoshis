@@ -1,0 +1,83 @@
+---
+/**
+ * „Bevor du dich einträgst" — fünf Frage-Antwort-Paare als Churn-Bremse,
+ * direkt vor dem zweiten CTA. Ersetzt den Faq-Block auf der Startseite.
+ * Keine Karten, keine Icons, kein Accordion: alle Antworten stehen offen da.
+ */
+const pairs = [
+  {
+    q: "Soll ich jetzt kaufen?",
+    a: "Weiß ich nicht. Und niemand, der es dir sagt, weiß es auch.",
+  },
+  {
+    q: "Wo steht Bitcoin Ende des Jahres?",
+    a: "Weiß ich nicht.",
+  },
+  {
+    q: "Welcher Coin kommt als Nächstes?",
+    a: "Keine Ahnung. Interessiert mich auch nicht.",
+  },
+  {
+    q: "Verdienst du daran, wenn ich kaufe?",
+    a: "Nein. Keine Affiliate-Links, kein Sponsoring, keine Kurse.",
+  },
+  {
+    q: "Ist es zu spät?",
+    a: "Falsche Frage. Genau darüber schreibe ich.",
+  },
+] as const;
+---
+
+<section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
+  {/* Genau eine Haarlinie in Dust als obere Sektionsgrenze */}
+  <hr class="rule" />
+
+  <div class="measure">
+    <h2 class="before-signup__title">Bevor du dich einträgst</h2>
+
+    <dl class="before-signup__list">
+      {
+        pairs.map((pair) => (
+          <>
+            <dt class="before-signup__question">{pair.q}</dt>
+            <dd class="before-signup__answer">{pair.a}</dd>
+          </>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .before-signup__title {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.25;
+    color: var(--c-ink);
+    margin-top: var(--sp-3);
+  }
+
+  .before-signup__list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .before-signup__question {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--c-ink);
+    margin-top: var(--sp-3);
+  }
+
+  .before-signup__answer {
+    font-family: var(--f-body);
+    font-weight: 400;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--c-stone);
+    margin: var(--sp-1) 0 0;
+  }
+</style>

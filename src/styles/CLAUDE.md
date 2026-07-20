@@ -2,6 +2,7 @@
 
 ## Zweck
 Globale Styles, Design-Tokens und das DaisyUI-Theme.
+**Verbindliche Quelle für alle Gestaltungsregeln: `/DESIGN.md` (v5.0).**
 
 ## global.css
 Tailwind v4 wird **CSS-first** konfiguriert — es gibt **keine**
@@ -13,22 +14,49 @@ Tailwind v4 wird **CSS-first** konfiguriert — es gibt **keine**
 @plugin "daisyui";
 
 @plugin "daisyui/theme" { name: "bitsandsatoshis"; … }  /* Markenfarben */
-@theme { --font-sans: Inter…; --font-serif: Playfair Display…; }
-
-.accent { font-family: var(--font-serif); font-style: italic; }
+@theme { --font-display: Chaney; --font-sans: Satoshi; --font-mono: IBM Plex Mono; }
+:root { --c-*, --f-*, --sp-*, --measure }
 ```
 
-## Theme-Tokens (Markenfarben → DaisyUI)
+## Tokens
+
+### Farben — fünf Tokens, wird nicht ergänzt
 | Token | Wert | Rolle |
 |---|---|---|
-| `--color-base-100` | `#FAF7F2` | Hintergrund (Cremeweiß) |
-| `--color-base-content` | `#2D2D2D` | Text (Dunkelgrau) |
-| `--color-primary` | `#F7931A` | Bitcoin Orange (CTAs/Akzente) |
+| `--c-paper` | `#F4EDE0` | Einziger Seitenhintergrund |
+| `--c-ink` | `#221A0F` | **Fließtext** + Headlines + Input-Rahmen |
+| `--c-orange` | `#E8832A` | **Nur Button-Hintergrund**, max. 2× pro Seite |
+| `--c-stone` | `#5C4F3A` | Meta, Datum, Eyebrow, Microcopy — **nie Fließtext** |
+| `--c-dust` | `#A89880` | **Nur** Linien und Placeholder — nie lesbarer Text |
+
+`--c-rule` und `--c-white` sind veraltet und existieren nur noch für nicht
+migrierte Komponenten.
+
+### Schrift
+| Token | Font | Rolle |
+|---|---|---|
+| `--f-display` | Chaney | H1–H3, Satzschreibung, nie unter 17px |
+| `--f-body` | Satoshi | Fließtext, Buttons — nur Gewicht 400 und 500 |
+| `--f-mono` | IBM Plex Mono | Datum, Lesezeit, Label — **nie Prosa** |
+
+### Abstände
+`--sp-1..5` = **8 / 16 / 24 / 40 / 64**. Zwischenwerte sind keine Option.
+
+### Satzbreite
+`--measure` = 620px. Linksbündig, eine Spalte.
+
+## Utility-Klassen
+`.measure` · `.rule` · `.h1` · `.h2` · `.h3` · `.font-display` · `.accent` ·
+`.meta` · `.eyebrow`
 
 ## Regeln
-- Farben **nie** hartkodiert in Komponenten — immer Tokens nutzen
-  (`bg-base-100`, `text-primary`, `btn-primary`, …).
-- Neue Design-Tokens als CSS-Variable im Theme/`@theme` ergänzen, nicht inline.
-- `.accent` für die Serif-Kursiv-Akzente (Playfair). Sparsam einsetzen.
-- Font-Gewichte, die genutzt werden, müssen in `Layout.astro` via `@fontsource`
-  importiert sein.
+- Farben **nie** hartkodiert in Komponenten — immer Tokens
+  (`var(--c-ink)` oder DaisyUI `text-base-content`, `btn-primary`).
+- Neue Design-Tokens als CSS-Variable ergänzen, nicht inline.
+- `border-radius: 0` überall. Kein `box-shadow`.
+- Kein `@media (prefers-color-scheme: dark)` — es gibt bewusst keinen Dark Mode.
+- Kein `text-align: center`.
+- Gliederung über Haarlinien (`.rule`) in Dust, nicht über Karten.
+- Kein `text-transform: uppercase` auf Überschriften. Kein Versalsatz.
+
+**Verbindlich ist `/DESIGN.md`.** Diese Datei ist nur die Kurzreferenz.

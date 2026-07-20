@@ -1,17 +1,19 @@
 # src/pages/
 
 ## Zweck
-Datei-basiertes Routing. Jede `.astro`-Datei = eine URL. Alles läuft **SSR**
-(`output: 'server'`), Daten werden im Frontmatter serverseitig geholt.
+Datei-basiertes Routing. Jede `.astro`-Datei = eine URL. **Hybrid**
+(`output: 'static'` + Vercel-Adapter): statisch ist der Default, Seiten mit
+`export const prerender = false` rendern serverseitig zur Request-Zeit.
 
 ## Routen
 ```
-index.astro            → /            Hero + Signup + letzte 3 Ausgaben
-archiv.astro           → /archiv      Alle Ausgaben (Karten-Grid)
-newsletter/[slug].astro→ /newsletter/:slug   Einzel-Ausgabe (eigener CLAUDE.md)
-ueber.astro            → /ueber       Über Vincent + Mission
-impressum.astro        → /impressum   DSGVO-Platzhalter
-datenschutz.astro      → /datenschutz DSGVO-Platzhalter
+index.astro            → /            SSR  Hero + Signup + letzte Ausgaben
+archiv.astro           → /archiv      SSR  Alle Ausgaben
+newsletter/[slug].astro→ /newsletter/:slug  SSR  Einzel-Ausgabe (eigener CLAUDE.md)
+ueber.astro            → /ueber       SSR  (progressives SignupForm braucht Request-Zeit)
+impressum.astro        → /impressum   statisch  DSGVO-Platzhalter
+datenschutz.astro      → /datenschutz statisch  DSGVO-Platzhalter
+api/subscribe.ts       → POST /api/subscribe  SSR-Endpoint → beehiiv (Signup)
 ```
 
 ## Muster für jede Seite

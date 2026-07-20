@@ -1,0 +1,5 @@
+# pnpm 11: ersetzt das entfernte `pnpm.onlyBuiltDependencies` aus package.json.
+# sharp wird von Astros Image-Optimierung gebraucht, esbuild von Vite.
+allowBuilds:
+  esbuild: true
+  sharp: true

@@ -1,26 +1,54 @@
 ---
-import SignupForm from "./SignupForm.astro";
+/**
+ * Zweiter CTA — Sektion 6.6 der Spec (DESIGN.md).
+ *
+ * Identisches Formular, identisches Button-Label, identische Microcopy wie im
+ * Hero. Kein neuer Verkaufstext: die Wiederholung ist der Punkt, nicht ein
+ * zweiter Anlauf zu überzeugen.
+ *
+ * Das Formular ist dieselbe Vue-Island wie oben (SignupIsland.vue → fetch auf
+ * POST /api/subscribe), nur mit eigener formId, damit die beiden Formulare auf
+ * einer Seite keine doppelten Element-IDs erzeugen. Damit läuft der Signup
+ * überall über denselben serverseitigen Weg zu beehiiv.
+ */
+import SignupIsland from "./SignupIsland.vue";
 
 interface Props {
+  /** Überschrift. Default ist der Spec-Text der Startseite (§6.6). */
   title?: string;
+  /** Optionaler Zusatzsatz. Auf der Startseite bewusst leer. */
   text?: string;
 }
 
-const {
-  title = "Fang an, Bitcoin wirklich zu verstehen.",
-  text = "Jede Woche eine ruhige, klare Ausgabe — kostenlos in dein Postfach. Kein Hype, kein Spam, jederzeit kündbar.",
-} = Astro.props;
+const { title = "Nächste Ausgabe: Freitag.", text } = Astro.props;
+
+// UTM aus der URL durchreichen — ohne sie bricht die Akquise-Statistik in
+// beehiiv ab (§9). Der No-JS-Rückläufer wird hier bewusst nicht ausgewertet:
+// /api/subscribe leitet auf / zurück, dort zeigt der Hero die Bestätigung.
+const sp = Astro.url.searchParams;
+const utm = Object.fromEntries(
+  (["utm_source", "utm_medium", "utm_campaign"] as const)
+    .map((key) => [key, sp.get(key)] as const)
+    .filter(([, value]) => value),
+) as Record<string, string>;
 ---
 
-<section class="border-t border-base-content/15 bg-base-200/40">
-  <div class="mx-auto max-w-3xl px-6 py-16 text-center sm:py-20">
-    <p class="eyebrow mb-4">Kostenlos abonnieren</p>
-    <h2 class="font-display text-3xl font-semibold leading-tight sm:text-4xl">
-      {title}
-    </h2>
-    <p class="mx-auto mt-4 max-w-md text-base-content/65">{text}</p>
-    <div class="mx-auto mt-8 max-w-md text-left">
-      <SignupForm variant="inline" />
-    </div>
+<!-- Gleicher Container wie Hero und Navbar, damit der Block mit dem Rest der
+     Seite fluchtet. Linksbündig, eine Spalte, 620px Satzbreite. -->
+<!-- id="newsletter": Ziel der beiden Navbar-Links. Lag vorher am Footer, der
+     jetzt kein Formular mehr hat. scroll-mt-28 hält die fixe Navbar frei. -->
+<section id="newsletter" class="mx-auto max-w-[1080px] px-5 sm:px-8">
+  <div class="max-w-[620px] border-t border-dust pt-10 pb-16">
+    <h2 class="h2">{title}</h2>
+
+    {
+      text && (
+        <p class="mt-4 text-[15px] leading-[1.65] text-ink text-pretty">
+          {text}
+        </p>
+      )
+    }
+
+    <SignupIsland client:idle utm={utm} formId="anmelden-2" />
   </div>
 </section>

@@ -249,8 +249,18 @@ export interface SubscribeResult {
   message: string;
 }
 
+/** UTM-Herkunft einer Anmeldung — Datengrundlage der Akquise-Statistik. */
+export interface SubscribeUtm {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+}
+
 /** E-Mail bei beehiiv anmelden. */
-export async function subscribe(email: string): Promise<SubscribeResult> {
+export async function subscribe(
+  email: string,
+  utm: SubscribeUtm = {},
+): Promise<SubscribeResult> {
   if (!isConfigured) {
     // Ohne Keys: Erfolg simulieren, damit das UI testbar ist.
     return {
@@ -268,7 +278,9 @@ export async function subscribe(email: string): Promise<SubscribeResult> {
         email,
         reactivate_existing: false,
         send_welcome_email: true,
-        utm_source: "website",
+        utm_source: utm.source || "website",
+        ...(utm.medium ? { utm_medium: utm.medium } : {}),
+        ...(utm.campaign ? { utm_campaign: utm.campaign } : {}),
       }),
     },
   );
@@ -280,7 +292,11 @@ export async function subscribe(email: string): Promise<SubscribeResult> {
     );
   }
 
-  return { ok: true, message: "Erfolgreich angemeldet." };
+  return {
+    ok: true,
+    message:
+      "Fast fertig. Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist.",
+  };
 }
 
 /** Mock-Ausgaben für den Demo-Modus ohne API-Keys. */

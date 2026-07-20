@@ -1,6 +1,10 @@
 ---
 import "../styles/global.css";
 
+// Schriften laufen über die Astro-Fonts-API (astro.config.mjs) — self-hosted,
+// kein Drittanbieter-Request im Browser des Besuchers.
+import { Font } from "astro:assets";
+
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.astro";
 
@@ -10,8 +14,8 @@ interface Props {
 }
 
 const {
-  title = "Bits&Satoshis — Der ruhige Bitcoin-Newsletter",
-  description = "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen — nicht spekulieren.",
+  title = "Bits&Satoshis · Der ruhige Bitcoin-Newsletter",
+  description = "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen, nicht spekulieren.",
 } = Astro.props;
 ---
 
@@ -29,17 +33,20 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <!-- Chaney + Satoshi Variable — Fontshare CDN -->
-    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-    <link
-      href="https://api.fontshare.com/v2/css?f[]=chaney@400&f[]=satoshi@900,700,500,400,300&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Cabinet Grotesk (Überschriften) + Satoshi (Fließtext) werden von der
+         eigenen Domain ausgeliefert und vorgeladen. Mono trägt nur Meta-Text
+         und braucht kein preload. -->
+    <Font cssVariable="--font-brand-display" preload />
+    <Font cssVariable="--font-brand-body" preload />
+    <Font cssVariable="--font-brand-mono" />
   </head>
   <body class="flex min-h-screen flex-col bg-base-100 text-base-content antialiased">
-    <Navbar client:load currentPath={Astro.url.pathname} />
-    <!-- pt berücksichtigt Announcement Bar (~40px) + Nav (~56px) -->
-    <main class="flex-1 pt-32 sm:pt-36">
+    <!-- Ohne client-Direktive: der Header ist statisches Markup (§10 verbietet
+         Scroll-Animationen), es wird also kein Vue an den Browser geliefert.
+         Er steht außerdem im Fluss statt fixed — den Abstand darunter setzt
+         der Hero selbst mit 64px. -->
+    <Navbar />
+    <main class="flex-1">
       <slot />
     </main>
     <Footer />

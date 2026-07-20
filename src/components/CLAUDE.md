@@ -9,15 +9,23 @@ Navbar.vue        ← Vue-Island: Logo links, Links mittig-links, Signup-CTA rec
                     schrumpft beim Scrollen zur schwebenden, runden Pille (client:load)
 Footer.astro      ← Logo, Mini-Signup (#newsletter), Impressum/Datenschutz-Links, Copyright
 Hero.astro        ← Homepage-Hero mit Headline + SignupForm
+SignupIsland.vue  ← Signup als Vue-Island: fetch an POST /api/subscribe
+                    (kein Reload); No-JS-Fallback: nativer Form-POST an den
+                    Endpoint, 303 zurück mit ?anmeldung=ok|fehler (wertet
+                    Hero.astro aus). Props: utm / formId / initialError.
+                    Genutzt im Hero, wiederverwendbar für den 2. CTA (formId!).
 SignupForm.astro  ← E-Mail-Formular → Astro Action `subscribe`
 SignupCta.astro   ← Wiederverwendbarer Signup-CTA-Block (Box + SignupForm), Props: title/text
 PostCard.astro    ← Vorschau einer Newsletter-Ausgabe (Karte), Link auf /newsletter/[slug]
-AuthorCard.astro  ← „Aus der Redaktion"-Box: author.png + Chaney-Zeile + Link zu /ueber;
+AuthorCard.astro  ← Autoren-Sektion (§6.4): rundes Portrait links, Text rechts
+                    (Ink, .measure), Link „Mehr über mich" in Ink mit Dust-Unterstrich;
                     Prop showLink={false} auf /ueber (kein Selbst-Link)
-Testimonials.astro← „Leserbriefe": 3 Zitate als asymmetrische Papier-Schnipsel
-                    (weiß/ink/weiß-strong), nur Dark-Card rotiert
-Faq.astro         ← „Noch Fragen?": natives <details>-Q&A im Zeitungsspalten-Stil,
-                    +→× Marker, Antwort-fadeIn nur beim Öffnen
+BeforeSignup.astro← „Bevor du dich einträgst": fünf offene Frage-Antwort-Paare
+                    (dl/dt/dd) vor dem zweiten CTA, eine Haarlinie oben, kein
+                    Accordion — ersetzt Faq.astro auf der Startseite
+Faq.astro         ← „Noch Fragen?": natives <details>-Q&A im Zeitungsspalten-Stil;
+                    nicht mehr auf der Startseite eingebunden (ersetzt durch
+                    BeforeSignup.astro)
 ```
 
 ## Design-Regeln für alle Komponenten

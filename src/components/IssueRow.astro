@@ -1,44 +1,73 @@
 ---
+/**
+ * IssueRow — ein Eintrag der Ausgabenliste (DESIGN.md §6.3).
+ *
+ * Datum (Mono, Stone) · Titel (Chaney 17–19px, Ink) · Untertitel (Satoshi, Stone).
+ * Kein Orange: das Budget aus §2 gehört den beiden Signup-Buttons.
+ * Kein Hover-Hintergrund, keine Bewegung (§4, §10). Die einzige Affordanz ist
+ * der unterstrichene Titel.
+ */
 import type { NewsletterPost } from "../lib/beehiiv";
 import { formatDate } from "../lib/format";
 
 interface Props {
   post: NewsletterPost;
-  /** Laufende Ausgabennummer, z.B. "014". Optional. */
-  nr?: string;
 }
 
-const { post, nr } = Astro.props;
-const href = `/newsletter/${post.slug}`;
+const { post } = Astro.props;
+
+// subtitle ist der redaktionelle Untertitel, teaser der beehiiv-Preview-Text.
+// Ist keins gesetzt, entfällt die Zeile ganz.
+const untertitel = post.subtitle || post.teaser;
 ---
 
-<a
-  href={href}
-  class="group grid grid-cols-[1fr_auto] items-baseline gap-x-5 gap-y-1 border-b border-base-content/12 py-6 transition-colors hover:bg-base-200/50 sm:grid-cols-[auto_1fr_auto] sm:items-center"
->
+<a href={`/newsletter/${post.slug}`} class="issue-row">
   {
-    nr && (
-      <span class="font-display order-1 text-lg font-semibold text-primary/80 sm:text-2xl">
-        Nº {nr}
-      </span>
+    post.publishedAt && (
+      <time datetime={post.publishedAt.toISOString()} class="meta issue-row__date">
+        {formatDate(post.publishedAt)}
+      </time>
     )
   }
-  <span class="order-3 min-w-0 sm:order-2">
-    <span class="font-display block text-2xl font-medium leading-snug sm:text-3xl">
-      {post.title}
-    </span>
-    {
-      (post.publishedAt || post.teaser) && (
-        <span class="mt-1 block text-sm text-base-content/55">
-          {post.publishedAt && formatDate(post.publishedAt)}
-          {post.publishedAt && post.teaser && " — "}
-          {post.teaser}
-        </span>
-      )
-    }
-  </span>
-  <span
-    class="order-2 text-xl text-base-content/30 transition-all group-hover:translate-x-1 group-hover:text-primary sm:order-3"
-    aria-hidden="true">→</span
-  >
+  <h3 class="h3 issue-row__title">{post.title}</h3>
+  {untertitel && <p class="issue-row__sub">{untertitel}</p>}
 </a>
+
+<style>
+  .issue-row {
+    display: block;
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-dust);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .issue-row__date {
+    display: block;
+  }
+
+  /* 8px innerhalb der Textgruppe: Datum zu Titel (§4).
+     Einheitliche Link-Affordanz der Seite: Unterstrich in Dust, Hover Ink. */
+  .issue-row__title {
+    margin-top: var(--sp-1);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .issue-row:hover .issue-row__title {
+    text-decoration-color: var(--c-ink);
+  }
+
+  .issue-row__sub {
+    margin-top: var(--sp-1);
+    max-width: var(--measure);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--c-stone);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
