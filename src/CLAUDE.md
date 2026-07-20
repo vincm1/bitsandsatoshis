@@ -22,6 +22,7 @@ ueber.astro            → /ueber       SSR  (progressives SignupForm braucht Re
 impressum.astro        → /impressum   statisch  DSGVO-Platzhalter
 datenschutz.astro      → /datenschutz statisch  DSGVO-Platzhalter
 api/subscribe.ts       → POST /api/subscribe  SSR-Endpoint → beehiiv (Signup)
+404.astro              → Fehlerseite   statisch  greift auch bei SSR-404s
 sitemap.xml.ts         → /sitemap.xml  SSR  statische Routen + Ausgaben-Slugs
 rss.xml.ts             → /rss.xml      SSR  RSS 2.0 (Titel + Teaser, Links auf eigene Domain)
 ```

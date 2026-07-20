@@ -1,0 +1,83 @@
+---
+// Statisch prerendert. Astro liefert diese Seite für jede unbekannte Route
+// aus — auch wenn eine SSR-Route (z.B. /newsletter/[slug]) eine
+// 404-Response zurückgibt.
+import Layout from "../layouts/Layout.astro";
+import SignupCta from "../components/SignupCta.astro";
+---
+
+<Layout
+  title="Seite nicht gefunden · Bits&Satoshis"
+  description="Diese Seite gibt es nicht — vielleicht hilft das Archiv weiter.">
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
+    <div class="measure">
+      {/* Dateline wie auf den Ausgabenseiten: caps-Zeile mit Rule-Border */}
+      <div class="notfound__dateline">
+        <span>Bits&Satoshis</span>
+        <span>Fehler 404</span>
+      </div>
+
+      <h1 class="h1">Diese Seite gibt es nicht.</h1>
+
+      <p class="notfound__body">
+        Vielleicht ist der Link veraltet, vielleicht war ein Tippfehler dabei.
+        Kein Grund zur Aufregung — alles Wichtige ist nur einen Klick entfernt.
+      </p>
+
+      <p class="notfound__links">
+        <a href="/">Zur Startseite</a>
+        <a href="/archiv">Alle Ausgaben im Archiv</a>
+      </p>
+    </div>
+  </section>
+
+  <SignupCta />
+</Layout>
+
+<style>
+  .notfound__dateline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-family: var(--f-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-dust);
+  }
+
+  .notfound__body {
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--c-stone);
+    margin-top: 1rem;
+  }
+
+  .notfound__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .notfound__links a {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+    width: fit-content;
+  }
+
+  .notfound__links a:hover {
+    text-decoration-color: var(--c-ink);
+  }
+</style>
