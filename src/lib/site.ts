@@ -12,7 +12,7 @@ export const OPERATOR = {
   street: "Auerfeldstr. 2",
   city: "81541 München",
   country: "Deutschland",
-  email: "vincent.michler94@gmail.com",
+  email: "vincent@bitsandsatoshis.com",
   registerCourt: "Amtsgericht München",
   registerNumber: "HRB 282022",
   /** Nur angeben, falls vorhanden — sonst leer lassen (Zeile wird ausgeblendet). */
