@@ -1,35 +1,111 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { OPERATOR } from "../lib/site";
 ---
 
 <Layout title="Impressum · Bits&Satoshis" description="Impressum von Bits&Satoshis.">
-  <section class="mx-auto max-w-2xl px-4 py-16">
-    <h1 class="text-3xl font-extrabold tracking-tight">Impressum</h1>
-
-    <div class="prose prose-neutral mt-8 max-w-none">
-      <p class="rounded-box border border-warning/40 bg-warning/10 p-4 text-sm not-prose">
-        ⚠️ Platzhalter: bitte vor dem Livegang mit den echten Angaben
-        ausfüllen (§ 5 DDG / § 18 MStV).
-      </p>
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
+    <div class="measure legal">
+      <h1 class="h1">Impressum</h1>
 
       <h2>Angaben gemäß § 5 DDG</h2>
       <p>
-        Vincent [Nachname]<br />
-        [Straße & Hausnummer]<br />
-        [PLZ Ort]<br />
-        Deutschland
+        {OPERATOR.company}<br />
+        {OPERATOR.street}<br />
+        {OPERATOR.city}<br />
+        {OPERATOR.country}
+      </p>
+      <p>
+        Vertreten durch den Geschäftsführer: {OPERATOR.representative}
       </p>
 
       <h2>Kontakt</h2>
       <p>
-        E-Mail: [deine@email.de]
+        E-Mail: <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a>
       </p>
+
+      <h2>Registereintrag</h2>
+      <p>
+        Registergericht: {OPERATOR.registerCourt}<br />
+        Registernummer: {OPERATOR.registerNumber}
+      </p>
+
+      {
+        OPERATOR.vatId && (
+          <>
+            <h2>Umsatzsteuer-ID</h2>
+            <p>
+              Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:{" "}
+              {OPERATOR.vatId}
+            </p>
+          </>
+        )
+      }
 
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>
-        Vincent [Nachname]<br />
-        [Anschrift wie oben]
+        {OPERATOR.representative}<br />
+        {OPERATOR.street}<br />
+        {OPERATOR.city}
+      </p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>
+        Die Inhalte dieser Website wurden mit Sorgfalt erstellt. Für
+        Richtigkeit, Vollständigkeit und Aktualität kann dennoch keine Gewähr
+        übernommen werden. Bits&amp;Satoshis ist ein redaktionelles Angebot —
+        keine Anlage-, Rechts- oder Steuerberatung. Entscheidungen, die du auf
+        Basis der Inhalte triffst, liegen in deiner eigenen Verantwortung.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Diese Website enthält Links zu externen Websites Dritter, auf deren
+        Inhalte kein Einfluss besteht. Für diese fremden Inhalte ist stets der
+        jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren
+        keine Rechtsverstöße erkennbar; bei Bekanntwerden von
+        Rechtsverletzungen werden entsprechende Links umgehend entfernt.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die Inhalte und Werke auf dieser Website unterliegen dem deutschen
+        Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb
+        der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des
+        Autors. Zitate mit Quellenangabe und Link sind willkommen.
       </p>
     </div>
   </section>
 </Layout>
+
+<style>
+  .legal h2 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    margin: 2.5rem 0 0.625rem;
+  }
+
+  .legal p {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--c-stone);
+    margin: 0 0 1rem;
+  }
+
+  .legal a {
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .legal a:hover {
+    text-decoration-color: var(--c-ink);
+  }
+</style>

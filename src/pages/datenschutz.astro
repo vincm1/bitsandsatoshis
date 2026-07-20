@@ -1,44 +1,178 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { OPERATOR } from "../lib/site";
 ---
 
 <Layout
   title="Datenschutz · Bits&Satoshis"
   description="Datenschutzerklärung von Bits&Satoshis.">
-  <section class="mx-auto max-w-2xl px-4 py-16">
-    <h1 class="text-3xl font-extrabold tracking-tight">Datenschutzerklärung</h1>
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
+    <div class="measure legal">
+      <h1 class="h1">Datenschutzerklärung</h1>
 
-    <div class="prose prose-neutral mt-8 max-w-none">
-      <p class="rounded-box border border-warning/40 bg-warning/10 p-4 text-sm not-prose">
-        ⚠️ Platzhalter: bitte vor dem Livegang durch eine vollständige,
-        DSGVO-konforme Datenschutzerklärung ersetzen (z.B. mit einem
-        Generator und juristischer Prüfung). Achte besonders auf die
-        Newsletter-Anmeldung via beehiiv (Auftragsverarbeitung, USA-Transfer).
+      <p class="legal__intro">
+        Diese Website ist bewusst sparsam gebaut: keine Cookies, keine
+        Analyse-Tools, keine Werbenetzwerke, keine eingebetteten Inhalte von
+        Drittanbietern. Schriften werden von der eigenen Domain ausgeliefert.
+        Personenbezogene Daten fallen nur an zwei Stellen an — beim Aufruf der
+        Website (Server-Logs) und wenn du dich für den Newsletter anmeldest.
       </p>
 
-      <h2>Verantwortlicher</h2>
-      <p>Vincent [Nachname], [Anschrift], siehe Impressum.</p>
-
-      <h2>Newsletter (beehiiv)</h2>
+      <h2>1. Verantwortlicher</h2>
       <p>
-        Für den Versand unseres Newsletters nutzen wir den Dienst beehiiv. Wenn
-        du dich anmeldest, wird deine E-Mail-Adresse an beehiiv übermittelt und
-        dort gespeichert. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1
-        lit. a DSGVO). Du kannst den Newsletter jederzeit über den Abmeldelink
-        in jeder E-Mail kündigen.
+        {OPERATOR.company}<br />
+        vertreten durch den Geschäftsführer {OPERATOR.representative}<br />
+        {OPERATOR.street}<br />
+        {OPERATOR.city}<br />
+        {OPERATOR.country}<br />
+        E-Mail: <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a>
       </p>
 
-      <h2>Hosting (Vercel)</h2>
+      <h2>2. Hosting (Vercel)</h2>
       <p>
-        Diese Website wird bei Vercel gehostet. Dabei können technisch
-        notwendige Daten (z.B. IP-Adresse) in Server-Logs verarbeitet werden.
+        Diese Website wird bei Vercel Inc., 440 N Barranca Ave #4133, Covina,
+        CA 91723, USA gehostet. Beim Aufruf der Website verarbeitet Vercel
+        technisch notwendige Daten, insbesondere IP-Adresse, Datum und Uhrzeit
+        des Zugriffs, aufgerufene Seite, Browsertyp und Betriebssystem
+        (Server-Logs). Diese Daten sind erforderlich, um die Website
+        auszuliefern und ihre Stabilität und Sicherheit zu gewährleisten.
+      </p>
+      <p>
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse
+        am sicheren und zuverlässigen Betrieb der Website). Mit Vercel besteht
+        ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Vercel ist unter
+        dem EU-US Data Privacy Framework zertifiziert; die Übermittlung in die
+        USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission
+        (Art. 45 DSGVO).
       </p>
 
-      <h2>Deine Rechte</h2>
+      <h2>3. Newsletter (beehiiv)</h2>
       <p>
-        Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung
-        der Verarbeitung, Datenübertragbarkeit und Widerspruch.
+        Für den Versand des Newsletters wird der Dienst beehiiv Inc., New
+        York, USA genutzt. Wenn du dich anmeldest, werden folgende Daten an
+        beehiiv übermittelt und dort gespeichert:
       </p>
+      <ul>
+        <li>deine E-Mail-Adresse,</li>
+        <li>Datum und Uhrzeit der Anmeldung und der Bestätigung,</li>
+        <li>
+          die Herkunft der Anmeldung (z.&nbsp;B. über welche Seite oder
+          Kampagne du dich eingetragen hast, sog. UTM-Parameter).
+        </li>
+      </ul>
+      <p>
+        Die Anmeldung läuft im Double-Opt-In-Verfahren: Du erhältst nach der
+        Eintragung eine E-Mail mit einem Bestätigungslink. Erst mit deiner
+        Bestätigung wird die Anmeldung wirksam — so wird sichergestellt, dass
+        niemand fremde Adressen einträgt.
+      </p>
+      <p>
+        beehiiv erhebt zudem Statistiken zur Nutzung des Newsletters,
+        insbesondere ob eine E-Mail geöffnet und welche Links angeklickt
+        wurden. Diese Auswertung hilft, den Newsletter zu verbessern.
+      </p>
+      <p>
+        Rechtsgrundlage der Verarbeitung ist deine Einwilligung (Art. 6 Abs. 1
+        lit. a DSGVO). Du kannst sie jederzeit mit Wirkung für die Zukunft
+        widerrufen — am einfachsten über den Abmeldelink, den jede
+        Newsletter-E-Mail enthält, oder per E-Mail an die oben genannte
+        Adresse. Nach der Abmeldung wird deine E-Mail-Adresse aus dem
+        Verteiler entfernt.
+      </p>
+      <p>
+        Mit beehiiv besteht ein Auftragsverarbeitungsvertrag nach Art. 28
+        DSGVO. Die Übermittlung in die USA stützt sich auf die
+        EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
+      </p>
+
+      <h2>4. Cookies und Tracking</h2>
+      <p>
+        Diese Website setzt keine Cookies und verwendet keine Analyse- oder
+        Tracking-Dienste. Deshalb gibt es auch kein Cookie-Banner.
+      </p>
+
+      <h2>5. Speicherdauer</h2>
+      <p>
+        Newsletter-Daten werden gespeichert, solange dein Abonnement besteht.
+        Server-Logs werden vom Hoster nach kurzer Zeit automatisch gelöscht.
+      </p>
+
+      <h2>6. Deine Rechte</h2>
+      <p>
+        Du hast gegenüber dem Verantwortlichen das Recht auf Auskunft über
+        deine gespeicherten Daten (Art. 15 DSGVO), Berichtigung (Art. 16),
+        Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18),
+        Datenübertragbarkeit (Art. 20) und Widerspruch gegen die Verarbeitung
+        (Art. 21). Eine erteilte Einwilligung kannst du jederzeit widerrufen
+        (Art. 7 Abs. 3 DSGVO); die Rechtmäßigkeit der bis zum Widerruf
+        erfolgten Verarbeitung bleibt davon unberührt.
+      </p>
+      <p>
+        Außerdem hast du das Recht, dich bei einer
+        Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO) — zum
+        Beispiel bei der Behörde deines Wohnsitzes.
+      </p>
+
+      <h2>7. Verschlüsselung</h2>
+      <p>
+        Alle Verbindungen zu dieser Website sind per TLS verschlüsselt
+        (erkennbar am Schloss-Symbol im Browser).
+      </p>
+
+      <p class="legal__stand">Stand: Juli 2026</p>
     </div>
   </section>
 </Layout>
+
+<style>
+  .legal h2 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    margin: 2.5rem 0 0.625rem;
+  }
+
+  .legal p,
+  .legal ul {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--c-stone);
+    margin: 0 0 1rem;
+  }
+
+  .legal ul {
+    padding-left: 1.375rem;
+  }
+
+  .legal li::marker {
+    color: var(--c-dust);
+  }
+
+  .legal__intro {
+    margin-top: 1.5rem;
+    color: var(--c-ink);
+  }
+
+  .legal a {
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .legal a:hover {
+    text-decoration-color: var(--c-ink);
+  }
+
+  .legal__stand {
+    margin-top: 2.5rem;
+    font-family: var(--f-mono, monospace);
+    font-size: 12px;
+    color: var(--c-dust);
+  }
+</style>
