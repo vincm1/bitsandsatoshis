@@ -7,7 +7,6 @@
  * berechtigten, ladungsfähige Anschrift und Handelsregister-Angaben.
  */
 export const OPERATOR = {
-  // TODO: Vor dem Livegang mit den echten UG-Daten füllen.
   company: "PyMinds UG (haftungsbeschränkt)",
   representative: "Vincent Michler", // Geschäftsführer
   street: "Auerfeldstr. 2",
