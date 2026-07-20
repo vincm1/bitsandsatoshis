@@ -56,7 +56,6 @@ const websiteSchema = {
 
 <!doctype html>
 <html lang="de">
-  <Analytics />
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,6 +104,9 @@ const websiteSchema = {
     <Font cssVariable="--font-brand-display" preload />
     <Font cssVariable="--font-brand-body" preload />
     <Font cssVariable="--font-brand-mono" />
+    <!-- Cookielose Reichweitenmessung (Datenschutzerklärung §4). Lädt im
+         Prod-Build von der eigenen Domain (/_vercel/insights). -->
+    <Analytics />
   </head>
   <body class="flex min-h-screen flex-col bg-base-100 text-base-content antialiased">
     <!-- Ohne client-Direktive: der Header ist statisches Markup (§10 verbietet
