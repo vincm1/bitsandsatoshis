@@ -13,6 +13,7 @@ setzt Meta-Tags und rahmt den `<slot />` mit `<Nav />` und `<Footer />`.
 interface Props {
   title?: string;        // <title> + og:title (Default: Marken-Titel)
   description?: string;  // Meta-Description + og:description (Default: Positionierung)
+  ogImage?: string;      // og:image-Pfad/URL (Default: /og-default.jpg)
 }
 ```
 
@@ -41,9 +42,12 @@ Rollen sind strikt getrennt (siehe `/DESIGN.md` §03): Chaney nur H1–H3 und
 nie unter 17px, Mono nur für Meta und nie für Prosa.
 
 ### Meta-Tags die immer gesetzt sind
-`charset`, `viewport`, `description`, `og:title`, `og:description`,
-`og:type=website`, `twitter:card=summary_large_image`. `lang="de"`.
-OG-Bild kann später ergänzt werden (`/og-default.jpg`).
+`charset`, `viewport`, `description`, Canonical-Link, RSS-`alternate`-Link,
+`og:site_name/title/description/type/url/image/locale`,
+`twitter:card=summary_large_image` + `twitter:title/description/image`.
+`lang="de"`. Absolute URLs basieren auf `site` in `astro.config.mjs`.
+Default-OG-Bild: `/og-default.jpg` (1200×630); Ausgabenseiten übergeben das
+beehiiv-Thumbnail via `ogImage`-Prop.
 
 ## Regeln
 - Genau **ein** Layout für alle Seiten — keine Layout-Duplikate anlegen,

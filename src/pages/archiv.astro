@@ -13,6 +13,13 @@ const posts = await getPosts({ limit: 100 });
 // No-JS-Fallback), ab der fünften versteckt. Der Button zeigt je vier weitere.
 const INITIAL_VISIBLE = 4;
 const hasMore = posts.length > INITIAL_VISIBLE;
+
+// 5 min CDN-Cache — neue Ausgaben erscheinen zeitnah, die beehiiv-API wird
+// trotzdem entlastet.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, s-maxage=300, stale-while-revalidate=86400",
+);
 ---
 
 <Layout

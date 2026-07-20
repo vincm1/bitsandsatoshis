@@ -14,11 +14,19 @@ const post = slug ? await getPost(slug) : null;
 if (!post) {
   return new Response(null, { status: 404, statusText: "Not Found" });
 }
+
+// Ausgaben ändern sich nach Versand praktisch nicht — 1 h CDN-Cache reicht
+// für Korrekturen, SWR hält die Auslieferung trotzdem sofort schnell.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+);
 ---
 
 <Layout
   title={`${post.title} · Bits&Satoshis`}
-  description={post.teaser || post.subtitle}>
+  description={post.teaser || post.subtitle}
+  ogImage={post.thumbnailUrl ?? undefined}>
   <article class="article">
     <a href="/archiv" class="article-back">← Zurück zum Archiv</a>
 

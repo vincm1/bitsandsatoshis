@@ -6,6 +6,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  // Kanonische Domain — Basis für Canonical-Links, Sitemap, RSS und
+  // absolute og:*-URLs (Astro.site).
+  site: 'https://bitsandsatoshis.com',
+
   // Hybrid: `output: 'hybrid'` wurde in Astro 5 entfernt — seitdem ist
   // 'static' + Adapter das Hybrid-Modell. Statisch ist der Default,
   // Seiten/Endpoints mit `export const prerender = false` laufen serverseitig

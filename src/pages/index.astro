@@ -11,6 +11,14 @@ import SignupCta from "../components/SignupCta.astro";
 import { getPosts } from "../lib/beehiiv";
 
 const posts = await getPosts({ limit: 3 });
+
+// 5 min CDN-Cache (Vercel cached pro URL inkl. Query — UTM-Varianten sind
+// deterministisch und damit sicher). SWR: Besucher bekommen sofort die
+// gecachte Seite, das CDN holt im Hintergrund eine frische.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, s-maxage=300, stale-while-revalidate=86400",
+);
 ---
 
 <Layout>

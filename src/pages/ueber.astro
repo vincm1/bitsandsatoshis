@@ -4,6 +4,12 @@ export const prerender = false;
 
 import Layout from "../layouts/Layout.astro";
 import SignupCta from "../components/SignupCta.astro";
+
+// Inhalt ändert sich nur mit Deploys — 1 h CDN-Cache.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+);
 ---
 
 <Layout

@@ -11,12 +11,22 @@ import Footer from "../components/Footer.astro";
 interface Props {
   title?: string;
   description?: string;
+  /** Pfad zu einem seiten-spezifischen OG-Bild (Default: /og-default.jpg). */
+  ogImage?: string;
 }
 
 const {
   title = "Bits&Satoshis · Der ruhige Bitcoin-Newsletter",
   description = "Der ruhige Bitcoin-Newsletter für Menschen, die verstehen wollen, nicht spekulieren.",
+  ogImage = "/og-default.jpg",
 } = Astro.props;
+
+// Absolute URLs für Canonical und og:* — Basis ist `site` aus astro.config.mjs.
+// `new URL()` lässt bereits absolute ogImage-Werte (beehiiv-Thumbnails) intakt.
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+// Maße sind nur für das eigene Default-Bild bekannt.
+const isDefaultOgImage = ogImage === "/og-default.jpg";
 ---
 
 <!doctype html>
@@ -29,10 +39,26 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Bits&Satoshis"
+      href={new URL("/rss.xml", Astro.site)}
+    />
+    <meta property="og:site_name" content="Bits&Satoshis" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    {isDefaultOgImage && <meta property="og:image:width" content="1200" />}
+    {isDefaultOgImage && <meta property="og:image:height" content="630" />}
+    <meta property="og:locale" content="de_DE" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <!-- Cabinet Grotesk (Überschriften) + Satoshi (Fließtext) werden von der
          eigenen Domain ausgeliefert und vorgeladen. Mono trägt nur Meta-Text
          und braucht kein preload. -->

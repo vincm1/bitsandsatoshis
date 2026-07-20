@@ -53,10 +53,9 @@ Mode. DaisyUI-Theme heißt `bitsandsatoshis` (in `src/styles/global.css`).
 │   │   └── CLAUDE.md
 │   ├── layouts/                     ← Seiten-Layouts
 │   │   └── CLAUDE.md
+│   ├── CLAUDE.md                    ← Doku für pages/ (dort würde .md als Route gebaut!)
 │   ├── pages/                       ← Routen (Dateiname = URL), SSR
-│   │   ├── CLAUDE.md
 │   │   └── newsletter/[slug].astro  ← Einzel-Ausgabe
-│   │       └── CLAUDE.md
 │   ├── lib/                         ← beehiiv-Client, Helfer (nur serverseitig)
 │   │   └── CLAUDE.md
 │   ├── actions/                     ← Astro Actions (Signup etc.)
