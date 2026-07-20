@@ -5,6 +5,7 @@ import "../styles/global.css";
 // kein Drittanbieter-Request im Browser des Besuchers.
 import { Font } from "astro:assets";
 
+import Analytics from '@vercel/analytics/astro'
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.astro";
 
@@ -55,6 +56,7 @@ const websiteSchema = {
 
 <!doctype html>
 <html lang="de">
+  <Analytics />
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

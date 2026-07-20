@@ -22,7 +22,10 @@ export default defineConfig({
   // Seiten/Endpoints mit `export const prerender = false` laufen serverseitig
   // (index, archiv, newsletter/[slug], /api/subscribe, /_actions).
   output: 'static',
-  adapter: vercel(),
+  // Web Analytics: cookielose Reichweitenmessung (in der Datenschutzerklärung
+  // unter „Reichweitenmessung" beschrieben). Muss zusätzlich im
+  // Vercel-Dashboard des Projekts aktiviert sein.
+  adapter: vercel({ webAnalytics: { enabled: true } }),
   integrations: [vue()],
 
   // Schriften — Astro lädt sie zur Build-Zeit herunter und liefert sie von der
