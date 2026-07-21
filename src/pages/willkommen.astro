@@ -1,0 +1,67 @@
+---
+/**
+ * Willkommens-Seite — Ziel der beehiiv Opt-in Redirect URL: hier landet, wer
+ * in der Bestätigungs-Mail auf „Anmeldung bestätigen" geklickt hat. Der
+ * Signup-Flow endet damit auf der eigenen Domain statt bei beehiiv.
+ *
+ * noindex: reine Funktionsseite, hat im Google-Index nichts verloren (und
+ * steht bewusst auch nicht in der Sitemap).
+ *
+ * Bewusste Ausnahme: kein Signup-CTA — die Person hat sich gerade
+ * angemeldet. Stattdessen ein Leseeinstieg, damit der erste Kontakt mit dem
+ * Inhalt nicht erst am Freitag stattfindet.
+ */
+import Layout from "../layouts/Layout.astro";
+
+// Dieselbe kuratierte Einstiegsausgabe wie auf der Startseite.
+const FEATURED_ISSUE = {
+  slug: "gold-vs-bitcoin-2026",
+  title: "Gold vs. Bitcoin",
+};
+---
+
+<Layout
+  title="Willkommen · Bits&Satoshis"
+  description="Deine Anmeldung ist bestätigt — du bist dabei."
+  noindex
+>
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-24 sm:px-8">
+    <div class="measure">
+      <p class="eyebrow">Newsletter</p>
+      <h1 class="h1 mt-2">Du bist dabei.</h1>
+
+      <p class="mt-6 text-[16px] leading-[1.65] text-ink text-pretty">
+        Deine Anmeldung ist bestätigt. Die Willkommens-Mail ist unterwegs —
+        manchmal braucht sie ein paar Minuten. Danach kommt jeden Freitag
+        eine Ausgabe: ein Thema, vier Minuten, keine Kursprognosen.
+      </p>
+
+      <p class="mt-4 text-[16px] leading-[1.65] text-ink text-pretty">
+        Ein Handgriff, der sich lohnt: Verschieb die erste Mail ins
+        Hauptpostfach oder nimm den Absender in deine Kontakte auf — dann
+        landen die Ausgaben nicht im Spam.
+      </p>
+
+      <hr class="rule mt-10" />
+
+      <p class="eyebrow mt-6">Zum Warmwerden</p>
+      <p class="mt-2 text-[15px] leading-[1.65] text-ink">
+        Bis zur nächsten Ausgabe: Lies{" "}
+        <a
+          href={`/newsletter/${FEATURED_ISSUE.slug}`}
+          class="font-medium underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+        >
+          {FEATURED_ISSUE.title}
+        </a>{" "}
+        — eine gute erste Ausgabe, um den Ton kennenzulernen. Oder stöber
+        durch{" "}
+        <a
+          href="/archiv"
+          class="font-medium underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+        >
+          alle bisherigen Ausgaben
+        </a>.
+      </p>
+    </div>
+  </section>
+</Layout>
