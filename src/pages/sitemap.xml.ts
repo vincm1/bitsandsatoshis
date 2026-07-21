@@ -13,6 +13,8 @@ const STATIC_ROUTES = [
   "/ueber",
   "/impressum",
   "/datenschutz",
+  "/abmelden",
+  // /willkommen fehlt bewusst: noindex, reines Redirect-Ziel der Opt-in-Mail.
   // Wissensseiten (§7) — statisch gebaut aus src/content/wissen/.
   "/was-ist-bitcoin",
   "/bitcoin-vs-gold",
