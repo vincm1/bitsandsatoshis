@@ -337,6 +337,43 @@ export async function subscribe(
   };
 }
 
+/**
+ * E-Mail vom Newsletter abmelden (Status inaktiv, Daten bleiben erhalten —
+ * beehiiv empfiehlt Unsubscribe statt DELETE).
+ *
+ * Eine unbekannte Adresse (404) gilt als Erfolg: die Abmelde-Seite antwortet
+ * bewusst neutral, damit sich nicht abfragen lässt, wer im Verteiler steht.
+ */
+export async function unsubscribe(email: string): Promise<SubscribeResult> {
+  const message =
+    "Falls diese Adresse eingetragen war, ist sie jetzt abgemeldet.";
+
+  if (!isConfigured) {
+    return {
+      ok: true,
+      message: "Demo-Modus: Abmeldung simuliert (beehiiv noch nicht verbunden).",
+    };
+  }
+
+  const res = await fetch(
+    `${API_BASE}/publications/${PUBLICATION_ID}/subscriptions/by_email/${encodeURIComponent(email)}`,
+    {
+      method: "PUT",
+      headers: authHeaders(),
+      body: JSON.stringify({ unsubscribe: true }),
+    },
+  );
+
+  if (!res.ok && res.status !== 404) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(
+      `beehiiv unsubscribe fehlgeschlagen: ${res.status} ${detail}`,
+    );
+  }
+
+  return { ok: true, message };
+}
+
 /** Mock-Ausgaben für den Demo-Modus ohne API-Keys. */
 const mockPosts: NewsletterPost[] = [
   {

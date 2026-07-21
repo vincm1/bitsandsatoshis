@@ -1,0 +1,113 @@
+---
+/**
+ * Abmelde-Seite — Selbstbedienungs-Widerruf auf der eigenen Domain
+ * (Spec: docs/superpowers/specs/2026-07-21-abmelden-design.md).
+ *
+ * Klassisches Form-POST an die Astro Action `unsubscribe` — kein Island,
+ * funktioniert ohne JS. Die Antwort ist bewusst neutral („falls eingetragen,
+ * jetzt abgemeldet"), damit sich nicht abfragen lässt, wer im Verteiler steht.
+ *
+ * Bewusste Ausnahme: kein Signup-CTA am Seitenende — ein Anmeldeformular
+ * unter dem Abmeldeformular wäre absurd.
+ */
+export const prerender = false;
+
+import Layout from "../layouts/Layout.astro";
+import { OPERATOR } from "../lib/site";
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.unsubscribe);
+const inputError =
+  result?.error && isInputError(result.error)
+    ? result.error.fields.email?.[0]
+    : undefined;
+const data = result && !result.error ? result.data : undefined;
+// ok:false = beehiiv-Fehler: Formular stehen lassen, Meldung darunter.
+const done = data?.ok === true;
+const serverError = data?.ok === false ? data.message : undefined;
+---
+
+<Layout
+  title="Abmelden · Bits&Satoshis"
+  description="Vom Bits&Satoshis-Newsletter abmelden — eine E-Mail-Adresse genügt."
+>
+  <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-24 sm:px-8">
+    <div class="measure">
+      <p class="eyebrow">Newsletter</p>
+      <h1 class="h1 mt-2">Abmelden</h1>
+
+      <p class="mt-6 text-[16px] leading-[1.65] text-ink text-pretty">
+        Schade — aber kein Drama. Trag deine E-Mail-Adresse ein, und du
+        bekommst keine weiteren Ausgaben.
+      </p>
+
+      {
+        done ? (
+          <p class="mt-8 text-[16px] leading-[1.65] font-medium text-ink">
+            {data.message}
+          </p>
+        ) : (
+          <form method="POST" action={actions.unsubscribe} class="mt-8">
+            <label class="sr-only" for="email">
+              E-Mail-Adresse
+            </label>
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="deine@email.de"
+                class="w-full border-b-2 border-dust bg-transparent pb-2 text-[16px] text-ink outline-none transition-colors placeholder:text-dust focus:border-ink"
+              />
+              {/* Honeypot: für Menschen unsichtbar, Bots füllen es. */}
+              <input
+                type="text"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+                class="hidden"
+              />
+              <button
+                type="submit"
+                class="shrink-0 whitespace-nowrap bg-ink px-6 py-2.5 text-[15px] font-medium text-paper hover:bg-stone"
+              >
+                Abmelden
+              </button>
+            </div>
+            {inputError && (
+              <p class="mt-2 text-sm font-medium text-error">{inputError}</p>
+            )}
+            {serverError && (
+              <p class="mt-2 text-sm font-medium text-error">{serverError}</p>
+            )}
+            {result?.error && !inputError && (
+              <p class="mt-2 text-sm font-medium text-error">
+                Da ist etwas schiefgelaufen. Bitte versuche es später erneut.
+              </p>
+            )}
+          </form>
+        )
+      }
+
+      <hr class="rule mt-10" />
+
+      <p class="meta mt-6">
+        Alternativ: Jede Newsletter-Mail enthält ganz unten einen
+        Abmeldelink — ein Klick genügt.
+      </p>
+      <p class="meta mt-2">
+        Du möchtest zusätzlich alle gespeicherten Daten löschen lassen
+        (Art. 17 DSGVO)? Schreib an{" "}
+        <a
+          href={`mailto:${OPERATOR.email}`}
+          class="text-ink underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+        >
+          {OPERATOR.email}
+        </a>.
+      </p>
+    </div>
+  </section>
+</Layout>
