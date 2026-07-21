@@ -10,7 +10,7 @@
  *
  * Ein Feld, ein oranges Element (Button-BG), border-radius 0, Fokus-Ring Ink.
  */
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -27,6 +27,12 @@ const props = withDefaults(
 const sending = ref(false);
 const done = ref(false);
 const message = ref(props.initialError);
+
+// Erfolgs-Block trägt „Fast fertig." als Headline — doppelt es die
+// Server-Meldung, wird der Prefix aus dem Fließtext entfernt.
+const successBody = computed(() =>
+  message.value.replace(/^Fast fertig\.\s*/, ""),
+);
 
 async function onSubmit(event: Event) {
   if (sending.value) return;
@@ -53,9 +59,17 @@ async function onSubmit(event: Event) {
 </script>
 
 <template>
-  <p v-if="done" class="mt-6 text-[15px] leading-[1.65] text-ink" role="status">
-    {{ message }}
-  </p>
+  <!-- Erfolg ersetzt das Formular: Ink-Rahmen statt Farbfläche (§4/§5),
+       Display-Headline macht den Zustand unübersehbar. -->
+  <div v-if="done" class="mt-6 border border-ink p-6" role="status">
+    <p class="font-display text-[17px] uppercase leading-none text-ink">
+      Fast fertig.
+    </p>
+    <p class="mt-3 text-[16px] leading-[1.65] text-ink">{{ successBody }}</p>
+    <p class="meta mt-3">
+      Keine Mail? Schau im Spam-Ordner nach — und zieh sie ins Hauptpostfach.
+    </p>
+  </div>
 
   <form
     v-else

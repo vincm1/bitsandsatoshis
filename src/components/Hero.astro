@@ -68,10 +68,18 @@ const utm = Object.fromEntries(
 
       {
         success ? (
-          <p class="mt-6 text-[15px] leading-[1.65] text-ink" role="status">
-            Fast fertig. Bestätige die Anmeldung in der Mail, die gerade
-            rausgegangen ist.
-          </p>
+          <div class="mt-6 border border-ink p-6" role="status">
+            <p class="font-display text-[17px] uppercase leading-none text-ink">
+              Fast fertig.
+            </p>
+            <p class="mt-3 text-[16px] leading-[1.65] text-ink">
+              Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist.
+            </p>
+            <p class="meta mt-3">
+              Keine Mail? Schau im Spam-Ordner nach — und zieh sie ins
+              Hauptpostfach.
+            </p>
+          </div>
         ) : (
           <SignupIsland client:idle utm={utm} initialError={noJsError} />
         )

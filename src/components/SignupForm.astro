@@ -16,6 +16,12 @@ const inputError =
 const failed = result?.error && !inputError;
 const success = result && !result.error;
 
+// Erfolgs-Block trägt „Fast fertig." als Headline — doppelt es die
+// Server-Meldung, wird der Prefix aus dem Fließtext entfernt.
+const successBody = success
+  ? result.data.message.replace(/^Fast fertig\.\s*/, "")
+  : "";
+
 const fieldId = `email-${variant}`;
 ---
 
@@ -75,7 +81,15 @@ const fieldId = `email-${variant}`;
 
 {
   success && (
-    <p class="mt-2 text-sm font-medium text-success">{result.data.message}</p>
+    <div class="mt-3 border border-ink p-6" role="status">
+      <p class="font-display text-[17px] uppercase leading-none text-ink">
+        Fast fertig.
+      </p>
+      <p class="mt-3 text-[16px] leading-[1.65] text-ink">{successBody}</p>
+      <p class="meta mt-3">
+        Keine Mail? Schau im Spam-Ordner nach — und zieh sie ins Hauptpostfach.
+      </p>
+    </div>
   )
 }
 {inputError && <p class="mt-2 text-sm font-medium text-error">{inputError}</p>}
