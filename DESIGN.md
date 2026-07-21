@@ -44,10 +44,13 @@ Diese Werte sind gesetzt und werden nicht ergänzt.
 | Token | Hex | Verwendung |
 |---|---|---|
 | Paper | `#F4EDE0` | Seitenhintergrund, immer |
-| Ink | `#221A0F` | Fließtext, Überschriften, Rahmen von Eingabefeldern |
+| Ink | `#221A0F` | Fließtext, Überschriften, Rahmen von Eingabefeldern, Fokus-Ring |
 | Orange | `#E8832A` | Ausschließlich Button-Hintergrund |
-| Stone | `#5C4F3A` | Sekundärtext, Metadaten, Bildunterschriften |
-| Dust | `#A89880` | Trennlinien, Platzhaltertext in Eingabefeldern |
+| Stone | `#5C4F3A` | Sekundärtext, Metadaten, Bildunterschriften, Platzhaltertext |
+| Dust | `#A89880` | Trennlinien |
+
+Kontrast auf Paper, gemessen: Ink 14,8:1 · Stone 6,9:1 · Orange 2,3:1 ·
+Dust 2,4:1. Die Zuordnung oben folgt daraus, nicht dem Geschmack.
 
 ### Tailwind-Konfiguration
 
@@ -56,7 +59,7 @@ Tailwind v4 wird **CSS-first** konfiguriert. Es gibt **keine**
 
 ```css
 @theme {
-  --font-display: 'Chaney', sans-serif;
+  --font-display: 'Cabinet Grotesk', sans-serif;
   --font-sans:    'Satoshi Variable', system-ui, sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
 }
@@ -90,7 +93,10 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 
 > **Dokumentierte Ausnahmen** (zählen nicht gegen das Budget):
 >
-> 1. der Fokus-Ring (`:focus-visible`) — Barrierefreiheit, nicht Gestaltung;
+> 1. ~~der Fokus-Ring~~ — **entfallen (Juli 2026).** Der Ring ist jetzt Ink.
+>    Orange auf Paper sind 2,3:1 und verfehlen die 3:1, die WCAG 1.4.11 für
+>    Nicht-Text-Kontraste verlangt; als Barrierefreiheits-Element war er damit
+>    genau dort wirkungslos, wo er gebraucht wird. Ink liefert 14,8:1;
 > 2. das Wort „Bitcoin" im Hero-H1 der Startseite — Markenzeichen-Akzent,
 >    genau einmal, nie auf Unterseiten;
 > 3. die Angebotskurve im Hero — Datengrafik nach §5, Orange ist dort
@@ -110,8 +116,10 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
   ermüdet und liegt beim Kontrast grenzwertig.
 - **Stone ist für Metadaten:** Datum, Lesezeit, Eyebrow-Labels, Microcopy
   unter dem Button, Untertitel in Ausgabenlisten.
-- **Dust ist ausschließlich Linie und Placeholder.** Nie Text, den jemand
-  lesen soll.
+- **Dust ist ausschließlich Linie.** Nie Text, den jemand lesen soll — auch
+  kein Placeholder. Dust auf Paper sind 2,4:1; im Signup-Feld war der
+  Placeholder der einzige sichtbare Hinweis, weil das `<label>` `sr-only`
+  ist. Placeholder sind deshalb Stone (6,9:1), siehe §6.2.
 - **Textlinks haben genau eine Affordanz:** Unterstrich in Dust
   (`text-underline-offset: 3px`), beim Hover wird der Unterstrich Ink.
   Gilt überall — Header, Footer, Listen-Titel, Fließtext-Links. Keine
@@ -128,12 +136,20 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 
 | Rolle | Schrift | Größe | Zeilenhöhe | Einsatz |
 |---|---|---|---|---|
-| H1 (Startseite) | Chaney | clamp 34–68px | 1.08 | Display-Größe im Hero, siehe Anmerkung |
-| H1 (Unterseiten) | Chaney | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
-| H2 | Chaney | 22–24px | 1.25 | Sektionsüberschriften |
-| H3 | Chaney | 17–19px | 1.3 | Ausgabentitel in Listen |
+| H1 (Startseite) | Display | clamp 34–68px | 1.08 | Display-Größe im Hero, siehe Anmerkung |
+| H1 (Unterseiten) | Display | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
+| H2 | Display | 24–32px | 1.2 | Sektionsüberschriften, siehe Anmerkung |
+| H3 | Display | 17–19px | 1.3 | Ausgabentitel in Listen |
 | Fließtext | Satoshi Variable | 15–16px | 1.65 | Alles, was ein Satz ist |
+| Pullquote | Satoshi Variable 500 | 22–28px | 1.4 | Stimmprobe (§6.4a), nur dort |
 | Meta | IBM Plex Mono | 11–12px | 1.4 | Datum, Label, Lesezeit, Microcopy |
+
+> **Welche Display-Schrift?** In Produktion läuft **Cabinet Grotesk 700**
+> (`astro.config.mjs`). Chaney, das diese Datei früher überall nannte, ist
+> lizenzrechtlich nicht als Webfont verfügbar (Atipo-Desktop-Lizenz) und
+> wurde ersetzt, ohne dass die Ersatzwahl je als Markenentscheidung getroffen
+> wurde. Damit steht die Referenz aus PRODUCT.md („ultra-bold Chaney display
+> type") ohne Träger da. **Offene Entscheidung**, siehe §13.
 
 > **Anmerkung zur Startseiten-H1** (Juli 2026): Die Markenreferenz in
 > PRODUCT.md (ultra-bold Display auf Paper) verlangt mehr typografische
@@ -142,10 +158,19 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 > `global.css`). Das clamp-Minimum 34px hält die §12-Regel ein: Formular
 > über der Falte bei 375px. Unterseiten bleiben bewusst bei 38–44px.
 
+> **Anmerkung zur H2** (Juli 2026): vorher 22–24px. Zwischen der Hero-H1
+> (68px) und dem Fließtext (15px) lag damit keine mittlere Stufe — die Seite
+> fiel nach dem Hero typografisch in sich zusammen und landete genau in der
+> Anti-Referenz aus PRODUCT.md („warm-restrained, forgettably competent").
+> 24–32px füllt die Lücke. Ruhe entsteht laut PRODUCT.md aus Abstand und
+> Tempo, nicht aus kleiner Schrift.
+
 ### Regeln
 
-- **Chaney nie unter 17px.** Display-Schriften brechen bei kleinen Graden weg.
-- **Chaney nie für Fließtext.** Maximal eine Zeile am Stück.
+- **Display nie unter 17px.** Display-Schriften brechen bei kleinen Graden weg.
+- **Display nie für Fließtext.** Maximal eine Zeile am Stück. Deshalb ist die
+  Pullquote (§6.4a) Satoshi 500 und nicht Display: ein mehrzeiliges Zitat ist
+  keine Überschrift.
 - **Mono nie für Prosa.** Nur Daten und Etiketten. Mono für einen ganzen Absatz
   lässt die Seite technisch statt editorial wirken. Das ist der wichtigste
   einzelne Hebel, damit die Seite nach Publikation und nicht nach Krypto-Tool
@@ -159,9 +184,8 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 
 ### Schrift-Einbindung
 
-Chaney, Satoshi Variable und IBM Plex Mono werden **lokal als woff2 in
-`/public/fonts/`** gehostet, nicht über einen externen Dienst. Gründe:
-Ladezeit, keine Drittanbieter-Requests, DSGVO.
+Alle Schriften werden **von der eigenen Domain** ausgeliefert, nicht über
+einen externen Dienst. Gründe: Ladezeit, keine Drittanbieter-Requests, DSGVO.
 
 ```css
 @font-face {
@@ -174,11 +198,11 @@ Ladezeit, keine Drittanbieter-Requests, DSGVO.
 
 Alle drei Schriften mit `<link rel="preload">` im `<head>`.
 
-> **Offener Punkt:** Aktuell laufen Chaney und Satoshi über die
-> Fontshare-CDN, IBM Plex Mono self-hosted über `@fontsource`. Das
-> widerspricht dieser Regel. Die woff2-Dateien müssen von Fontshare
-> heruntergeladen und nach `/public/fonts/` gelegt werden, danach fällt der
-> externe Request weg. Siehe Abschnitt 13.
+> **Erledigt (Juli 2026).** Hier stand ein offener Punkt, dass Schriften über
+> die Fontshare-CDN liefen. Das ist überholt: Die Fonts laufen über die
+> Astro-Fonts-API (`fonts:` in `astro.config.mjs`), die sie zur Build-Zeit
+> herunterlädt und mit Hash-Namen von der eigenen Domain ausliefert. Live
+> gemessen: kein Request an Fontshare, Google oder ein anderes CDN.
 
 ---
 
@@ -253,7 +277,7 @@ Acht Sektionen in dieser Reihenfolge. Nicht mehr.
 
 ### 6.1 Header
 
-Logo-Wortmarke links (Chaney, 15px, Ink). Rechts ein einziges Element:
+Logo-Wortmarke links (Display, 15px, Ink). Rechts ein einziges Element:
 „Abonnieren" (Mono, 12px, Stone), Ankerlink auf das Hero-Formular.
 
 **Keine Navigation.** Wer schon Leser ist, kommt über die E-Mail, nicht über
@@ -269,7 +293,7 @@ Eyebrow (Mono, 12px, Stone):
 Bitcoin, Geld und Politik · jeden Freitag
 ```
 
-H1 (Chaney, Umbruch gesetzt, „Bitcoin" in Orange als dokumentierte
+H1 (Display, Umbruch gesetzt, „Bitcoin" in Orange als dokumentierte
 Markenzeichen-Ausnahme, siehe §2):
 
 ```
@@ -298,11 +322,23 @@ Rechts neben dem Textblock (ab `lg`, darunter gestapelt nach dem Formular):
 die interaktive Angebotskurve (`Angebotskurve.vue`) — die einzige Grafik der
 Marke, Datengrafik nach §5.
 
-Formular: ein Feld, Placeholder `deine@email.de`, Rahmen 1px Ink. Button
-direkt anschließend ohne Lücke, Hintergrund Orange, **Text Weiß**, Gewicht 500.
+Formular: ein Feld, Placeholder `deine@email.de` in **Stone**, Rahmen 1px Ink.
+Feldschrift 16px. Button direkt anschließend ohne Lücke, Hintergrund Orange,
+**Text Ink**, Gewicht 500.
 
-> Text Weiß ist eine bewusste Entscheidung gegen die frühere Ink-Vorgabe
-> (Kontrast auf Orange: Weiß 2,7:1, Ink 6,3:1 — WCAG AA verlangt 4,5:1).
+> **Korrektur (Juli 2026).** Hier stand zwischenzeitlich „Text Weiß" mit der
+> Begründung, das sei eine bewusste Entscheidung — angeführt mit genau den
+> Zahlen, die dagegen sprechen: Weiß auf Orange 2,7:1, Ink 6,3:1, WCAG AA
+> verlangt 4,5:1. Die Spec war damit an einen Fehler im Code angepasst worden,
+> statt umgekehrt. Verbindlich ist Ink.
+>
+> Aus demselben Grund ist der Placeholder Stone (6,9:1) und nicht Dust
+> (2,4:1). Dust bleibt Linienfarbe; als Placeholder war es der einzige
+> sichtbare Feldhinweis, weil das `<label>` `sr-only` ist.
+>
+> 16px statt 15px: iOS Safari zoomt beim Fokus in jedes Feld unter 16px
+> hinein und reißt damit ausgerechnet am Konversionspunkt das Layout auf.
+>
 > Wer das ändert, ändert es hier und in `SignupIsland.vue` zugleich.
 
 Button-Label:
@@ -330,7 +366,14 @@ fällt niemandem auf, eine falsche Zahl kostet alles.
 
 ### 6.3 Die letzten drei Ausgaben
 
-Eyebrow (Mono, 12px, Stone): `Die letzten drei Ausgaben`
+Überschrift als **H2** (Display, 24–32px, Ink): `Die letzten drei Ausgaben`,
+darunter die Haarlinie als Ressortkopf (§4).
+
+> **Korrektur (Juli 2026):** Hier stand „Eyebrow (Mono, 12px, Stone)". Als
+> 12px-Label war die Sektionsüberschrift kleiner und leiser als die
+> 19px-Ausgabentitel, die sie überschreibt — Sehende bekamen damit eine
+> andere Gliederung als Screenreader-Nutzer, für die das Element seit jeher
+> ein `<h2>` war. Sektionsköpfe sehen jetzt überall gleich aus.
 
 Drei Einträge untereinander, getrennt durch Haarlinien in Dust. Kein Grid,
 keine Karten.
@@ -340,7 +383,7 @@ Pro Eintrag:
 - Datum + Lesezeit (Mono, 11px, Stone), z.B. `17. Juli 2026 · 4 Min.` —
   die Lesezeit kommt aus dem RSS-Inhalt (`getPosts({ withContent: true })`,
   nur Startseite; das Archiv bleibt ohne, dort entfällt die Angabe)
-- Titel (Chaney, 17px, Ink), verlinkt auf `/p/slug`
+- Titel (Display, 17px, Ink), verlinkt auf `/p/slug`
 - Untertitel (Satoshi, 14px, Stone)
 
 Wird aus der beehiiv-API gezogen, nicht hartkodiert.
@@ -395,11 +438,11 @@ richtige Richtung.
 ### 6.5 Bevor du dich einträgst
 
 Sechs Frage-Antwort-Paare (`BeforeSignup.astro`), Überschrift „Bevor du dich
-einträgst" (Chaney, 22px). Ersetzt die frühere Liste „Was das hier nicht ist"
+einträgst" (Display, H2). Ersetzt die frühere Liste „Was das hier nicht ist"
 (Juli 2026): dieselbe Funktion, aber als Stimme statt als Aufzählung.
 
 **Form: Zeitungs-Ledger.** Ab `sm` steht die Frage links in einer festen
-schmalen Spalte (Chaney, 17px, Ink), die Antwort rechts (Satoshi, 15px, Ink).
+schmalen Spalte (Display, 17px, Ink), die Antwort rechts (Satoshi, 15px, Ink).
 Haarlinien in Dust trennen die Paare und laufen über beide Spalten. Unter
 `sm` gestapelt. Gesamtbreite innerhalb der 620px-Satzbreite (§4). Keine
 Karten, keine Icons, kein Accordion: alle Antworten stehen offen da.
@@ -428,7 +471,7 @@ geht, kostet Zustellbarkeit. Das Frequenz-Paar („Wie oft schreibst du?")
 
 ### 6.6 Zweiter CTA
 
-Überschrift (Chaney, 22px):
+Überschrift (Display, H2):
 
 ```
 Nächste Ausgabe: Freitag.
@@ -470,7 +513,7 @@ sind indexiert und in versendeten E-Mails verlinkt und müssen **exakt erhalten
 bleiben**.
 
 Aufbau: Back-Link „← Alle Ausgaben" (Mono), Datum + Lesezeit (Mono), Titel
-(Chaney), Untertitel, Haarlinie, Fließtext, danach das Formular, danach drei
+(Display), Untertitel, Haarlinie, Fließtext, danach das Formular, danach drei
 Links auf verwandte Ausgaben („Weiterlesen", `IssueRow`-Liste). Lesebreite
 720px (dokumentierte Ausnahme, §4).
 
@@ -618,8 +661,18 @@ an Ort und Stelle:
 Fast fertig. Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist.
 ```
 
+Die Bestätigung **zeigt die eingetragene Adresse** und bietet darunter einen
+Rückweg („Nicht deine Adresse?", setzt das Formular zurück). Grund: Bei
+Double-Opt-in ist der Tippfehler der größte stille Verlustkanal. Wer
+`vincnet@…` einträgt, wartet auf eine Mail, die nie kommt; in beehiiv sieht
+das aus wie eine Anmeldung. Ohne Rückweg war die einzige Korrekturmöglichkeit
+ein Reload, und der wurde nirgends angeboten.
+
 **Fehlerfall:** benennen, was passiert ist, und was zu tun ist. Kein
-„Fehler:"-Präfix, keine Entschuldigung, keine Rohfehler aus der API.
+„Fehler:"-Präfix, keine Entschuldigung, keine Rohfehler aus der API. Die
+Meldung steht in einem Ink-Rahmen wie die Bestätigung — als reiner Fließtext
+war sie optisch nicht von Prosa zu unterscheiden und trug ihre Bedeutung
+allein in `role="alert"`, also nur für Screenreader.
 
 ### Rendering
 
@@ -734,17 +787,44 @@ verlinkt im Footer, in der Sitemap eingetragen.
 
 ### Komponenten
 
+Vier Dateien sind nirgends mehr eingebunden und widersprechen der Spec. Sie
+verwirren jeden, der sie als Vorbild liest, und gehören gelöscht:
+
 | Datei | Verstoß |
 |---|---|
-| `components/PostCard.astro` | Karten-Darstellung; ungenutzt, streichen oder auf Listeneintrag umbauen |
+| `components/PostCard.astro` | Karten-Darstellung (§4). Aktive Form ist `IssueRow.astro` |
+| `components/SignupForm.astro` | `rounded-full` + `btn btn-primary` gegen die 0px-Regel (§2). Aktiver Weg ist `SignupIsland.vue` → `/api/subscribe` |
+| `components/FooterSignup.vue` | Toast, `animation: spin`, kein `prefers-reduced-motion` (§10) |
+| `components/Faq.astro` | ersetzt durch `BeforeSignup.astro` |
+
+Mit `SignupForm.astro` und `FooterSignup.vue` entfällt auch die letzte Nutzung
+der Action `actions.subscribe`; `actions.unsubscribe` bleibt aktiv (`/abmelden`).
 
 Impressum und Datenschutz sind inzwischen bereinigt (echte Betreiber-Daten,
 kein „wir", Token-basierte Styles) und stehen nicht mehr auf der Liste.
 
 ### Schriften
 
-Chaney und Satoshi laufen über die Fontshare-CDN statt lokal aus
-`/public/fonts/`. Widerspricht Abschnitt 3 (DSGVO, Drittanbieter-Requests).
+**Der Fontshare-Punkt ist erledigt.** Die Schriften laufen über die
+Astro-Fonts-API, die sie zur Build-Zeit herunterlädt und von der eigenen
+Domain ausliefert. Live gemessen: kein Request an Fontshare oder Google.
+
+**Offen bleibt die Markenentscheidung.** Chaney existiert lizenzrechtlich nicht
+als Webfont; in Produktion läuft Cabinet Grotesk 700. Diese Wahl war ein
+Ersatz aus der Not, keine Entscheidung: Die Font-Auswahl für die wichtigste
+Schrift der Marke ist nie geführt worden, und die Referenz aus PRODUCT.md
+(„ultra-bold Chaney display type filling the viewport", Arnold's Pump Club)
+steht damit ohne Träger da. Nebenbefund: Gewicht 800 wird geladen und nirgends
+benutzt.
+
+### Sonstiges
+
+| Punkt | Ist | Soll |
+|---|---|---|
+| Footer-Disclaimer | zwei Zeilen 11px Mono | §3 nennt Mono-Prosa den wichtigsten Hebel gegen den Krypto-Tool-Look, §6.7 verordnet sie trotzdem. Widerspruch auflösen |
+| Rasterausreißer | `py-3` (12px) an Input und Button | auf 16px oder in §4 als Ausnahme dokumentieren |
+| Mobile Hero-H1 | drei Zeilen bei 375px | §4 erlaubt zwei |
+| `@fontsource/ibm-plex-mono` | in `package.json` | wird nicht mehr importiert, kann raus |
 
 ---
 

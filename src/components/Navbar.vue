@@ -40,8 +40,16 @@
         </span>
       </a>
 
-      <!-- .eyebrow ist exakt Mono / 12px / letter-spacing 0.04em / Stone. -->
-      <a href="#anmelden" class="eyebrow abo-link">Abonnieren</a>
+      <!-- .eyebrow ist exakt Mono / 12px / letter-spacing 0.04em / Stone.
+
+           Ziel absolut, nicht als reines Fragment: `#anmelden` gehört dem
+           Hero und existiert damit ausschließlich auf der Startseite. Als
+           `#anmelden` war der Link auf Archiv, Ausgaben, /ueber, allen
+           Wissensseiten und /abmelden wirkungslos — also genau dort, wo
+           Besucher aus der Suche einsteigen (§7: „Eingänge, keine
+           Durchgänge"). `/#anmelden` trifft auf jeder Seite das Hero-
+           Formular und bleibt auf der Startseite ein Sprung ohne Reload. -->
+      <a href="/#anmelden" class="eyebrow abo-link">Abonnieren</a>
     </div>
   </header>
 </template>

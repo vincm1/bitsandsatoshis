@@ -27,6 +27,17 @@ const props = withDefaults(
 const sending = ref(false);
 const done = ref(false);
 const message = ref(props.initialError);
+// Die abgeschickte Adresse überlebt den Wechsel in den Erfolgs-Block: sie wird
+// dort angezeigt, damit ein Tippfehler auffällt, solange er noch korrigierbar
+// ist. Ohne diesen Weg endet „vincnet@…" als stille Karteileiche in beehiiv.
+const submittedEmail = ref("");
+
+/** Zurück zum Formular, wenn die bestätigte Adresse nicht stimmt. */
+function reset() {
+  done.value = false;
+  message.value = "";
+  submittedEmail.value = "";
+}
 
 // Erfolgs-Block trägt „Fast fertig." als Headline — doppelt es die
 // Server-Meldung, wird der Prefix aus dem Fließtext entfernt.
@@ -40,11 +51,13 @@ async function onSubmit(event: Event) {
   message.value = "";
 
   const form = event.target as HTMLFormElement;
+  const payload = new FormData(form);
+  submittedEmail.value = String(payload.get("email") ?? "");
   try {
     const res = await fetch("/api/subscribe", {
       method: "POST",
       headers: { Accept: "application/json" },
-      body: new FormData(form),
+      body: payload,
     });
     const data = (await res.json()) as { ok: boolean; message: string };
     done.value = data.ok;
@@ -66,8 +79,15 @@ async function onSubmit(event: Event) {
       Fast fertig.
     </p>
     <p class="mt-3 text-[16px] leading-[1.65] text-ink">{{ successBody }}</p>
+    <p v-if="submittedEmail" class="mt-3 text-[16px] leading-[1.65] text-ink">
+      Wir haben geschrieben an
+      <span class="font-medium">{{ submittedEmail }}</span>.
+      <button type="button" class="reset-link" @click="reset">
+        Nicht deine Adresse?
+      </button>
+    </p>
     <p class="meta mt-3">
-      Keine Mail? Schau im Spam-Ordner nach — und zieh sie ins Hauptpostfach.
+      Keine Mail? Schau im Spam-Ordner nach und zieh sie ins Hauptpostfach.
     </p>
   </div>
 
@@ -88,7 +108,7 @@ async function onSubmit(event: Event) {
         required
         placeholder="deine@email.de"
         autocomplete="email"
-        class="signup-input w-full rounded-none border border-ink bg-paper px-4 py-3 text-[15px] text-ink placeholder:text-dust"
+        class="signup-input w-full rounded-none border border-ink bg-paper px-4 py-3 text-[16px] text-ink placeholder:text-stone"
       />
       <input
         v-for="(value, key) in utm"
@@ -101,13 +121,20 @@ async function onSubmit(event: Event) {
         type="submit"
         :disabled="sending"
         :aria-busy="sending"
-        class="shrink-0 cursor-pointer rounded-none bg-orange px-8 py-3 text-[15px] font-medium text-white hover:opacity-[0.88] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default disabled:opacity-[0.88]"
+        class="shrink-0 cursor-pointer rounded-none bg-orange px-8 py-3 text-[16px] font-medium text-ink hover:opacity-[0.88] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default disabled:opacity-[0.88]"
       >
-        Freitags lesen
+        {{ sending ? "Wird gesendet" : "Freitags lesen" }}
       </button>
     </div>
 
-    <p v-if="message" class="mt-2 text-[15px] leading-[1.65] text-ink" role="alert">
+    <!-- Ink-Rahmen wie beim Erfolgs-Block: ohne ihn war die Fehlermeldung
+         optisch identisch mit Fließtext und trug ihre Bedeutung allein in
+         role="alert" — also nur für Screenreader. -->
+    <p
+      v-if="message"
+      class="mt-4 border border-ink p-4 text-[16px] leading-[1.65] text-ink"
+      role="alert"
+    >
       {{ message }}
     </p>
 
@@ -130,16 +157,38 @@ async function onSubmit(event: Event) {
  * Spezifität.
  *
  * outline-offset 0 statt 2px entfernt die Lücke, die wie ein doppelter
- * Rahmen aussah. Zusammen mit dem orangen Rahmen ergibt das eine
- * durchgehende 2px-Kante — kräftig genug als Fokus-Indikator (§12) und
- * ohne Layout-Shift, weil die border-width unverändert bei 1px bleibt.
+ * Rahmen aussah. Zusammen mit dem Rahmen ergibt das eine durchgehende
+ * 2px-Kante — kräftig genug als Fokus-Indikator (§12) und ohne
+ * Layout-Shift, weil die border-width unverändert bei 1px bleibt.
  *
- * Orange ist hier erlaubt: §2 nimmt den Fokus-Ring ausdrücklich vom
- * Orange-Budget aus, weil er Barrierefreiheit ist und nicht Gestaltung.
+ * Ink statt Orange: Orange auf Paper sind 2,3:1 und damit unter den 3:1,
+ * die WCAG 1.4.11 für Nicht-Text-Kontraste verlangt. Der Ring war auf
+ * hellen Screens kaum zu sehen. Ink liefert 14,8:1.
  */
 .signup-input:focus-visible {
-  outline: 1px solid var(--c-orange);
+  outline: 1px solid var(--c-ink);
   outline-offset: 0;
-  border-color: var(--c-orange);
+  border-color: var(--c-ink);
+}
+
+/**
+ * Rückweg aus dem Erfolgs-Block. Ein <button> und kein <a>, weil nichts
+ * navigiert wird; die Affordanz ist trotzdem die der übrigen Textlinks
+ * (Dust-Unterstrich, Hover Ink), damit die Seite nur eine Link-Sprache hat.
+ */
+.reset-link {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--c-dust);
+  text-underline-offset: 3px;
+}
+
+.reset-link:hover {
+  text-decoration-color: var(--c-ink);
 }
 </style>

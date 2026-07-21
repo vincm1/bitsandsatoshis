@@ -1,5 +1,6 @@
 {
   "enabledPlugins": {
-    "cds-mcp@claude-plugins-official": true
+    "cds-mcp@claude-plugins-official": true,
+    "humanizer@humanizer": true
   }
 }

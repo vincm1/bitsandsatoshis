@@ -6,7 +6,14 @@ Fonts, globale Styles) bereitstellen.
 
 ## Layout.astro — Haupt-Layout
 Jede Seite rendert in `Layout.astro`. Es lädt die Fonts, die globale CSS,
-setzt Meta-Tags und rahmt den `<slot />` mit `<Nav />` und `<Footer />`.
+setzt Meta-Tags und rahmt den `<slot />` mit `<Navbar />` und `<Footer />`.
+Dazu `<Analytics />` (`@vercel/analytics`) für cookielose Reichweitenmessung,
+die im Prod-Build von der eigenen Domain lädt (`/_vercel/insights`).
+
+`<Navbar />` steht **ohne client-Direktive** im Markup — es geht also kein Vue
+an den Browser. Der Header ist außerdem nicht `fixed`, sondern im Fluss; den
+Abstand darunter setzt der Hero selbst. Wer hier etwas ändert, braucht kein
+`scroll-mt` an Ankerzielen.
 
 ### Props
 ```typescript
@@ -31,22 +38,36 @@ Beispiel: "Archiv — Bits&Satoshis"
 Homepage: "Bits&Satoshis — Der ruhige Bitcoin-Newsletter"
 ```
 
-### Fonts (kein Google-CDN)
-**Chaney + Satoshi** — Fontshare-CDN im `<head>`. Chaney gibt es nur dort,
-Satoshi läuft aus demselben Request mit.
+### Fonts (keine Drittanbieter-Requests)
+Alle drei Schriften laufen über die **Astro-Fonts-API**, konfiguriert unter
+`fonts:` in `astro.config.mjs`. Astro lädt sie zur Build-Zeit herunter und
+liefert sie mit Hash-Namen von der eigenen Domain aus. Im Browser entsteht
+kein Request an Fontshare, Google oder ein anderes CDN — live nachgemessen.
 
-**IBM Plex Mono** — self-hosted, im Frontmatter:
-```ts
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
+Eingebunden werden sie im `<head>` über die `<Font />`-Komponente:
+```astro
+import { Font } from "astro:assets";
+<Font cssVariable="--font-brand-display" preload />
+<Font cssVariable="--font-brand-body" preload />
+<Font cssVariable="--font-brand-mono" />
 ```
 
-Die Font-Families sind als Tailwind-Tokens in `src/styles/global.css`
-(`@theme { --font-display / --font-sans / --font-mono }`) hinterlegt →
-Utilities `font-display` / `font-sans` / `font-mono`.
+| Rolle | Familie | Schnitte | cssVariable |
+|---|---|---|---|
+| Display | Cabinet Grotesk | 700, 800 | `--font-brand-display` |
+| Fließtext | Satoshi | 400, 500 | `--font-brand-body` |
+| Meta | IBM Plex Mono | 400, 500 | `--font-brand-mono` |
 
-Rollen sind strikt getrennt (siehe `/DESIGN.md` §03): Chaney nur H1–H3 und
-nie unter 17px, Mono nur für Meta und nie für Prosa.
+Die `cssVariable`-Namen sind bewusst **nicht** `--font-display`/`--font-sans`/
+`--font-mono`: die gehören Tailwind (`@theme` in `global.css`) und würden
+kollidieren. `global.css` mappt die Tailwind- und die `--f-*`-Tokens auf diese
+drei.
+
+> `@fontsource/ibm-plex-mono` steht noch in der `package.json`, wird aber
+> nirgends mehr importiert. Kann raus.
+
+Rollen sind strikt getrennt (siehe `/DESIGN.md` §3): Display nur H1–H3 und nie
+unter 17px, Mono nur für Meta und nie für Prosa.
 
 ### Meta-Tags die immer gesetzt sind
 `charset`, `viewport`, `description`, Canonical-Link, RSS-`alternate`-Link,

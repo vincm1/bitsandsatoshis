@@ -23,8 +23,15 @@ const {
 ---
 
 {/* h2 statt p: die IssueRow-Titel sind h3, ohne diese Ebene wäre die
-    Heading-Hierarchie h1 → h3 gebrochen (a11y). Optik bleibt .eyebrow. */}
-<h2 class="eyebrow">{eyebrow}</h2>
+    Heading-Hierarchie h1 → h3 gebrochen (a11y).
+
+    Optik .h2 statt .eyebrow: als 12px-Mono-Label war die Sektions-
+    überschrift kleiner und leiser als die 19px-Ausgabentitel darunter,
+    die sie überschreibt. Sehende bekamen damit eine andere Gliederung als
+    Screenreader-Nutzer. Jetzt trägt die Überschrift auch visuell, und
+    Sektionsköpfe sehen überall gleich aus (SignupCta nutzt dieselbe .h2).
+    Die Haarlinie darunter bleibt der Ressortkopf aus §4. */}
+<h2 class="h2">{eyebrow}</h2>
 <hr class="rule issue-list__rule" />
 
 {

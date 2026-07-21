@@ -23,8 +23,12 @@ const { quote, slug, issueTitle } = Astro.props;
 ---
 
 <section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
-  <figure class="pull-quote measure">
-    <blockquote class="pull-quote__text">{quote}</blockquote>
+  {/* Linien über den vollen Container wie jede andere Ressortgrenze (§4),
+      Inhalt auf Satzbreite. Vorher lief die Rahmung selbst auf 620px und war
+      damit als einzige Linie der Seite kürzer als alle übrigen — im Scroll
+      las sich das als Setzfehler, nicht als eigene Form. */}
+  <figure class="pull-quote">
+    <blockquote class="pull-quote__text measure">{quote}</blockquote>
     <figcaption class="meta pull-quote__source">
       Aus der Ausgabe <a href={`/newsletter/${slug}`} class="pull-quote__link">{issueTitle}</a>
     </figcaption>
@@ -41,12 +45,17 @@ const { quote, slug, issueTitle } = Astro.props;
     border-bottom: 1px solid var(--c-dust);
   }
 
+  /* 22–28px in Satoshi 500. Vorher 19px/400: damit war die Stimmprobe der
+     Marke von gewöhnlichem Fließtext (15px/400) kaum zu unterscheiden und
+     leistete als Zitat nichts. Bewusst nicht die Display-Schrift — §3 lässt
+     sie nur für Überschriften zu, ein mehrzeiliges Zitat ist keine. 500 ist
+     das einzige zusätzlich erlaubte Satoshi-Gewicht (§3). */
   .pull-quote__text {
     margin: 0;
     font-family: var(--f-body);
-    font-weight: 400;
-    font-size: 19px;
-    line-height: 1.5;
+    font-weight: 500;
+    font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+    line-height: 1.4;
     color: var(--c-ink);
   }
 

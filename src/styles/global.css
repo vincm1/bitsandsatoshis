@@ -146,12 +146,16 @@ body {
   line-height: 1.08;
 }
 
-/* H2 — Sektionsüberschriften, 22–24px */
+/* H2 — Sektionsüberschriften, 24–32px.
+   Vorher 22–24px: zwischen der Hero-H1 (68px) und dem Fließtext (15px) lag
+   damit keine mittlere Stufe, die Seite fiel nach dem Hero typografisch in
+   sich zusammen. 32px füllt das Loch, ohne die Ruhe anzutasten — die entsteht
+   laut PRODUCT.md aus Abstand und Tempo, nicht aus kleiner Schrift. */
 .h2 {
   font-family: var(--f-display);
   font-weight: 700;
-  font-size: clamp(1.375rem, 2.5vw, 1.5rem);
-  line-height: 1.25;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  line-height: 1.2;
   color: var(--c-ink);
 }
 
@@ -190,8 +194,11 @@ body {
   color: var(--c-stone);
 }
 
-/* Fokus immer Orange — zählt nicht gegen das Orange-Budget */
+/* Fokus in Ink, nicht Orange. Orange auf Paper ergibt 2,3:1 und verfehlt damit
+   WCAG 1.4.11 (3:1 für Nicht-Text-Kontraste) — der Ring war auf hellen Screens
+   praktisch unsichtbar, also genau dort wirkungslos, wo er gebraucht wird.
+   Ink auf Paper: 14,8:1, Ink auf dem orangen Button: 6,3:1. */
 :focus-visible {
-  outline: 2px solid var(--c-orange);
+  outline: 2px solid var(--c-ink);
   outline-offset: 2px;
 }

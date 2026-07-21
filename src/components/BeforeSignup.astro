@@ -41,7 +41,7 @@ const pairs = [
   <hr class="rule" />
 
   <div class="measure">
-    <h2 class="before-signup__title">Bevor du dich einträgst</h2>
+    <h2 class="h2 before-signup__title">Bevor du dich einträgst</h2>
 
     <dl class="before-signup__list">
       {
@@ -62,12 +62,10 @@ const pairs = [
 </section>
 
 <style>
+  /* Größe und Schnitt kommen aus .h2 (§3, 24–32px). Vorher hier mit 22px
+     dupliziert — damit war dieser Sektionskopf kleiner als die übrigen,
+     sobald .h2 angehoben wurde. Bleibt lokal nur der Abstand. */
   .before-signup__title {
-    font-family: var(--f-display);
-    font-weight: 700;
-    font-size: 22px;
-    line-height: 1.25;
-    color: var(--c-ink);
     margin-top: var(--sp-3);
   }
 

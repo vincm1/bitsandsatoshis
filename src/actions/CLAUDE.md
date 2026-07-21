@@ -8,8 +8,21 @@ Ersetzen separate API-Endpunkte/Functions. Laufen serverseitig, API-Keys sicher.
 Exportiert `server` mit allen Actions. Aktuell:
 
 ```ts
-subscribe  // E-Mail-Anmeldung → ruft subscribe() aus src/lib/beehiiv.ts
+unsubscribe  // Abmeldung → unsubscribe() aus src/lib/beehiiv.ts. Genutzt von /abmelden
+subscribe    // Anmeldung → subscribe() aus src/lib/beehiiv.ts. Siehe Hinweis
 ```
+
+> **Der Live-Signup läuft nicht über `subscribe`.** Das Formular auf der Seite
+> ist `SignupIsland.vue` und schickt seinen POST an `/api/subscribe`
+> (`src/pages/api/subscribe.ts`); ohne JS greift der native Form-POST an
+> denselben Endpoint. Die Action `subscribe` wird nur noch von totem Code
+> aufgerufen (`SignupForm.astro`, `FooterSignup.vue`) und kann mit diesem
+> zusammen entfallen. `unsubscribe` ist dagegen aktiv im Einsatz.
+
+`unsubscribe` trägt ein **Honeypot-Feld** (`website`): für Menschen unsichtbar,
+und wenn ein Bot es füllt, antwortet die Action neutral, ohne die beehiiv-API
+anzufassen. Die Erfolgsmeldung ist bewusst unspezifisch („Falls diese Adresse
+eingetragen war …") und verrät damit nicht, ob eine Adresse existiert.
 
 ### Muster
 ```ts
