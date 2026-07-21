@@ -1,0 +1,11 @@
+---
+/**
+ * beehiiv-Altlast: Tag-Seiten liefen unter /t/<tag>. Ein Gegenstück gibt es
+ * nicht — alle sammelnd per 301 aufs Archiv. Als Catch-all-Route statt
+ * Config-Redirect, weil Astro-Redirects dynamische Parameter im Ziel
+ * verlangen (siehe astro.config.mjs).
+ */
+export const prerender = false;
+
+return Astro.redirect("/archiv", 301);
+---

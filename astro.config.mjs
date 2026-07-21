@@ -10,11 +10,25 @@ export default defineConfig({
   // absolute og:*-URLs (Astro.site).
   site: 'https://bitsandsatoshis.com',
 
-  // beehiiv-Altlasten: die bisherige beehiiv-Website nutzt /p/<slug>. Die
-  // 301er reichen die Google-Signale der bereits indexierten URLs an die
-  // neuen /newsletter/-URLs weiter — wichtig für den DNS-Umzug.
+  // beehiiv-Altlasten: 301er reichen die Google-Signale der bereits
+  // indexierten beehiiv-URLs an die neuen Pfade weiter — wichtig für den
+  // DNS-Umzug. Quellen: site:bitsandsatoshis.com (Stand Juli 2026) plus die
+  // Standard-Pfade, die jede beehiiv-Site bedient.
   redirects: {
+    // Ausgaben: beehiiv nutzt /p/<slug>, wir /newsletter/<slug>.
     '/p/[slug]': { status: 301, destination: '/newsletter/[slug]' },
+    // beehiiv-Archiv → eigenes Archiv. (Tag-Seiten /t/<tag> leitet die
+    // Catch-all-Route src/pages/t/[...tag].astro um — Config-Redirects
+    // können dynamische Parameter nicht verwerfen.)
+    '/archive': { status: 301, destination: '/archiv' },
+    // Indexierte beehiiv-Tag-Seite ("Newsletters Knowledge") → Archiv.
+    '/newsletters-knowledge': { status: 301, destination: '/archiv' },
+    // beehiiv-Signup- und Upgrade-Seiten → Startseite mit Formular-Anker.
+    '/subscribe': { status: 301, destination: '/#newsletter' },
+    '/upgrade': { status: 301, destination: '/#newsletter' },
+    // Alte Wissensquellen-Seite (Bücher/Podcasts) — hat (noch) kein
+    // Gegenstück; bis eine Wissensseite existiert auf die Startseite.
+    '/bitcoin-resources': { status: 301, destination: '/' },
   },
 
   // Hybrid: `output: 'hybrid'` wurde in Astro 5 entfernt — seitdem ist
