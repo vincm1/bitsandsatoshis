@@ -7,7 +7,19 @@ import type { APIRoute } from "astro";
 import { getPosts } from "../lib/beehiiv";
 import { escapeXml } from "../lib/format";
 
-const STATIC_ROUTES = ["/", "/archiv", "/ueber", "/impressum", "/datenschutz"];
+const STATIC_ROUTES = [
+  "/",
+  "/archiv",
+  "/ueber",
+  "/impressum",
+  "/datenschutz",
+  // Wissensseiten (§7) — statisch gebaut aus src/content/wissen/.
+  "/was-ist-bitcoin",
+  "/bitcoin-vs-gold",
+  "/bitcoin-mythen",
+  "/bitcoin-kaufen",
+  "/bitcoin-verwahren",
+];
 
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getPosts({ limit: 100 });

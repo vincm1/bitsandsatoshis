@@ -23,10 +23,16 @@ const untertitel = post.subtitle || post.teaser;
 
 <a href={`/newsletter/${post.slug}`} class="issue-row">
   {
-    post.publishedAt && (
-      <time datetime={post.publishedAt.toISOString()} class="meta issue-row__date">
-        {formatDate(post.publishedAt)}
-      </time>
+    (post.publishedAt || post.readingTimeMinutes) && (
+      <p class="meta issue-row__date">
+        {post.publishedAt && (
+          <time datetime={post.publishedAt.toISOString()}>
+            {formatDate(post.publishedAt)}
+          </time>
+        )}
+        {post.publishedAt && post.readingTimeMinutes && " · "}
+        {post.readingTimeMinutes && `${post.readingTimeMinutes} Min.`}
+      </p>
     )
   }
   <h3 class="h3 issue-row__title">{post.title}</h3>

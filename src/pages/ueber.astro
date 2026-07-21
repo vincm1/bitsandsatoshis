@@ -42,25 +42,33 @@ const profileSchema = {
       keine Qualifikationsbehauptung. Das Foto ist eine der drei erlaubten
       Bild-Ausnahmen (§5). Kein Orange außer dem Signup-Button am Ende (§2). */}
   <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
-    <img
-      src="/author.png"
-      alt="Vincent, Autor von Bits&Satoshis"
-      class="about__photo"
-      width="112"
-      height="112"
-      loading="eager"
-    />
+    {/* Kopf im AuthorCard-Muster: Portrait links, Text rechts, mobil
+        gestapelt. Eine Ebene tiefer beginnt die Prosa auf Satzbreite. */}
+    <div class="about__head">
+      <img
+        src="/author.png"
+        alt="Vincent, Autor von Bits&Satoshis"
+        class="about__photo"
+        width="112"
+        height="112"
+        loading="eager"
+      />
 
-    <div class="measure">
-      <h1 class="h1 about__title">Ich bin Vincent.</h1>
+      <div class="measure">
+        <p class="eyebrow">Über mich</p>
+        <h1 class="h1 about__title">Ich bin Vincent.</h1>
         <p class="about__body">
           Bits&amp;Satoshis gibt es, weil ich Bitcoin verstehen wollte und
           fast alles auf Deutsch entweder etwas verkaufen oder ein Video sein
           wollte. Jetzt schreibe ich jede Woche das, was ich damals gern
           gelesen hätte.
         </p>
+      </div>
     </div>
 
+    {/* Ressortgrenzen wie auf der Startseite: Haarlinie über den vollen
+        Container, 24px, dann die H2. 64px Abstand vor jeder Linie. */}
+    <hr class="rule about__rule" />
     <div class="measure">
       <h2 class="h2 about__heading">Wie ich arbeite</h2>
       <p class="about__body">
@@ -74,18 +82,24 @@ const profileSchema = {
         markiere, wo ich mir nicht sicher bin. Eine Ausgabe liest sich in
         etwa vier Minuten.
       </p>
+    </div>
 
+    <hr class="rule about__rule" />
+    <div class="measure">
       <h2 class="h2 about__heading">Was der Newsletter nicht ist</h2>
       <p class="about__body">
         Keine Kursprognosen. Keine Altcoins. Keine Trading-Signale. Kein
         Sponsoring. Keine tägliche Mail.
       </p>
       <p class="about__body">
-        Ich verdiene auch nichts daran, wenn du kaufst. Keine
-        Affiliate-Links, keine Kurse, kein Coaching. Der Newsletter ist
-        kostenlos, und du kannst dich mit einem Klick wieder abmelden.
+        Wenn ich etwas empfehle und daran verdiene, steht es dabei.
+        Versteckt läuft hier nichts. Der Newsletter selbst ist kostenlos,
+        und du kannst dich mit einem Klick wieder abmelden.
       </p>
+    </div>
 
+    <hr class="rule about__rule" />
+    <div class="measure">
       <h2 class="h2 about__heading">Schreib mir</h2>
       <p class="about__body">
         Der direkteste Weg: Antworte auf eine Ausgabe. Die Mails gehen in
@@ -100,15 +114,32 @@ const profileSchema = {
 </Layout>
 
 <style>
-  /* Foto über der Überschrift: eine Spalte, eine linke Kante (§4). */
+  /* Kopf im AuthorCard-Muster: Portrait links, Text rechts (§6.4). */
+  .about__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-4);
+  }
+
+  @media (max-width: 640px) {
+    .about__head {
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+  }
+
   .about__photo {
+    flex-shrink: 0;
     width: 112px;
     height: 112px;
     display: block;
     object-fit: cover;
     /* Kreis ist erlaubt: Portrait, kein UI-Element (§6.4) */
     border-radius: 50%;
-    margin-bottom: var(--sp-3);
+  }
+
+  .about__title {
+    margin-top: var(--sp-1);
   }
 
   .about__body {
@@ -119,14 +150,18 @@ const profileSchema = {
     color: var(--c-ink);
   }
 
-  /* Raster (§4): 16px innerhalb einer Textgruppe, 24px zwischen Absätzen,
-     40px vor einer neuen Zwischenüberschrift. */
+  /* Raster (§4): 16px Überschrift→Absatz, 24px zwischen Absätzen,
+     64px vor jeder Ressortgrenze, 24px von der Linie zur H2. */
   .h1 + .about__body {
     margin-top: var(--sp-2);
   }
 
-  .about__heading {
-    margin-top: var(--sp-4);
+  .about__rule {
+    margin-top: var(--sp-5);
+  }
+
+  .about__rule + .measure {
+    margin-top: var(--sp-3);
   }
 
   .about__heading + .about__body {

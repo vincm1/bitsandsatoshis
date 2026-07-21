@@ -6,12 +6,30 @@ import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import IssueList from "../components/IssueList.astro";
 import AuthorCard from "../components/AuthorCard.astro";
+import PullQuote from "../components/PullQuote.astro";
 import BeforeSignup from "../components/BeforeSignup.astro";
 import SignupCta from "../components/SignupCta.astro";
 import { getPosts } from "../lib/beehiiv";
 
-const posts = await getPosts({ limit: 3 });
+// withContent lädt den RSS-Inhalt mit — daraus kommt die Lesezeit der Liste.
+const posts = await getPosts({ limit: 3, withContent: true });
 
+// Kuratierte Einstiegsausgabe — dieselbe Quelle wie die PullQuote unten.
+// Bei Bedarf auf eine neuere repräsentative Ausgabe umziehen.
+const FEATURED_ISSUE = {
+  slug: "gold-vs-bitcoin-2026",
+  title: "Gold vs. Bitcoin",
+};
+
+// Bisherige Themenfelder — aus echten Ausgaben, bei neuen Feldern ergänzen.
+const TOPIC_AREAS = [
+  "Geldpolitik",
+  "Steuern",
+  "ETFs",
+  "Mining",
+  "Quantencomputer",
+  "Psychologie",
+];
 // 5 min CDN-Cache (Vercel cached pro URL inkl. Query — UTM-Varianten sind
 // deterministisch und damit sicher). SWR: Besucher bekommen sofort die
 // gecachte Seite, das CDN holt im Hintergrund eine frische.
@@ -30,11 +48,24 @@ Astro.response.headers.set(
   <section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
     <IssueList posts={posts} eyebrow="Die letzten drei Ausgaben" />
 
-    {/* Weg ins Archiv, gleiche Link-Affordanz wie überall:
-        Dust-Unterstrich, Hover Ink (§2). 24px Abstand zur Liste (§4). */}
+    {/* Themenbreite gehört zur Liste (16px): beantwortet die stille Frage
+        „geht dem der Stoff aus?" — Meta-Register, keine Prosa. */}
+    <p class="meta mt-4">Bisher: {TOPIC_AREAS.join(" · ")}</p>
+
+    {/* Navigationsgruppe (24px zur Liste, 8px intern): Einstieg für Skeptiker
+        und Weg ins Archiv — beide führen von der Liste weiter. */}
+    <p class="mt-6 text-[15px] leading-[1.65] text-ink">
+      Neu hier? Lies zuerst{" "}
+      <a
+        href={`/newsletter/${FEATURED_ISSUE.slug}`}
+        class="font-medium underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+      >
+        {FEATURED_ISSUE.title}
+      </a>. Dann weißt du, ob das hier etwas für dich ist.
+    </p>
     <a
       href="/archiv"
-      class="mt-6 inline-block text-[15px] font-medium text-ink underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+      class="mt-2 inline-block text-[15px] font-medium text-ink underline decoration-dust underline-offset-[3px] hover:decoration-ink"
     >
       Alle Ausgaben
     </a>
@@ -42,7 +73,15 @@ Astro.response.headers.set(
 
   <AuthorCard />
 
+  {/* Stimmprobe (§6.4a): ein echtes Zitat aus einer Ausgabe, Quelle verlinkt.
+      Überprüfbare Stimme statt Behauptung — wie die Ausgabenliste oben. */}
+  <PullQuote
+    quote="Bitcoin wirkt von außen chaotisch. Das Chaos arbeitet mehrheitlich in die richtige Richtung."
+    slug="gold-vs-bitcoin-2026"
+    issueTitle="Gold vs. Bitcoin"
+  />
+
   <BeforeSignup />
 
-  <SignupCta />
+  <SignupCta format="Ein Thema · 4 Minuten · keine Kursprognosen · kostenlos" />
 </Layout>

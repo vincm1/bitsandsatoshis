@@ -98,7 +98,7 @@ async function onSubmit(event: Event) {
     </p>
 
     <p class="meta mt-2">
-      Eine Mail pro Woche · 4 Minuten · Abmelden mit einem Klick
+      Kostenlos · eine Mail pro Woche · Abmelden mit einem Klick
     </p>
   </form>
 </template>

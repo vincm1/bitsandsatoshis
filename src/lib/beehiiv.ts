@@ -8,6 +8,8 @@
  * der Client Mock-Daten, damit die Seite ohne Konfiguration lauffähig ist.
  */
 
+import { readingTimeMinutes } from "./format";
+
 const API_BASE = "https://api.beehiiv.com/v2";
 
 const API_KEY = import.meta.env.BEEHIIV_API_KEY as string | undefined;
@@ -29,6 +31,8 @@ export interface NewsletterPost {
   webUrl: string | null;
   /** Voller HTML-Inhalt (nur via getPost mit free_web_content). */
   contentHtml: string | null;
+  /** Lesezeit in Minuten — nur wenn der Inhalt mitgeladen wurde. */
+  readingTimeMinutes: number | null;
 }
 
 /** Rohform eines beehiiv-Posts (nur die genutzten Felder). */
@@ -113,6 +117,26 @@ function sanitizeContentHtml(html: string): string {
     .trim();
 }
 
+/**
+ * Entfernt das führende E-Mail-Banner: ein reines Bild-Div ganz am Anfang.
+ * Auf der Website steht der Titel im Seitenkopf — das Banner wäre doppeltes
+ * Branding. Bild-Divs mit Caption (weitere Kinder neben dem <img>) bleiben.
+ */
+function stripLeadingBanner(html: string): string {
+  const m = /^\s*<div>\s*<img\b[^>]*\/?>\s*<\/div>/i.exec(html);
+  return m ? html.slice(m[0].length) : html;
+}
+
+/** Entfernt leere <p>/<div>/<span> — beehiiv lässt welche zurück, sie erzeugen Lücken. */
+function stripEmptyElements(html: string): string {
+  let prev;
+  do {
+    prev = html;
+    html = html.replace(/<(p|div|span)>(?:\s|&nbsp;)*<\/\1>/gi, "");
+  } while (html !== prev);
+  return html;
+}
+
 /** True, wenn das HTML sichtbaren Inhalt enthält (Text oder Bilder). */
 function hasVisibleContent(html: string): boolean {
   if (/<img\b/i.test(html)) return true;
@@ -135,7 +159,9 @@ function extractArticleHtml(
     const body =
       extractByMarker(rss, /<div\b[^>]*class=['"][^'"]*beehiiv__body[^'"]*['"]/i) ??
       rss;
-    const clean = sanitizeContentHtml(body);
+    const clean = stripLeadingBanner(
+      stripEmptyElements(sanitizeContentHtml(body)),
+    );
     if (hasVisibleContent(clean)) return clean;
   }
 
@@ -146,7 +172,9 @@ function extractArticleHtml(
       /<div\b[^>]*id=['"]content-blocks['"]/i,
     );
     if (blocks) {
-      const clean = sanitizeContentHtml(blocks);
+      const clean = stripLeadingBanner(
+        stripEmptyElements(sanitizeContentHtml(blocks)),
+      );
       if (hasVisibleContent(clean)) return clean;
     }
   }
@@ -155,6 +183,7 @@ function extractArticleHtml(
 }
 
 function mapPost(raw: BeehiivPost): NewsletterPost {
+  const contentHtml = extractArticleHtml(raw.content?.free);
   return {
     id: raw.id,
     slug: raw.slug ?? raw.id,
@@ -164,19 +193,25 @@ function mapPost(raw: BeehiivPost): NewsletterPost {
     publishedAt: toUnixDate(raw.publish_date ?? raw.displayed_date),
     thumbnailUrl: raw.thumbnail_url ?? null,
     webUrl: raw.web_url ?? null,
-    contentHtml: extractArticleHtml(raw.content?.free),
+    contentHtml,
+    readingTimeMinutes: contentHtml ? readingTimeMinutes(contentHtml) : null,
   };
 }
 
 export interface GetPostsOptions {
   limit?: number;
+  /**
+   * Lädt den RSS-Inhalt pro Post mit — nötig für die Lesezeit in der Liste.
+   * Nur für kleine Listen (Startseite) setzen; das Archiv bleibt schlank.
+   */
+  withContent?: boolean;
 }
 
 /** Veröffentlichte Ausgaben, neueste zuerst. */
 export async function getPosts(
   opts: GetPostsOptions = {},
 ): Promise<NewsletterPost[]> {
-  const { limit = 25 } = opts;
+  const { limit = 25, withContent = false } = opts;
 
   if (!isConfigured) {
     return mockPosts.slice(0, limit);
@@ -188,6 +223,9 @@ export async function getPosts(
     direction: "desc",
     limit: String(limit),
   });
+  if (withContent) {
+    params.append("expand[]", "free_rss_content");
+  }
 
   const res = await fetch(
     `${API_BASE}/publications/${PUBLICATION_ID}/posts?${params}`,
@@ -313,6 +351,7 @@ const mockPosts: NewsletterPost[] = [
     webUrl: "#",
     contentHtml:
       "<p>Dies ist eine <strong>Demo-Ausgabe</strong>. Sobald die beehiiv-API verbunden ist, erscheint hier der echte Newsletter-Inhalt.</p>",
+    readingTimeMinutes: 4,
   },
   {
     id: "post_mock_2",
@@ -326,6 +365,7 @@ const mockPosts: NewsletterPost[] = [
     webUrl: "#",
     contentHtml:
       "<p>Dies ist eine <strong>Demo-Ausgabe</strong>. Sobald die beehiiv-API verbunden ist, erscheint hier der echte Newsletter-Inhalt.</p>",
+    readingTimeMinutes: 3,
   },
   {
     id: "post_mock_1",
@@ -339,5 +379,6 @@ const mockPosts: NewsletterPost[] = [
     webUrl: "#",
     contentHtml:
       "<p>Dies ist eine <strong>Demo-Ausgabe</strong>. Sobald die beehiiv-API verbunden ist, erscheint hier der echte Newsletter-Inhalt.</p>",
+    readingTimeMinutes: 5,
   },
 ];

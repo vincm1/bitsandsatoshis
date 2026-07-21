@@ -1,0 +1,254 @@
+---
+/**
+ * Wissensseiten (§7/§8 der Spec) — statisch gebaute SEO-Eingangsseiten.
+ *
+ * Inhalt lebt als Markdown in src/content/wissen/<slug>.md; der Dateiname ist
+ * die URL (/was-ist-bitcoin usw. — bestehende, indexierte Pfade, nicht
+ * umbenennen). Rolle: Eingänge, keine Durchgänge — der Besucher soll hier
+ * konvertieren, deshalb das Formular nach dem ersten Drittel (Marker
+ * `<!--SIGNUP-->` im Markdown) und am Ende, und keine Links auf Startseite
+ * oder Archiv im Text.
+ *
+ * prerender: Inhalt ändert sich nur mit Deploys — statisch ist der Default
+ * (hybrid), hier explizit dokumentiert.
+ */
+export const prerender = true;
+
+import Layout from "../layouts/Layout.astro";
+import SignupCta from "../components/SignupCta.astro";
+import { formatDate } from "../lib/format";
+
+interface WissenFrontmatter {
+  title: string;
+  metaTitle: string;
+  description: string;
+  updated: string;
+}
+
+interface WissenModule {
+  frontmatter: WissenFrontmatter;
+  compiledContent: () => Promise<string>;
+}
+
+export function getStaticPaths() {
+  const modules = import.meta.glob("../content/wissen/*.md");
+  return Object.keys(modules).map((path) => ({
+    params: { wissen: path.split("/").pop()!.replace(/\.md$/, "") },
+  }));
+}
+
+const modules = import.meta.glob<WissenModule>("../content/wissen/*.md", {
+  eager: true,
+});
+
+const { wissen } = Astro.params;
+const entry = Object.entries(modules).find(([path]) =>
+  path.endsWith(`/${wissen}.md`),
+)?.[1];
+
+if (!entry) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { frontmatter } = entry;
+const updated = new Date(frontmatter.updated);
+
+// Formular nach dem ersten Drittel (§7): der Marker im Markdown teilt den
+// gerenderten Inhalt. Fehlt er, steht nur der End-CTA.
+const html = await entry.compiledContent();
+const [beforeSignup, afterSignup = ""] = html.split("<!--SIGNUP-->");
+
+// Strukturierte Daten: Wissensseiten sind zeitlose Artikel des Autors.
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: frontmatter.title,
+  description: frontmatter.description,
+  dateModified: updated.toISOString(),
+  author: {
+    "@type": "Person",
+    name: "Vincent Michler",
+    url: new URL("/ueber", Astro.site).href,
+  },
+  image: new URL("/og-default.jpg", Astro.site).href,
+  mainEntityOfPage: new URL(`/${wissen}`, Astro.site).href,
+  inLanguage: "de",
+};
+---
+
+<Layout
+  title={`${frontmatter.metaTitle} · Bits&Satoshis`}
+  description={frontmatter.description}
+>
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(articleSchema)}
+  />
+
+  {/* Gleicher Container und gleiche linke Kante wie alle Seiten (§4).
+      Satzbreite 620px — die 720px-Ausnahme gilt nur den Ausgaben. */}
+  <article class="mx-auto max-w-[1080px] px-5 pt-16 sm:px-8">
+    <div class="measure">
+      <p class="eyebrow">Wissen</p>
+
+      <h1 class="h1 wissen-title">{frontmatter.title}</h1>
+
+      <p class="meta wissen-updated">
+        Stand: <time datetime={updated.toISOString().slice(0, 10)}
+          >{formatDate(updated)}</time
+        >
+      </p>
+
+      <hr class="rule wissen-rule" />
+
+      <div class="wissen-prose" set:html={beforeSignup} />
+    </div>
+  </article>
+
+  {/* Formular nach dem ersten Drittel (§7). Ohne Anker und mit eigener
+      formId — der #newsletter-Anker gehört dem CTA am Seitenende. */}
+  <SignupCta
+    anchorId={null}
+    formId="anmelden-1"
+    format="Ein Thema · 4 Minuten · keine Kursprognosen · kostenlos"
+  />
+
+  {
+    afterSignup.trim().length > 0 && (
+      <article class="mx-auto max-w-[1080px] px-5 sm:px-8">
+        <div class="measure wissen-prose" set:html={afterSignup} />
+      </article>
+    )
+  }
+
+  <SignupCta />
+</Layout>
+
+<style>
+  .wissen-title {
+    margin-top: var(--sp-1);
+    text-wrap: balance;
+  }
+
+  .wissen-updated {
+    margin-top: var(--sp-2);
+  }
+
+  .wissen-rule {
+    margin: var(--sp-3) 0 var(--sp-4);
+  }
+
+  /* ── Prose: Brand-Typografie für das Markdown-HTML ──
+     set:html → :global() nötig. Gleiche Regeln wie .article-prose auf den
+     Ausgabenseiten, reduziert auf das, was Markdown erzeugt. Fließtext ist
+     Ink, nie Stone (§2); kein Orange (Budget gehört den Signup-Buttons). */
+
+  .wissen-prose {
+    padding-bottom: var(--sp-5);
+  }
+
+  .wissen-prose :global(p) {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-2);
+    text-wrap: pretty;
+  }
+
+  .wissen-prose :global(h2) {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(1.375rem, 2.5vw, 1.5rem);
+    line-height: 1.25;
+    color: var(--c-ink);
+    margin: var(--sp-4) 0 var(--sp-2);
+  }
+
+  .wissen-prose :global(h3) {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+    line-height: 1.3;
+    color: var(--c-ink);
+    margin: var(--sp-3) 0 var(--sp-1);
+  }
+
+  /* Nur zwei Satoshi-Gewichte: 400 für Text, 500 für Hervorhebungen (§3). */
+  .wissen-prose :global(strong),
+  .wissen-prose :global(b) {
+    font-weight: 500;
+    color: var(--c-ink);
+  }
+
+  /* Einzige Link-Affordanz der Seite: Unterstrich Dust, Hover Ink (§2). */
+  .wissen-prose :global(a) {
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .wissen-prose :global(a:hover) {
+    text-decoration-color: var(--c-ink);
+  }
+
+  /* Pullquote als Zeitungssatz: Haarlinien statt Farbstreifen. */
+  .wissen-prose :global(blockquote) {
+    border-top: 1px solid var(--c-dust);
+    border-bottom: 1px solid var(--c-dust);
+    padding: var(--sp-2) 0;
+    margin: var(--sp-4) 0;
+  }
+
+  .wissen-prose :global(blockquote p) {
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .wissen-prose :global(hr) {
+    border: none;
+    border-top: 1px solid var(--c-dust);
+    margin: var(--sp-4) 0;
+  }
+
+  .wissen-prose :global(ul),
+  .wissen-prose :global(ol) {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-2);
+    padding-left: var(--sp-3);
+  }
+
+  .wissen-prose :global(li) {
+    margin-bottom: var(--sp-1);
+  }
+
+  .wissen-prose :global(li::marker) {
+    color: var(--c-stone);
+  }
+
+  /* Datentabellen: Haarlinien in Dust, kein Flächen-Hintergrund. */
+  .wissen-prose :global(table) {
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--c-ink);
+    margin: var(--sp-3) 0;
+    width: 100%;
+  }
+
+  .wissen-prose :global(th),
+  .wissen-prose :global(td) {
+    border: 1px solid var(--c-dust);
+    padding: var(--sp-1) 12px;
+    text-align: left;
+  }
+
+  .wissen-prose :global(th) {
+    font-weight: 500;
+  }
+</style>

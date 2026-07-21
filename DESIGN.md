@@ -128,11 +128,19 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 
 | Rolle | Schrift | Größe | Zeilenhöhe | Einsatz |
 |---|---|---|---|---|
-| H1 | Chaney | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
+| H1 (Startseite) | Chaney | clamp 34–68px | 1.08 | Display-Größe im Hero, siehe Anmerkung |
+| H1 (Unterseiten) | Chaney | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
 | H2 | Chaney | 22–24px | 1.25 | Sektionsüberschriften |
 | H3 | Chaney | 17–19px | 1.3 | Ausgabentitel in Listen |
 | Fließtext | Satoshi Variable | 15–16px | 1.65 | Alles, was ein Satz ist |
 | Meta | IBM Plex Mono | 11–12px | 1.4 | Datum, Label, Lesezeit, Microcopy |
+
+> **Anmerkung zur Startseiten-H1** (Juli 2026): Die Markenreferenz in
+> PRODUCT.md (ultra-bold Display auf Paper) verlangt mehr typografische
+> Conviction, als die 44px-Deckelung hergab — „Calm is not timid". Die
+> Hero-H1 läuft deshalb auf `clamp(34px, 6vw, 68px)` (`.h1-hero` in
+> `global.css`). Das clamp-Minimum 34px hält die §12-Regel ein: Formular
+> über der Falte bei 375px. Unterseiten bleiben bewusst bei 38–44px.
 
 ### Regeln
 
@@ -181,10 +189,20 @@ Alle drei Schriften mit `<link rel="preload">` im `<head>`.
   Text, der gelesen werden will.
 - **Satzbreite maximal 620px.** Auch auf großen Bildschirmen. Längere Zeilen
   werden nicht gelesen.
+  > **Dokumentierte Ausnahme:** Ausgabenseiten (`/newsletter/[slug]`) setzen
+  > auf 720px. Die Ausgaben sind lange Lesetexte, die 620px wirkten dort
+  > abgeschnitten. 720px bleibt bei 16px Fließtext unter der Grenze von
+  > ~75 Zeichen pro Zeile. Alle anderen Seiten bleiben bei 620px.
 - **Seitenrand:** 32px Desktop, 20px Mobil.
 - **Kein Grid mit Karten.** Trennung durch Haarlinien in Dust, 1px. Bei 0px
   Radius sehen Karten wie Boxen aus und Boxen sehen wie ein Dashboard aus.
   Linien sehen wie eine Zeitungsseite aus.
+- **Ressortgrenzen-Muster (festgehalten Juli 2026):** Jede Sektion nach dem
+  Hero beginnt mit einer Haarlinie über den vollen Container, dann 24px bis
+  zum Sektionskopf (Eyebrow oder H2), und endet mit 64px. Zwei Ausnahmen:
+  die Ausgabenliste führt ihre Linie als Zeitungs-Ressortkopf unter dem
+  Eyebrow, die Pullquote (§6.4a) rahmt sich selbst mit Linien oben und
+  unten und bekommt keine zusätzliche Sektionslinie.
 
 ### Abstandsraster
 
@@ -231,7 +249,7 @@ Stockfotografie ist der schnellste Weg, generisch auszusehen.
 
 ## 6. Startseite
 
-Sieben Sektionen in dieser Reihenfolge. Nicht mehr.
+Acht Sektionen in dieser Reihenfolge. Nicht mehr.
 
 ### 6.1 Header
 
@@ -259,11 +277,21 @@ Bitcoin besitzen ist einfach.
 Verstehen nicht.
 ```
 
-Subline (Satoshi, 15px, Ink, max 480px):
+Byline (Mono, 12px, Stone), direkt unter der H1 — macht das „Ich" der
+Subline zum benannten Absender, bevor der Autor-Block (§6.4) vertieft:
 
 ```
-Ein Thema pro Woche, zu Ende gedacht. Ich sage dir, was ich davon
-halte, und wo ich mir nicht sicher bin.
+Von Vincent Michler
+```
+
+Subline (Satoshi, 15px, Ink, max 480px). Sie trägt die Value Proposition:
+Zielgruppe (hat sich mit Bitcoin beschäftigt, will jetzt in die Tiefe),
+Ergebnis („was es bedeutet") und Differenzierung („mit klarer Meinung"),
+nicht den Prozess:
+
+```
+Du weißt, was Bitcoin ist. Jetzt willst du wissen, was es bedeutet.
+Jeden Freitag ein Thema, zu Ende gedacht, mit klarer Meinung.
 ```
 
 Rechts neben dem Textblock (ab `lg`, darunter gestapelt nach dem Formular):
@@ -290,8 +318,12 @@ Verpflichtung suggeriert.
 Microcopy (Mono, 11px, Stone):
 
 ```
-Eine Mail pro Woche · 4 Minuten · Abmelden mit einem Klick
+Kostenlos · eine Mail pro Woche · Abmelden mit einem Klick
 ```
+
+> **Anmerkung (Juli 2026):** „Kostenlos" ersetzt „4 Minuten" — Risikoabbau
+> gehört an den Entscheidungspunkt. Die Lesezeit steht jetzt im
+> Format-Vertrag am zweiten CTA (§6.6), keine Dopplung.
 
 **Keine Abonnentenzahl.** Nirgends auf der Seite. Die Abwesenheit einer Zahl
 fällt niemandem auf, eine falsche Zahl kostet alles.
@@ -305,7 +337,9 @@ keine Karten.
 
 Pro Eintrag:
 
-- Datum (Mono, 11px, Stone)
+- Datum + Lesezeit (Mono, 11px, Stone), z.B. `17. Juli 2026 · 4 Min.` —
+  die Lesezeit kommt aus dem RSS-Inhalt (`getPosts({ withContent: true })`,
+  nur Startseite; das Archiv bleibt ohne, dort entfällt die Angabe)
 - Titel (Chaney, 17px, Ink), verlinkt auf `/p/slug`
 - Untertitel (Satoshi, 14px, Stone)
 
@@ -313,6 +347,18 @@ Wird aus der beehiiv-API gezogen, nicht hartkodiert.
 
 Diese Sektion **ersetzt Testimonials**. Sie ist überprüfbarer Beweis statt
 Behauptung: der Besucher kann klicken und selbst urteilen.
+
+**Sektionsfuß (ergänzt Juli 2026):**
+
+1. Themenzeile (Mono-Meta, 16px unter der Liste): `Bisher: Geldpolitik ·
+   Steuern · ETFs · …` — nur echte Themenfelder aus veröffentlichten
+   Ausgaben, gepflegt als Konstante in `index.astro`. Beantwortet die stille
+   Frage, ob dem Newsletter der Stoff ausgeht.
+2. Navigationsgruppe (24px darunter): kuratierter Einstiegslink „Neu hier?
+   Lies zuerst …" (Prosa, Link mit Dust-Unterstrich) und mit 8px Abstand der
+   Link „Alle Ausgaben". Der Einstiegslink zeigt auf eine redaktionell
+   gewählte, repräsentative Ausgabe (`FEATURED_ISSUE` in `index.astro`) und
+   wird getauscht wie das Zitat in §6.4a.
 
 ### 6.4 Autor
 
@@ -327,18 +373,58 @@ schreibe ich, was ich damals lesen wollen hätte.
 
 Drei Sätze. Kein Lebenslauf, keine Qualifikationsbehauptung.
 
-### 6.5 Was das hier nicht ist
+### 6.4a Stimmprobe
 
-Eyebrow (Mono): `Was das hier nicht ist`
+Ein kuratiertes, wörtliches Zitat aus einer veröffentlichten Ausgabe
+(`PullQuote.astro`), gerahmt von zwei Haarlinien in Dust — dieselbe
+Pullquote-Form wie auf den Ausgabenseiten (§7). Darunter die Quellzeile in
+Mono mit Link auf die Ausgabe (Dust-Unterstrich, Hover Ink).
+
+Zweck: überprüfbare Stimme statt Behauptung, wie die Ausgabenliste. Der
+Besucher liest einen echten Satz und kann zur Quelle klicken. Genau ein
+Zitat, hartkodiert und redaktionell gewählt; es wird getauscht, wenn eine
+Ausgabe einen besseren Satz liefert. Kein Karussell, kein Zufall.
+
+Aktuelles Zitat (aus „Gold vs. Bitcoin", `/p/gold-vs-bitcoin-2026`):
 
 ```
-Keine Kursprognosen. Keine Altcoins. Keine Trading-Signale.
-Kein Sponsoring. Keine tägliche Mail.
+Bitcoin wirkt von außen chaotisch. Das Chaos arbeitet mehrheitlich in die
+richtige Richtung.
+```
+
+### 6.5 Bevor du dich einträgst
+
+Sechs Frage-Antwort-Paare (`BeforeSignup.astro`), Überschrift „Bevor du dich
+einträgst" (Chaney, 22px). Ersetzt die frühere Liste „Was das hier nicht ist"
+(Juli 2026): dieselbe Funktion, aber als Stimme statt als Aufzählung.
+
+**Form: Zeitungs-Ledger.** Ab `sm` steht die Frage links in einer festen
+schmalen Spalte (Chaney, 17px, Ink), die Antwort rechts (Satoshi, 15px, Ink).
+Haarlinien in Dust trennen die Paare und laufen über beide Spalten. Unter
+`sm` gestapelt. Gesamtbreite innerhalb der 620px-Satzbreite (§4). Keine
+Karten, keine Icons, kein Accordion: alle Antworten stehen offen da.
+
+Copy (verbindlich; kein „wir", kein Em-Dash, Ich-Form):
+
+```
+Soll ich jetzt kaufen?            Weiß ich nicht. Niemand weiß es. Wer es
+                                  dir verkauft, verkauft dir etwas.
+Wo steht der Kurs Ende des        Weiß ich nicht. Steht hier auch nie.
+Jahres?
+Welcher Coin ist der nächste      Keiner. Hier gibt es nur Bitcoin.
+Bitcoin?
+Verdienst du daran, wenn ich      Wenn ich an einer Empfehlung verdiene,
+kaufe?                            steht es dabei. Versteckt läuft hier
+                                  nichts.
+Wie oft schreibst du?             Freitags. Eine Mail, vier Minuten.
+                                  Mehr nicht.
+Ist es zu spät?                   Falsche Frage. Genau darüber schreibe ich.
 ```
 
 Diese Sektion ist die **Churn-Bremse**. Sie hält die falschen Abonnenten ab.
 Ein Abonnent, der nicht kommt, kostet nichts. Einer, der kommt und wieder
-geht, kostet Zustellbarkeit.
+geht, kostet Zustellbarkeit. Das Frequenz-Paar („Wie oft schreibst du?")
+übernimmt die frühere Zeile „Keine tägliche Mail".
 
 ### 6.6 Zweiter CTA
 
@@ -351,10 +437,24 @@ Nächste Ausgabe: Freitag.
 Darunter identisches Formular, identisches Button-Label, identische Microcopy.
 Kein neuer Verkaufstext.
 
+**Format-Vertrag (ergänzt Juli 2026):** Zwischen Überschrift und Formular
+eine Mono-Meta-Zeile, die das Versprechen scanbar macht:
+
+```
+Ein Thema · 4 Minuten · keine Kursprognosen · kostenlos
+```
+
+Das ist kein Verkaufstext, sondern die Vertragsbedingungen in Kurzform —
+dieselbe Funktion wie die Microcopy, eine Ebene konkreter.
+
 ### 6.7 Footer
 
 Archiv · Über mich · Impressum · Datenschutz · Kontakt. Social-Links optional,
 klein, Stone.
+
+Darunter (ergänzt Juli 2026) eine zweite Zeile mit Eyebrow „Wissen" und den
+fünf Wissensseiten (§7) — der Footer ist ihr einziger fester Link-Ort, damit
+die Startseite auf ihr eines Ziel fokussiert bleibt.
 
 Disclaimer (keine Anlageberatung) in Mono, 11px.
 
@@ -369,13 +469,28 @@ Disclaimer (keine Anlageberatung) in Mono, 11px.
 sind indexiert und in versendeten E-Mails verlinkt und müssen **exakt erhalten
 bleiben**.
 
-Aufbau: Datum (Mono), Titel (Chaney), Untertitel, Fließtext, danach das
-Formular, danach drei Links auf verwandte Ausgaben.
+Aufbau: Back-Link „← Alle Ausgaben" (Mono), Datum + Lesezeit (Mono), Titel
+(Chaney), Untertitel, Haarlinie, Fließtext, danach das Formular, danach drei
+Links auf verwandte Ausgaben („Weiterlesen", `IssueRow`-Liste). Lesebreite
+720px (dokumentierte Ausnahme, §4).
 
-Der Prose-Content aus der API kommt mit beehiiv-eigenem Markup und muss
-normalisiert werden. **Das ist der aufwendigste Teil des Projekts, nicht die
-Startseite.** Dafür einen eigenen `.prose`-Style schreiben, der die Tokens aus
-Abschnitt 2 und 3 anwendet.
+Der Prose-Content aus der API kommt mit beehiiv-eigenem Markup und wird
+zweistufig normalisiert (**umgesetzt Juli 2026**):
+
+1. **Pipeline** (`src/lib/beehiiv.ts`): strippt Scripts/Styles, alle
+   `style`/`class`-Attribute, leere Elemente sowie das führende
+   E-Mail-Banner-Bild (der Titel steht auf der Website schon im Seitenkopf).
+2. **`.article-prose`-Styles** (`[slug].astro`) wenden die Tokens aus §2/§3
+   auf das rohe Markup an:
+   - Fließtext Ink 16px, `b`/`strong` in Gewicht 500
+   - Links mit Dust-Unterstrich, Fußnoten-Verweise (`a > sup`) als Mono-Ziffer
+   - Blockquote als Pullquote mit Haarlinien oben/unten, kein Farbstreifen
+   - Bilder mit 1px-Dust-Haarlinie und 8px-Passepartout, beehiiv-Captions
+     (`img + div`) als Mono-Meta
+   - Datentabellen (`table:has(th)`) mit Dust-Haarlinien; Layout-Tabellen
+     ohne `th` (Autoren-Signatur) randlos und kompakt
+   - `<sub>`-Disclaimer und Fußnoten-Definitionen als Kleingedrucktes
+     (12px, Stone)
 
 ### Wissensseiten
 
@@ -458,14 +573,16 @@ Die Trennung gilt ab jetzt für neue.
 
 ### Technische Checkliste
 
-- [ ] `@astrojs/sitemap` eingebunden, Sitemap in der Search Console eingereicht
-- [ ] RSS-Feed selbst gebaut (`/rss.xml`), beehiiv liefert ihn nicht mehr
-- [ ] JSON-LD `Article` auf jeder Ausgabe, `Person` auf `/ueber-mich`
-- [ ] `og:image` pro Ausgabe aus den Canva-Bannern
-- [ ] Canonical-Tags auf allen Seiten
-- [ ] `robots.txt`
-- [ ] Search Console überhaupt eingerichtet
-- [ ] Alle bestehenden `/p/`-URLs verifiziert erreichbar
+- [x] Sitemap selbst gebaut (`/sitemap.xml`, `src/pages/sitemap.xml.ts`)
+- [x] RSS-Feed selbst gebaut (`/rss.xml`), beehiiv liefert ihn nicht mehr
+- [x] JSON-LD: `Article` auf jeder Ausgabe, `WebSite` global,
+      `ProfilePage` auf `/ueber`
+- [x] `og:image` pro Ausgabe (beehiiv-Thumbnail, dort landen die Canva-Banner)
+- [x] Canonical-Tags auf allen Seiten
+- [x] `robots.txt` (verweist auf die Sitemap)
+- [ ] Search Console eingerichtet, Sitemap dort eingereicht
+- [ ] Alle bestehenden `/p/`-URLs verifiziert erreichbar (Route aktuell
+      `/newsletter/`, siehe §13)
 
 ---
 
@@ -601,7 +718,8 @@ Sektion. Jede Ergänzung schwächt das Einzige, was die Seite leisten muss.
 Aktualisiert Juli 2026. Erledigt und aus der Liste raus: Hero, AuthorCard,
 Archiv, Über-Seite, Navbar, Footer, Testimonials (gestrichen), Faq (auf der
 Startseite durch die Sektion „Bevor du dich einträgst" ersetzt), Copy-Prüfung
-auf Em-Dashes.
+auf Em-Dashes, RSS/Sitemap/JSON-LD/robots.txt (§8), Ausgabenseite
+(Prose-Normalisierung, Lesezeit, „Weiterlesen"-Block — §7).
 
 ### Struktur
 
@@ -609,16 +727,19 @@ auf Em-Dashes.
 |---|---|---|
 | Ausgaben-Route | `/newsletter/[slug]` | `/p/[slug]` (verifiziert live) |
 | Über-Seite | `/ueber` | `/ueber-mich` |
-| Wissensseiten | fehlen komplett | 5 Seiten in `src/content/` |
-| RSS, Sitemap, JSON-LD, robots.txt | fehlen | Abschnitt 8 |
+
+Wissensseiten: umgesetzt Juli 2026 — 5 Markdown-Dateien in
+`src/content/wissen/`, gerendert über `src/pages/[wissen].astro` (statisch),
+verlinkt im Footer, in der Sitemap eingetragen.
 
 ### Komponenten
 
 | Datei | Verstoß |
 |---|---|
 | `components/PostCard.astro` | Karten-Darstellung; ungenutzt, streichen oder auf Listeneintrag umbauen |
-| `pages/newsletter/[slug].astro` | Route; Prose-Styles gegen §2/§3 prüfen |
-| `pages/impressum.astro`, `datenschutz.astro` | Platzhalter mit Tailwind-Prose statt Tokens; Datenschutz-Text enthält „wir" |
+
+Impressum und Datenschutz sind inzwischen bereinigt (echte Betreiber-Daten,
+kein „wir", Token-basierte Styles) und stehen nicht mehr auf der Liste.
 
 ### Schriften
 

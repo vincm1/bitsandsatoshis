@@ -1,0 +1,68 @@
+---
+/**
+ * PullQuote — Stimmprobe auf der Startseite (§6.4a der Spec, DESIGN.md).
+ *
+ * Ein kuratiertes, echtes Zitat aus einer veröffentlichten Ausgabe, gerahmt
+ * von zwei Haarlinien in Dust — dieselbe Pullquote-Form wie auf den
+ * Ausgabenseiten (§7). Überprüfbare Stimme statt Behauptung: die Quelle ist
+ * verlinkt, der Besucher kann nachlesen.
+ *
+ * Kein Orange, keine Karte, keine Kursivschrift als Dauerzustand — die Form
+ * bleibt im Zeitungs-Register der Seite.
+ */
+interface Props {
+  /** Das Zitat, wörtlich aus der Ausgabe. Ohne Anführungszeichen übergeben. */
+  quote: string;
+  /** Slug der Quell-Ausgabe (Link auf /newsletter/[slug]). */
+  slug: string;
+  /** Titel der Quell-Ausgabe für die Quellzeile. */
+  issueTitle: string;
+}
+
+const { quote, slug, issueTitle } = Astro.props;
+---
+
+<section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
+  <figure class="pull-quote measure">
+    <blockquote class="pull-quote__text">{quote}</blockquote>
+    <figcaption class="meta pull-quote__source">
+      Aus der Ausgabe <a href={`/newsletter/${slug}`} class="pull-quote__link">{issueTitle}</a>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  /* Haarlinien oben und unten rahmen das Zitat — wie die Blockquotes der
+     Ausgabenseiten (§7), kein Farbstreifen, keine Anführungszeichen-Grafik. */
+  .pull-quote {
+    margin: 0;
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--c-dust);
+    border-bottom: 1px solid var(--c-dust);
+  }
+
+  .pull-quote__text {
+    margin: 0;
+    font-family: var(--f-body);
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--c-ink);
+  }
+
+  .pull-quote__source {
+    margin-top: var(--sp-2);
+  }
+
+  /* Einheitliche Link-Affordanz der Seite: Dust-Unterstrich, Hover Ink (§2). */
+  .pull-quote__link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .pull-quote__link:hover {
+    text-decoration-color: var(--c-ink);
+  }
+</style>

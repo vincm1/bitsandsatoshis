@@ -18,9 +18,28 @@ interface Props {
   title?: string;
   /** Optionaler Zusatzsatz. Auf der Startseite bewusst leer. */
   text?: string;
+  /**
+   * Format-Vertrag als Mono-Zeile unter der Überschrift, z.B.
+   * "Ein Thema · 4 Minuten · keine Kursprognosen · kostenlos".
+   */
+  format?: string;
+  /**
+   * Anker der Sektion. Default "newsletter" (Ziel der Navbar-Links).
+   * `null`, wenn der CTA doppelt auf einer Seite steht (Wissensseiten:
+   * Formular nach dem ersten Drittel) — der Anker gehört dann dem letzten.
+   */
+  anchorId?: string | null;
+  /** Eindeutig pro Formular auf der Seite (doppelte Element-IDs vermeiden). */
+  formId?: string;
 }
 
-const { title = "Nächste Ausgabe: Freitag.", text } = Astro.props;
+const {
+  title = "Nächste Ausgabe: Freitag.",
+  text,
+  format,
+  anchorId = "newsletter",
+  formId = "anmelden-2",
+} = Astro.props;
 
 // UTM aus der URL durchreichen — ohne sie bricht die Akquise-Statistik in
 // beehiiv ab (§9). Der No-JS-Rückläufer wird hier bewusst nicht ausgewertet:
@@ -37,9 +56,14 @@ const utm = Object.fromEntries(
      Seite fluchtet. Linksbündig, eine Spalte, 620px Satzbreite. -->
 <!-- id="newsletter": Ziel der beiden Navbar-Links. Lag vorher am Footer, der
      jetzt kein Formular mehr hat. scroll-mt-28 hält die fixe Navbar frei. -->
-<section id="newsletter" class="mx-auto max-w-[1080px] px-5 sm:px-8">
-  <div class="max-w-[620px] border-t border-dust pt-10 pb-16">
+<section id={anchorId ?? undefined} class="mx-auto max-w-[1080px] px-5 sm:px-8">
+  {/* Ressortgrenze wie überall: Haarlinie über den vollen Container,
+      24px, dann der Kopf. Der Inhalt bleibt auf Satzbreite. */}
+  <hr class="rule" />
+  <div class="max-w-[620px] pt-6 pb-16">
     <h2 class="h2">{title}</h2>
+
+    {format && <p class="meta mt-2">{format}</p>}
 
     {
       text && (
@@ -49,6 +73,6 @@ const utm = Object.fromEntries(
       )
     }
 
-    <SignupIsland client:idle utm={utm} formId="anmelden-2" />
+    <SignupIsland client:idle utm={utm} formId={formId} />
   </div>
 </section>

@@ -22,6 +22,17 @@ const links = [
   { href: "/impressum", label: "Impressum" },
   { href: "/datenschutz", label: "Datenschutz" },
 ];
+
+// Wissensseiten (§7): SEO-Eingänge. Der Footer ist ihr einziger fester
+// Link-Ort auf der Seite — mehr interne Verlinkung braucht Google nicht,
+// und die Startseite bleibt auf ihr eines Ziel fokussiert.
+const wissenLinks = [
+  { href: "/was-ist-bitcoin", label: "Was ist Bitcoin?" },
+  { href: "/bitcoin-vs-gold", label: "Bitcoin vs. Gold" },
+  { href: "/bitcoin-mythen", label: "Bitcoin-Mythen" },
+  { href: "/bitcoin-kaufen", label: "Bitcoin kaufen" },
+  { href: "/bitcoin-verwahren", label: "Bitcoin verwahren" },
+];
 ---
 
 <footer class="mt-16 border-t border-dust">
@@ -37,6 +48,20 @@ const links = [
       <nav class="mt-6 flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer">
         {
           links.map((link) => (
+            <a
+              href={link.href}
+              class="text-[15px] leading-[1.65] text-ink underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <p class="eyebrow mt-6">Wissen</p>
+      <nav class="mt-2 flex flex-wrap gap-x-6 gap-y-2" aria-label="Wissen">
+        {
+          wissenLinks.map((link) => (
             <a
               href={link.href}
               class="text-[15px] leading-[1.65] text-ink underline decoration-dust underline-offset-[3px] hover:decoration-ink"

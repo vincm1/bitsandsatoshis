@@ -138,6 +138,14 @@ body {
   color: var(--c-ink);
 }
 
+/* Hero-H1 der Startseite — Display-Größe 34–68px (§3, PRODUCT.md-Referenz:
+   ultra-bold Display auf Paper). Unterseiten bleiben bei .h1 (38–44px).
+   Das clamp-Minimum 34px hält die §12-Regel: Formular über der Falte bei 375px. */
+.h1-hero {
+  font-size: clamp(2.125rem, 6vw, 4.25rem);
+  line-height: 1.08;
+}
+
 /* H2 — Sektionsüberschriften, 22–24px */
 .h2 {
   font-family: var(--f-display);

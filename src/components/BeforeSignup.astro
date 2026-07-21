@@ -1,25 +1,33 @@
 ---
 /**
- * „Bevor du dich einträgst" — fünf Frage-Antwort-Paare als Churn-Bremse,
- * direkt vor dem zweiten CTA. Ersetzt den Faq-Block auf der Startseite.
- * Keine Karten, keine Icons, kein Accordion: alle Antworten stehen offen da.
+ * „Bevor du dich einträgst" — sechs Frage-Antwort-Paare als Churn-Bremse,
+ * direkt vor dem zweiten CTA (§6.5). Hält die falschen Abonnenten ab und
+ * zeigt die Stimme des Newsletters.
+ *
+ * Form: Zeitungs-Ledger. Ab sm steht die Frage links in einer festen
+ * schmalen Spalte, die Antwort rechts; Haarlinien in Dust trennen die
+ * Paare. Unter sm gestapelt. Keine Karten, keine Icons, kein Accordion.
  */
 const pairs = [
   {
     q: "Soll ich jetzt kaufen?",
-    a: "Weiß ich nicht. Und niemand, der es dir sagt, weiß es auch.",
+    a: "Weiß ich nicht. Niemand weiß es. Wer es dir verkauft, verkauft dir etwas.",
   },
   {
-    q: "Wo steht Bitcoin Ende des Jahres?",
-    a: "Weiß ich nicht.",
+    q: "Wo steht der Kurs Ende des Jahres?",
+    a: "Weiß ich nicht. Steht hier auch nie.",
   },
   {
-    q: "Welcher Coin kommt als Nächstes?",
-    a: "Keine Ahnung. Interessiert mich auch nicht.",
+    q: "Welcher Coin ist der nächste Bitcoin?",
+    a: "Keiner. Hier gibt es nur Bitcoin.",
   },
   {
     q: "Verdienst du daran, wenn ich kaufe?",
-    a: "Nein. Keine Affiliate-Links, kein Sponsoring, keine Kurse.",
+    a: "Wenn ich an einer Empfehlung verdiene, steht es dabei. Versteckt läuft hier nichts.",
+  },
+  {
+    q: "Wie oft schreibst du?",
+    a: "Freitags. Eine Mail, vier Minuten. Mehr nicht.",
   },
   {
     q: "Ist es zu spät?",
@@ -37,11 +45,16 @@ const pairs = [
 
     <dl class="before-signup__list">
       {
-        pairs.map((pair) => (
-          <>
+        pairs.map((pair, index) => (
+          <div
+            class:list={[
+              "before-signup__pair",
+              index > 0 && "before-signup__pair--ruled",
+            ]}
+          >
             <dt class="before-signup__question">{pair.q}</dt>
             <dd class="before-signup__answer">{pair.a}</dd>
-          </>
+          </div>
         ))
       }
     </dl>
@@ -59,25 +72,58 @@ const pairs = [
   }
 
   .before-signup__list {
-    margin: 0;
+    margin: var(--sp-3) 0 0;
     padding: 0;
   }
 
+  .before-signup__pair {
+    padding: var(--sp-3) 0;
+  }
+
+  /* Der Titel bringt den Abstand nach oben schon mit */
+  .before-signup__pair:first-child {
+    padding-top: 0;
+  }
+
+  /* Haarlinie zwischen den Paaren — läuft über beide Ledger-Spalten */
+  .before-signup__pair--ruled {
+    border-top: 1px solid var(--c-dust);
+  }
+
+  /* Ledger ab sm: Frage links in fester Spalte, Antwort rechts.
+     Gesamtbreite bleibt innerhalb von .measure (620px, §4). */
+  @media (min-width: 640px) {
+    .before-signup__pair {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      column-gap: var(--sp-4);
+      align-items: start;
+    }
+  }
+
+  /* 17px ist die Untergrenze für die Display-Schrift (§3) */
   .before-signup__question {
     font-family: var(--f-display);
     font-weight: 700;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.3;
     color: var(--c-ink);
-    margin-top: var(--sp-3);
   }
 
+  /* Fließtext ist immer Ink, nie Stone (§2) — die Antworten sind die
+     Stimme der Seite, kein Kleingedrucktes. */
   .before-signup__answer {
     font-family: var(--f-body);
     font-weight: 400;
-    font-size: 13.5px;
-    line-height: 1.5;
-    color: var(--c-stone);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--c-ink);
     margin: var(--sp-1) 0 0;
+  }
+
+  @media (min-width: 640px) {
+    .before-signup__answer {
+      margin-top: 0;
+    }
   }
 </style>

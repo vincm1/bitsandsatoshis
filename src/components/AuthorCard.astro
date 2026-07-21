@@ -2,7 +2,8 @@
 /**
  * Autoren-Sektion (§6.4) — Portrait links, Text rechts, auf Mobil untereinander.
  * Einsatz: Homepage (nach Ausgaben-Liste) + /ueber (oben, ohne Selbst-Link).
- * Keine Karte, keine Rotation, kein Orange: Gliederung nur über Weißraum.
+ * Keine Karte, keine Rotation, kein Orange. Ressortgrenze wie überall:
+ * Haarlinie in Dust, 24px, dann der Inhalt.
  */
 interface Props {
   /** Link „Mehr über mich" ausblenden (auf /ueber selbst). */
@@ -13,7 +14,9 @@ const { showLink = true } = Astro.props;
 ---
 
 <section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
-  <div class="author">
+  <hr class="rule" />
+
+  <div class="author mt-6">
     {
       showLink ? (
         <a href="/ueber" class="author__photo-frame" aria-label="Mehr über Vincent">
