@@ -52,11 +52,16 @@ import { Font } from "astro:assets";
 <Font cssVariable="--font-brand-mono" />
 ```
 
-| Rolle | Familie | Schnitte | cssVariable |
-|---|---|---|---|
-| Display | Cabinet Grotesk | 700, 800 | `--font-brand-display` |
-| Fließtext | Satoshi | 400, 500 | `--font-brand-body` |
-| Meta | IBM Plex Mono | 400, 500 | `--font-brand-mono` |
+| Rolle | Familie | Schnitte | Provider | cssVariable |
+|---|---|---|---|---|
+| Display | Archivo | variabel 700–900 | Google | `--font-brand-display` |
+| Fließtext | Satoshi | 400, 500 | Fontshare | `--font-brand-body` |
+| Meta | IBM Plex Mono | 400, 500 | Google | `--font-brand-mono` |
+
+Archivo wird immer mit `font-weight: 900` **und**
+`font-variation-settings: 'wdth' 125` gesetzt (siehe `.font-display`, `.h1`,
+`.h2` in `global.css`; `.h3` nutzt 110). Ohne die Breitenachse ist es eine
+andere Schrift, gestalterisch gesehen.
 
 Die `cssVariable`-Namen sind bewusst **nicht** `--font-display`/`--font-sans`/
 `--font-mono`: die gehören Tailwind (`@theme` in `global.css`) und würden

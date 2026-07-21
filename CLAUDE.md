@@ -38,13 +38,13 @@ Stone (Meta):   #5C4F3A   ← Datum, Labels, Placeholder
 Dust (Linien):  #A89880   ← Haarlinien statt Karten. Nie lesbarer Text
 ```
 
-**Schriften:** Cabinet Grotesk (H1–H3, Satzschreibung, nie unter 17px),
-Satoshi (Fließtext, nur 400 und 500), IBM Plex Mono (Datum, Lesezeit, Label,
-nie Prosa).
+**Schriften:** Archivo Black mit `wdth 125` (H1–H3, Satzschreibung, nie unter
+17px), Satoshi (Fließtext, nur 400 und 500), IBM Plex Mono (Datum, Lesezeit,
+Label, nie Prosa).
 
-> Die Display-Schrift war ursprünglich Chaney. Die gibt es lizenzrechtlich
-> nicht als Webfont; Cabinet Grotesk ist der Ersatz, wurde aber nie als
-> Markenentscheidung getroffen. Offener Punkt, siehe `DESIGN.md` §3/§13.
+> Die Breitenachse ist Teil der Markenentscheidung, nicht Kosmetik: Archivo
+> bei normaler Breite ist austauschbar, erst `wdth 125` gibt die füllende
+> Wucht. Wer sie ändert, ändert den Auftritt. Begründung in `DESIGN.md` §3.
 
 **Kernregeln:** linksbündig, eine Spalte, 620px Satzbreite · Haarlinien statt
 Karten · Abstände nur 8/16/24/40/64 · 0px Radius · keine Schatten · keine

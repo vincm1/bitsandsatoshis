@@ -141,6 +141,14 @@ async function onSubmit(event: Event) {
     <p class="meta mt-2">
       Kostenlos · eine Mail pro Woche · Abmelden mit einem Klick
     </p>
+    <!-- Zweckbindung am Entscheidungspunkt, nicht erst im Footer. Die
+         Zielgruppe (§1: DACH, misstrauisch) gibt hier personenbezogene Daten
+         heraus; wer nicht sagt, was damit passiert, verliert genau die
+         Besucher, die am gründlichsten lesen. -->
+    <p class="meta mt-2">
+      Ich nutze deine Adresse nur für den Newsletter.
+      <a href="/datenschutz" class="privacy-link">Datenschutz</a>
+    </p>
   </form>
 </template>
 
@@ -189,6 +197,18 @@ async function onSubmit(event: Event) {
 }
 
 .reset-link:hover {
+  text-decoration-color: var(--c-ink);
+}
+
+/** Dieselbe Affordanz wie jeder Textlink der Seite (§2). */
+.privacy-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--c-dust);
+  text-underline-offset: 3px;
+}
+
+.privacy-link:hover {
   text-decoration-color: var(--c-ink);
 }
 </style>

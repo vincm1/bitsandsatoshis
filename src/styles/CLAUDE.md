@@ -41,7 +41,7 @@ migrierte Komponenten.
 ### Schrift
 | Token | Font | Rolle |
 |---|---|---|
-| `--f-display` | Cabinet Grotesk | H1–H3, Satzschreibung, nie unter 17px |
+| `--f-display` | Archivo | H1–H3, Satzschreibung, nie unter 17px. Immer `font-weight: 900` + `font-variation-settings: 'wdth' 125` (H3: 110) |
 | `--f-body` | Satoshi | Fließtext, Buttons — nur Gewicht 400 und 500 |
 | `--f-mono` | IBM Plex Mono | Datum, Lesezeit, Label — **nie Prosa** |
 

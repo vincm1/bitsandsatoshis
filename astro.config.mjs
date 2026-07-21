@@ -52,15 +52,27 @@ export default defineConfig({
   // kollidieren. global.css mappt die Tailwind- und die --f-*-Tokens auf diese
   // drei hier.
   //
-  // Chaney ist raus: Atipo-Desktop-Lizenz, existiert nicht als Webfont. Der
-  // frühere Fontshare-Request lieferte dafür stillschweigend nichts, die
-  // Überschriften liefen auf sans-serif.
+  // Display-Schrift ist Archivo (Omnibus-Type), ausdrücklich für gedruckte
+  // Headlines entworfen — dieselbe Herkunft wie das Paper-Register der Marke.
+  // Gesetzt wird sie im Black-Schnitt mit hochgedrehter Breitenachse
+  // (`wdth`), siehe .font-display in global.css: das ist Chaneys Bauprinzip
+  // (breit, geometrisch, füllend), aber mit Groß- und Kleinschreibung, die §3
+  // verlangt und die deutsche Substantive brauchen.
+  //
+  // Zur Vorgeschichte: Hier stand Chaney, angefordert über Fontshare. Chaney
+  // gehört aber atipo foundry, nicht Fontshare — der Request lief still ins
+  // Leere und die Überschriften fielen auf sans-serif zurück. Der frühere
+  // Kommentar „existiert nicht als Webfont" war falsch (atipo verkauft
+  // Webfont-Lizenzen); der eigentliche Ausschlussgrund ist, dass Chaney eine
+  // reine Versalschrift ist und §3 Versalsatz verbietet.
   fonts: [
     {
-      provider: fontProviders.fontshare(),
-      name: 'Cabinet Grotesk',
+      provider: fontProviders.google(),
+      name: 'Archivo',
       cssVariable: '--font-brand-display',
-      weights: [700, 800],
+      // Variabler Bereich statt fester Schnitte: erlaubt 900 für Display und
+      // lässt Spielraum, ohne eine zweite Datei zu laden.
+      weights: ['700 900'],
       fallbacks: ['sans-serif'],
     },
     {

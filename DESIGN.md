@@ -59,7 +59,7 @@ Tailwind v4 wird **CSS-first** konfiguriert. Es gibt **keine**
 
 ```css
 @theme {
-  --font-display: 'Cabinet Grotesk', sans-serif;
+  --font-display: 'Archivo', sans-serif;
   --font-sans:    'Satoshi Variable', system-ui, sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
 }
@@ -136,7 +136,7 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 
 | Rolle | Schrift | Größe | Zeilenhöhe | Einsatz |
 |---|---|---|---|---|
-| H1 (Startseite) | Display | clamp 34–68px | 1.08 | Display-Größe im Hero, siehe Anmerkung |
+| H1 (Startseite) | Display | clamp 30–54px | 1.10 | Display-Größe im Hero, siehe Anmerkung |
 | H1 (Unterseiten) | Display | 38–44px (mobil 30–34px) | 1.12 | Genau einmal pro Seite |
 | H2 | Display | 24–32px | 1.2 | Sektionsüberschriften, siehe Anmerkung |
 | H3 | Display | 17–19px | 1.3 | Ausgabentitel in Listen |
@@ -144,19 +144,38 @@ Auf Unterseiten mit nur einem Formular gilt entsprechend: ein oranges Element.
 | Pullquote | Satoshi Variable 500 | 22–28px | 1.4 | Stimmprobe (§6.4a), nur dort |
 | Meta | IBM Plex Mono | 11–12px | 1.4 | Datum, Label, Lesezeit, Microcopy |
 
-> **Welche Display-Schrift?** In Produktion läuft **Cabinet Grotesk 700**
-> (`astro.config.mjs`). Chaney, das diese Datei früher überall nannte, ist
-> lizenzrechtlich nicht als Webfont verfügbar (Atipo-Desktop-Lizenz) und
-> wurde ersetzt, ohne dass die Ersatzwahl je als Markenentscheidung getroffen
-> wurde. Damit steht die Referenz aus PRODUCT.md („ultra-bold Chaney display
-> type") ohne Träger da. **Offene Entscheidung**, siehe §13.
+> **Die Display-Schrift ist Archivo Black, breit laufend** (Juli 2026
+> entschieden). Gesetzt als `font-weight: 900` plus
+> `font-variation-settings: 'wdth' 125`. Die Breite ist die eigentliche
+> Entscheidung: Archivo bei normaler Breite ist eine saubere, aber
+> austauschbare Grotesk; erst die hochgedrehte Achse ergibt die füllende
+> Wucht, für die PRODUCT.md Chaney nennt. H3 läuft auf `wdth 110`, weil lange
+> deutsche Titel in der Ausgabenliste sonst zu früh brechen.
+>
+> Warum Archivo: von Omnibus-Type ausdrücklich für gedruckte Headlines
+> entworfen, also dieselbe Herkunft wie das Paper-Register der Marke. Volle
+> Abdeckung deutscher Zeichen. Variabler Font, eine Datei.
+>
+> **Warum nicht Chaney.** Nicht aus Lizenzgründen: atipo foundry verkauft
+> Webfont-Lizenzen, die Familie gibt es sogar als „pay what you want".
+> Der frühere Eintrag hier und der Kommentar in `astro.config.mjs` waren
+> falsch. Der echte Grund ist, dass Chaney eine **reine Versalschrift** ist
+> und §3 Versalsatz in Überschriften verbietet. Beides zusammen geht nicht,
+> und im Deutschen tragen Großbuchstaben Bedeutung, die im Versalsatz
+> verlorengeht. PRODUCT.md beschreibt eine Wirkung, keine Datei; die Wirkung
+> liefert Archivo mit Groß- und Kleinschreibung.
 
 > **Anmerkung zur Startseiten-H1** (Juli 2026): Die Markenreferenz in
 > PRODUCT.md (ultra-bold Display auf Paper) verlangt mehr typografische
 > Conviction, als die 44px-Deckelung hergab — „Calm is not timid". Die
-> Hero-H1 läuft deshalb auf `clamp(34px, 6vw, 68px)` (`.h1-hero` in
-> `global.css`). Das clamp-Minimum 34px hält die §12-Regel ein: Formular
-> über der Falte bei 375px. Unterseiten bleiben bewusst bei 38–44px.
+> Hero-H1 läuft deshalb auf `clamp(30px, 4.6vw, 54px)` (`.h1-hero` in
+> `global.css`). Unterseiten bleiben bewusst bei 38–44px.
+>
+> Der Maximalwert lag zwischenzeitlich bei 68px. Mit der breit laufenden
+> Archivo sprengte das den gesetzten Umbruch: Die H1 lief auf fünf Zeilen
+> statt drei und drückte das Formular nach unten. 54px bei `wdth 125` deckt
+> optisch dieselbe Fläche wie 68px bei normaler Breite. Verifiziert bei
+> 1440px und 375px: gesetzter Umbruch hält, Formular steht über der Falte.
 
 > **Anmerkung zur H2** (Juli 2026): vorher 22–24px. Zwischen der Hero-H1
 > (68px) und dem Fließtext (15px) lag damit keine mittlere Stufe — die Seite
@@ -351,15 +370,26 @@ Nicht „Jetzt kostenlos abonnieren". Das beschreibt eine Transaktion.
 „Freitags lesen" beschreibt ein Ergebnis und konvertiert besser, weil es keine
 Verpflichtung suggeriert.
 
-Microcopy (Mono, 11px, Stone):
+Microcopy (Mono, 11px, Stone), zwei Zeilen:
 
 ```
 Kostenlos · eine Mail pro Woche · Abmelden mit einem Klick
+Ich nutze deine Adresse nur für den Newsletter. [Datenschutz]
 ```
 
-> **Anmerkung (Juli 2026):** „Kostenlos" ersetzt „4 Minuten" — Risikoabbau
+`Datenschutz` verlinkt auf `/datenschutz`, mit der normalen Link-Affordanz
+(Dust-Unterstrich, Hover Ink).
+
+> **Anmerkung (Juli 2026):** „Kostenlos" ersetzt „4 Minuten". Risikoabbau
 > gehört an den Entscheidungspunkt. Die Lesezeit steht jetzt im
 > Format-Vertrag am zweiten CTA (§6.6), keine Dopplung.
+
+> **Anmerkung zur zweiten Zeile (Juli 2026):** Vorher stand am Formular kein
+> Wort dazu, was mit der Adresse passiert, und kein Link zur
+> Datenschutzerklärung. Bei einer E-Mail-Erhebung in der DACH-Region ist das
+> beides: ein Vertrauens- und ein Compliance-Thema. Die Zielgruppe aus §1
+> liest genau an dieser Stelle genau. Der Hinweis gehört deshalb an das Feld,
+> nicht in den Footer.
 
 **Keine Abonnentenzahl.** Nirgends auf der Seite. Die Abwesenheit einer Zahl
 fällt niemandem auf, eine falsche Zahl kostet alles.
@@ -809,13 +839,9 @@ kein „wir", Token-basierte Styles) und stehen nicht mehr auf der Liste.
 Astro-Fonts-API, die sie zur Build-Zeit herunterlädt und von der eigenen
 Domain ausliefert. Live gemessen: kein Request an Fontshare oder Google.
 
-**Offen bleibt die Markenentscheidung.** Chaney existiert lizenzrechtlich nicht
-als Webfont; in Produktion läuft Cabinet Grotesk 700. Diese Wahl war ein
-Ersatz aus der Not, keine Entscheidung: Die Font-Auswahl für die wichtigste
-Schrift der Marke ist nie geführt worden, und die Referenz aus PRODUCT.md
-(„ultra-bold Chaney display type filling the viewport", Arnold's Pump Club)
-steht damit ohne Träger da. Nebenbefund: Gewicht 800 wird geladen und nirgends
-benutzt.
+**Die Markenentscheidung ist getroffen (Juli 2026):** Archivo Black mit
+`wdth 125`. Begründung und der wahre Grund gegen Chaney stehen in §3.
+Cabinet Grotesk ist raus.
 
 ### Sonstiges
 

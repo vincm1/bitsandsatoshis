@@ -120,19 +120,26 @@ body {
   margin: 0;
 }
 
-/* Cabinet Grotesk display headlines — nie unter 17px, nie für Fließtext.
+/* Archivo Black, breit laufend — nie unter 17px, nie für Fließtext.
    Satzschreibung, kein Versalsatz, kein Title Case.
-   Gewicht 700: die Familie wird nur in 700 und 800 geladen. */
+
+   `wdth 125` ist die eigentliche Gestaltungsentscheidung: Archivo bei
+   normaler Breite ist eine saubere, aber austauschbare Grotesk. Erst die
+   hochgedrehte Breitenachse ergibt die füllende Wucht, für die PRODUCT.md
+   Chaney nennt — und anders als Chaney kann Archivo Groß- und
+   Kleinschreibung. Wer die Breite ändert, ändert den Markenauftritt. */
 .font-display {
   font-family: var(--f-display);
-  font-weight: 700;
+  font-weight: 900;
+  font-variation-settings: 'wdth' 125;
   letter-spacing: 0;
 }
 
 /* H1 — genau einmal pro Seite. 30–34px mobil, 38–44px Desktop. */
 .h1 {
   font-family: var(--f-display);
-  font-weight: 700;
+  font-weight: 900;
+  font-variation-settings: 'wdth' 125;
   font-size: clamp(1.875rem, 5vw, 2.75rem);
   line-height: 1.12;
   color: var(--c-ink);
@@ -142,8 +149,8 @@ body {
    ultra-bold Display auf Paper). Unterseiten bleiben bei .h1 (38–44px).
    Das clamp-Minimum 34px hält die §12-Regel: Formular über der Falte bei 375px. */
 .h1-hero {
-  font-size: clamp(2.125rem, 6vw, 4.25rem);
-  line-height: 1.08;
+  font-size: clamp(1.875rem, 4.6vw, 3.375rem);
+  line-height: 1.1;
 }
 
 /* H2 — Sektionsüberschriften, 24–32px.
@@ -153,16 +160,20 @@ body {
    laut PRODUCT.md aus Abstand und Tempo, nicht aus kleiner Schrift. */
 .h2 {
   font-family: var(--f-display);
-  font-weight: 700;
+  font-weight: 900;
+  font-variation-settings: 'wdth' 125;
   font-size: clamp(1.5rem, 3.2vw, 2rem);
   line-height: 1.2;
   color: var(--c-ink);
 }
 
 /* H3 — Ausgabentitel in Listen, 17–19px. 17px ist die untere Grenze. */
+/* Breite hier bewusst 110 statt 125: In der Ausgabenliste stehen lange
+   deutsche Titel auf schmalem Raum, bei voller Breite brechen sie zu früh. */
 .h3 {
   font-family: var(--f-display);
-  font-weight: 700;
+  font-weight: 900;
+  font-variation-settings: 'wdth' 110;
   font-size: clamp(1.0625rem, 2vw, 1.1875rem);
   line-height: 1.3;
   color: var(--c-ink);
