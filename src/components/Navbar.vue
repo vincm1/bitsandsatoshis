@@ -17,27 +17,20 @@
     <!-- Derselbe Container wie der Hero: 1080px, 20px mobil / 32px Desktop.
          Dadurch sitzen Emblem und H1 auf exakt derselben linken Kante. -->
     <div
-      class="mx-auto flex max-w-[1080px] items-center justify-between px-5 py-1 sm:px-8"
+      class="mx-auto flex max-w-[1080px] items-center justify-between px-5 py-2 sm:px-8"
     >
-      <!-- Wortmarke 20px: §6.1 nennt 15px, §3 verbietet die Display-Schrift
-           aber unter 17px. 20px löst den Widerspruch und trägt das Emblem.
-
-           gap-0 mit negativem Margin: das Emblem ist ein Kreis in einer
-           quadratischen Box, dadurch trägt es an den Seiten schon Weißraum mit
-           sich. Der optische Abstand ist größer als der gesetzte — das leere
-           Quadrat wird also weggezogen. Das ist Kerning einer Wort-Bild-Marke,
-           nicht Layout — deshalb hier bewusst neben dem 8/16/24/40/64-Raster
-           aus §4. -->
-      <a href="/" class="flex items-center">
+      <!-- Bewusste Abweichung von §6.1 (dort: Wortmarke als Display-Text): die
+           Marke ist hier die gelieferte Bild-Wortmarke (Icon + „Bits&Satoshis.").
+           Das alt trägt den Markennamen, damit A11y und SEO erhalten bleiben.
+           Höhe 32px, Breite automatisch aus dem Seitenverhältnis (~6:1). -->
+      <a href="/" class="flex items-center" aria-label="Bits&amp;Satoshis, zur Startseite">
         <img
-          src="/logo.svg"
-          alt=""
-          aria-hidden="true"
-          class="-ml-1.5 h-10 w-10 shrink-0"
+          src="/logo-wordmark.svg"
+          alt="Bits&amp;Satoshis"
+          width="570"
+          height="95"
+          class="h-8 w-auto shrink-0"
         />
-        <span class="font-display text-[20px] leading-none text-ink">
-          Bits&amp;Satoshis
-        </span>
       </a>
 
       <!-- .eyebrow ist exakt Mono / 12px / letter-spacing 0.04em / Stone.
@@ -56,17 +49,50 @@
 
 <style scoped>
 /**
- * Einheitliche Link-Affordanz der Seite: Unterstrich in Dust, Hover Ink.
- * Kein Orange (§2: "kein oranger Hover-State auf Text"), keine Animation.
+ * Header-Link „Abonnieren": Ruhezustand Stone-Text mit Dust-Unterstrich nur
+ * unter dem Wortanfang („Abon"). Beim Hover wächst der Unterstrich weich auf
+ * die volle Wortbreite und Text wie Linie färben sich in Bitcoin-Orange.
+ *
+ * Bewusste Abweichung von §2 (oranger Hover-State auf Text) und §10 (keine
+ * Animation): auf ausdrücklichen Wunsch. Der Unterstrich ist ein ::after —
+ * so lassen sich Breite und Farbe sauber animieren (Gradient-Farben nicht).
  */
 .abo-link {
+  position: relative;
   display: inline-block;
-  text-decoration: underline;
-  text-decoration-color: var(--c-dust);
-  text-underline-offset: 3px;
+  text-decoration: none;
+  padding-bottom: 3px;
+  transition: color 0.45s ease;
+}
+
+.abo-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 45%;
+  background-color: var(--c-dust);
+  transition:
+    width 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+    background-color 0.45s ease;
 }
 
 .abo-link:hover {
-  text-decoration-color: var(--c-ink);
+  color: var(--c-orange);
+}
+
+.abo-link:hover::after {
+  width: 100%;
+  background-color: var(--c-orange);
+}
+
+/* §10: Wo Bewegung ist, gehört prefers-reduced-motion dazu — dann springt
+   der Zustand ohne Übergang. */
+@media (prefers-reduced-motion: reduce) {
+  .abo-link,
+  .abo-link::after {
+    transition: none;
+  }
 }
 </style>

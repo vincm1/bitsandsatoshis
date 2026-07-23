@@ -91,9 +91,17 @@ Der Signup läuft immer über `SignupIsland.vue` → `POST /api/subscribe` →
 noch, wird aber nur von totem Code aufgerufen.
 
 ## Logo
-`public/logo.svg` — rundes Emblem in Bitcoin-Orange, Schriftzug integriert.
-In `Navbar.vue` als dekoratives `<img>` (`alt=""`, `aria-hidden`) neben der
-Wortmarke; das Emblem zählt laut §2 nicht gegen das Orange-Budget.
+`public/logo-wordmark.svg` — volle Bild-Wortmarke (B-Icon + „Bits&Satoshis."),
+transparent und eng zugeschnitten (viewBox-Ratio ~6:1) aus
+`public/logo_hell_svg.svg` abgeleitet: Paper-Hintergrundfläche entfernt, viewBox
+auf den Inhalt getrimmt. Wird in `Navbar.vue` (Höhe 32px) und `Footer.astro`
+(Höhe 24px) als `<img>` mit `alt="Bits&Satoshis"` gerendert. Bewusste Abweichung
+von DESIGN.md §6.1, das die Wortmarke als Display-*Text* vorsieht — der
+`alt`-Text hält A11y/SEO. Das orange Icon zählt laut §2 nicht gegen das
+Orange-Budget.
+
+`public/logo.svg` (rundes B-Emblem) ist dadurch **unreferenziert**, bleibt aber
+im Repo liegen. Quelldateien `logo_hell_svg.svg` / `Logo hell.png` ebenso.
 
 ## Neue Komponente?
 Nutze das Skill `/neue-komponente`.
