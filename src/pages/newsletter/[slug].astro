@@ -21,7 +21,18 @@ if (!post) {
 const recent = await getPosts({ limit: 4 });
 const related = recent.filter((p) => p.id !== post.id).slice(0, 3);
 
-const minutes = post.contentHtml ? readingTimeMinutes(post.contentHtml) : null;
+// Nur die neuesten Ausgaben sind hier voll lesbar; ältere werden gegatet und
+// führen zum Signup. recent kommt in publish_date-desc-Ordnung wie die
+// Startseite, die ersten READABLE_COUNT sind also die neuesten. Bei weniger
+// als READABLE_COUNT Ausgaben sind alle lesbar.
+const READABLE_COUNT = 3;
+const newestIds = new Set(
+  recent.slice(0, READABLE_COUNT).map((p) => p.id),
+);
+const isReadable = newestIds.has(post.id);
+
+const minutes =
+  isReadable && post.contentHtml ? readingTimeMinutes(post.contentHtml) : null;
 
 // Ausgaben ändern sich nach Versand praktisch nicht — 1 h CDN-Cache reicht
 // für Korrekturen, SWR hält die Auslieferung trotzdem sofort schnell.
@@ -89,9 +100,9 @@ const articleSchema = {
       <hr class="rule article-rule" />
 
       {
-        post.contentHtml ? (
+        isReadable && post.contentHtml ? (
           <div class="article-prose" set:html={post.contentHtml} />
-        ) : (
+        ) : isReadable ? (
           <div class="article-fallback">
             <p>
               Der vollständige Inhalt dieser Ausgabe ist hier noch nicht
@@ -100,6 +111,19 @@ const articleSchema = {
             {post.webUrl && post.webUrl !== "#" && (
               <a href={post.webUrl} target="_blank" rel="noopener">
                 Ausgabe auf beehiiv lesen
+              </a>
+            )}
+          </div>
+        ) : (
+          <div class="article-gate">
+            {post.teaser && <p class="article-gate__lead">{post.teaser}</p>}
+            <p>
+              Nur die letzten drei Ausgaben stehen hier vollständig. Trag dich
+              ein, dann kommt jede neue Ausgabe direkt in dein Postfach.
+            </p>
+            {post.webUrl && post.webUrl !== "#" && (
+              <a href={post.webUrl} target="_blank" rel="noopener">
+                Diese Ausgabe auf beehiiv lesen
               </a>
             )}
           </div>
@@ -385,6 +409,33 @@ const articleSchema = {
   }
 
   .article-fallback a:hover {
+    text-decoration-color: var(--c-ink);
+  }
+
+  /* ── Gate: ältere Ausgaben ohne Volltext ───────────
+     Kein Gatekeeping-Signal, nur ein ruhiger Hinweis vor dem Signup-CTA.
+     Fließtext Ink, Link mit der Standard-Affordanz (§2). */
+  .article-gate p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-2);
+  }
+
+  /* Teaser als Meta-Vorspann: ruhiger als der Fließtext (§2). */
+  .article-gate__lead {
+    color: var(--c-stone);
+  }
+
+  .article-gate a {
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-dust);
+    text-underline-offset: 3px;
+  }
+
+  .article-gate a:hover {
     text-decoration-color: var(--c-ink);
   }
 
