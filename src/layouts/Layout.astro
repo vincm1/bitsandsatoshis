@@ -70,6 +70,10 @@ const websiteSchema = {
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalUrl} />
+    <!-- Einsprachige DE-Site: selbstreferenzierendes hreflang macht Google die
+         Zielsprachregion explizit. x-default zeigt auf dieselbe URL. -->
+    <link rel="alternate" hreflang="de-DE" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
     <link
       rel="alternate"
       type="application/rss+xml"
