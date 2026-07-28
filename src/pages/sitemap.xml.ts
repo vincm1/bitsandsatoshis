@@ -7,6 +7,13 @@ import type { APIRoute } from "astro";
 import { getPosts } from "../lib/beehiiv";
 import { escapeXml } from "../lib/format";
 
+// Wissensseiten (§7) werden aus src/content/wissen/ abgeleitet — dieselbe
+// Quelle wie [wissen].astro. So landet jede neue Wissensseite automatisch in
+// der Sitemap, ohne dass sie hier von Hand nachgetragen werden muss.
+const wissenRoutes = Object.keys(
+  import.meta.glob("../content/wissen/*.md"),
+).map((path) => `/${path.split("/").pop()!.replace(/\.md$/, "")}`);
+
 const STATIC_ROUTES = [
   "/",
   "/archiv",
@@ -15,12 +22,7 @@ const STATIC_ROUTES = [
   "/datenschutz",
   "/abmelden",
   // /willkommen fehlt bewusst: noindex, reines Redirect-Ziel der Opt-in-Mail.
-  // Wissensseiten (§7) — statisch gebaut aus src/content/wissen/.
-  "/was-ist-bitcoin",
-  "/bitcoin-vs-gold",
-  "/bitcoin-mythen",
-  "/bitcoin-kaufen",
-  "/bitcoin-verwahren",
+  ...wissenRoutes,
 ];
 
 export const GET: APIRoute = async ({ site }) => {

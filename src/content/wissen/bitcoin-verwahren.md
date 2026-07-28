@@ -1,11 +1,13 @@
 ---
 title: "Bitcoin verwahren: Schlüssel oder Versprechen"
 metaTitle: "Bitcoin verwahren: Wallet, Börse oder Verwahrer?"
-description: "Bitcoin selbst verwahren oder auf der Börse lassen? Was die Seed Phrase wirklich ist, welche Fehler Leute ruinieren und wie du klein anfängst."
-updated: 2026-07-21
+description: "Wo Bitcoin lagern: selbst verwahren oder auf der Börse lassen? Was die Seed Phrase wirklich ist, welche Fehler Leute ruinieren und wie du klein anfängst."
+updated: 2026-07-28
 ---
 
 Bei Aktien, Gold-ETCs und Tagesgeld ist Verwahrung eine Fußnote. Bei Bitcoin ist sie die eigentliche Entscheidung. Denn Bitcoin ist das erste Asset, das du vollständig selbst halten kannst, ohne Bank, ohne Broker, ohne Lagerhaus. Ob du das tust, ist die Frage, an der sich alles Weitere entscheidet.
+
+Wer schlicht wissen will, wo er seine Bitcoin lagern soll, steht damit schon mitten in dieser Entscheidung. Verwahren, aufbewahren, lagern: gemeint ist immer dasselbe, und der Ort ist dabei zweitrangig. Entscheidend ist, wer die Schlüssel hält.
 
 Mein Standpunkt vorweg: Wer die Schlüssel nicht hält, hält ein Versprechen. Das ist keine Katastrophe, aber es ist etwas anderes als Bitcoin. Gleichzeitig ist Selbstverwahrung eine Verantwortung, keine Pflicht. Ein schlecht gesicherter Seed am Küchentisch ist gefährlicher als ein regulierter Verwahrer. Die ehrliche Antwort hängt davon ab, wer du bist und um wie viel Geld es geht.
 
