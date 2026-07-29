@@ -15,9 +15,9 @@ subscribe    // Anmeldung → subscribe() aus src/lib/beehiiv.ts. Siehe Hinweis
 > **Der Live-Signup läuft nicht über `subscribe`.** Das Formular auf der Seite
 > ist `SignupIsland.vue` und schickt seinen POST an `/api/subscribe`
 > (`src/pages/api/subscribe.ts`); ohne JS greift der native Form-POST an
-> denselben Endpoint. Die Action `subscribe` wird nur noch von totem Code
-> aufgerufen (`SignupForm.astro`, `FooterSignup.vue`) und kann mit diesem
-> zusammen entfallen. `unsubscribe` ist dagegen aktiv im Einsatz.
+> denselben Endpoint. Seit dem Löschen von `SignupForm.astro` und
+> `FooterSignup.vue` (Juli 2026) hat die Action `subscribe` **keinen Aufrufer
+> mehr** und kann entfallen. `unsubscribe` ist dagegen aktiv im Einsatz.
 
 `unsubscribe` trägt ein **Honeypot-Feld** (`website`): für Menschen unsichtbar,
 und wenn ein Bot es füllt, antwortet die Action neutral, ohne die beehiiv-API

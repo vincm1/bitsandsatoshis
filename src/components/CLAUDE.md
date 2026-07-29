@@ -18,6 +18,12 @@ SignupIsland.vue  ← Das Signup-Formular. Vue-Island (client:idle): Submit als
                     fetch an POST /api/subscribe, ohne Reload. Ohne JS greift
                     der native Form-POST an denselben Endpoint.
                     Props: utm / formId / initialError.
+SignupSuccess.vue ← Erfolgs-Block nach dem Signup: Statuszeile, Headline,
+                    dann drei nummerierte Schritte als Ledger (Mail öffnen,
+                    Link klicken, Spam/Werbung prüfen). Eine Datei für zwei
+                    Wege — das Island rendert sie hydriert (mit „Nicht deine
+                    Adresse?"), Hero.astro im No-JS-Rückläufer als SFC ohne
+                    client-Direktive. Props: body / email / showReset.
 SignupCta.astro   ← Zweiter CTA (§6.6): H2, optionale Format-Zeile, dieselbe
                     SignupIsland mit eigener formId. Setzt den Anker
                     id="newsletter". Props: title/text/format/anchorId/formId.
@@ -30,6 +36,11 @@ AuthorCard.astro  ← Autoren-Sektion (§6.4): rundes Portrait links, Text recht
                     Prop showLink={false} auf /ueber (kein Selbst-Link).
 PullQuote.astro   ← Stimmprobe (§6.4a): echtes Zitat aus einer Ausgabe, von
                     zwei Haarlinien gerahmt, Quelle verlinkt.
+ReaderValue.astro ← Leser-Nutzen als Zeitungs-Ledger (Form wie §6.5). Copy
+                    kommt als Prop `items` von der Seite: Startseite kurz
+                    (nach den Ausgaben), /ueber lang. `accent` färbt die H2
+                    orange und ist auf beiden Seiten gesetzt: bewusste
+                    Abweichung von §2/§12. Kein Container.
 BeforeSignup.astro← „Bevor du dich einträgst" (§6.5): sechs Frage-Antwort-Paare
                     als Zeitungs-Ledger, direkt vor dem zweiten CTA.
 Footer.astro      ← Footer (§6.7): Navigation, Rechtliches, Disclaimer.
@@ -39,20 +50,12 @@ Angebotskurve.vue ← Die einzige Grafik der Marke (§5). Interaktiver Zeitregle
                     client:visible. role="slider", volle Tastaturbedienung.
 ```
 
-## Toter Code — nicht als Vorbild nehmen
-Diese drei sind nirgends mehr eingebunden und widersprechen der aktuellen Spec.
-Sie stehen noch im Repo, bis jemand sie löscht:
-
-```
-SignupForm.astro  ← alter Signup über die Action actions.subscribe. Shippt
-                    rounded-full und btn btn-primary gegen die 0px-Regel (§2).
-                    Der aktive Weg ist SignupIsland.vue → /api/subscribe.
-FooterSignup.vue  ← Footer-Signup mit Toast, spin-Animation, ohne
-                    prefers-reduced-motion. Verstößt gegen §10.
-PostCard.astro    ← Kartendarstellung einer Ausgabe. §4 verbietet Karten;
-                    die aktive Form ist IssueRow.astro.
-Faq.astro         ← natives <details>-Q&A, ersetzt durch BeforeSignup.astro.
-```
+## Gelöschter Code
+`SignupForm.astro`, `FooterSignup.vue`, `PostCard.astro` und `Faq.astro` sind
+im Juli 2026 entfernt worden: nirgends mehr eingebunden und im Widerspruch zur
+Spec (Karten, `rounded-full`, Toast ohne `prefers-reduced-motion`). Die aktiven
+Entsprechungen sind `SignupIsland.vue`, `IssueRow.astro` und
+`BeforeSignup.astro`. Wer sie sucht, findet sie in der Git-History.
 
 ## Design-Regeln für alle Komponenten
 Kurzfassung von `/DESIGN.md` §2–§5. Im Zweifel dort nachsehen.

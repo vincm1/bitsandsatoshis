@@ -817,18 +817,11 @@ verlinkt im Footer, in der Sitemap eingetragen.
 
 ### Komponenten
 
-Vier Dateien sind nirgends mehr eingebunden und widersprechen der Spec. Sie
-verwirren jeden, der sie als Vorbild liest, und gehören gelöscht:
-
-| Datei | Verstoß |
-|---|---|
-| `components/PostCard.astro` | Karten-Darstellung (§4). Aktive Form ist `IssueRow.astro` |
-| `components/SignupForm.astro` | `rounded-full` + `btn btn-primary` gegen die 0px-Regel (§2). Aktiver Weg ist `SignupIsland.vue` → `/api/subscribe` |
-| `components/FooterSignup.vue` | Toast, `animation: spin`, kein `prefers-reduced-motion` (§10) |
-| `components/Faq.astro` | ersetzt durch `BeforeSignup.astro` |
-
-Mit `SignupForm.astro` und `FooterSignup.vue` entfällt auch die letzte Nutzung
-der Action `actions.subscribe`; `actions.unsubscribe` bleibt aktiv (`/abmelden`).
+**Erledigt.** Die vier spec-widrigen Dateien (`PostCard.astro`,
+`SignupForm.astro`, `FooterSignup.vue`, `Faq.astro`) sind gelöscht. Damit ist
+auch die Action `actions.subscribe` ohne Aufrufer: sie steht noch in
+`src/actions/index.ts` und kann entfallen. `actions.unsubscribe` bleibt aktiv
+(`/abmelden`).
 
 Impressum und Datenschutz sind inzwischen bereinigt (echte Betreiber-Daten,
 kein „wir", Token-basierte Styles) und stehen nicht mehr auf der Liste.

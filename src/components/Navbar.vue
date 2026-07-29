@@ -1,10 +1,13 @@
 <!--
   Header — Sektion 6.1 der Spec (DESIGN.md).
 
-  Wortmarke links, ein einziger Textlink rechts, darunter eine Haarlinie in
-  Dust. Keine Navigation (§6.1: "Wer schon Leser ist, kommt über die E-Mail,
-  nicht über die Seite"), kein Orange (§2: der Header-Link wäre sonst ein
-  drittes oranges Element), kein Radius, kein Schatten.
+  Wortmarke links, ein einziger Textlink rechts, darunter eine Haarlinie.
+  Keine Navigation (§6.1: "Wer schon Leser ist, kommt über die E-Mail, nicht
+  über die Seite"), kein Radius, kein Schatten.
+
+  Zwei dokumentierte Abweichungen von §2 (Orange nur als Button-Hintergrund),
+  beide auf ausdrücklichen Wunsch: die Haarlinie unter dem Header und der
+  Hover-Zustand von „Abonnieren". Begründung jeweils an Ort und Stelle.
 
   Bewusst ohne <script>: §10 verbietet Scroll-Animationen und Fade-Ins, damit
   entfällt das Morphen zur Pille und die Einblendung. Ohne Nav-Links gibt es
@@ -13,7 +16,16 @@
   Browser.
 -->
 <template>
-  <header class="border-b border-dust">
+  <!-- Haarlinie in Orange statt Dust: bewusste Abweichung von §2 (Orange nur
+       als Button-Hintergrund), auf ausdrücklichen Wunsch. Sie zählt nicht
+       gegen das Orange-Budget der Seite, weil sie kein Bedienelement ist und
+       keinen Text trägt — der Kontrast von Orange auf Paper (2,3:1) trifft
+       hier also niemanden, der etwas lesen muss.
+
+       40 % Deckkraft, nicht voll: über die ganze Seitenbreite wird die volle
+       Farbe zum zweiten Blickfang neben dem Button. Abgesenkt bleibt sie ein
+       Markenakzent und ordnet sich der Haarlinien-Logik (§4) unter. -->
+  <header class="border-b border-orange/40">
     <!-- Derselbe Container wie der Hero: 1080px, 20px mobil / 32px Desktop.
          Dadurch sitzen Emblem und H1 auf exakt derselben linken Kante. -->
     <div

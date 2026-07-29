@@ -7,6 +7,7 @@ import Hero from "../components/Hero.astro";
 import IssueList from "../components/IssueList.astro";
 import AuthorCard from "../components/AuthorCard.astro";
 import PullQuote from "../components/PullQuote.astro";
+import ReaderValue from "../components/ReaderValue.astro";
 import BeforeSignup from "../components/BeforeSignup.astro";
 import SignupCta from "../components/SignupCta.astro";
 import { getPosts } from "../lib/beehiiv";
@@ -20,6 +21,24 @@ const FEATURED_ISSUE = {
   slug: "gold-vs-bitcoin-2026",
   title: "Gold vs. Bitcoin",
 };
+
+// Leser-Nutzen, Kurzfassung (§6.5-Ledger). Die lange Fassung steht auf
+// /ueber; hier je ein Satz, damit die Sektion die Liste nicht überholt.
+// Keine Abonnentenzahlen, keine Testimonials (§10).
+const READER_VALUE = [
+  {
+    title: "Du verstehst die Meldung",
+    body: "Was ein Ereignis für Bitcoin tatsächlich ändert, und was nur laut war.",
+  },
+  {
+    title: "Du weißt, wo ich stehe",
+    body: "Klare Meinung, und markiert, wo ich mir nicht sicher bin.",
+  },
+  {
+    title: "Dein Postfach bleibt ruhig",
+    body: "Eine Mail, freitags, vier Minuten. Kein Kursalarm.",
+  },
+] as const;
 
 // Bisherige Themenfelder — aus echten Ausgaben, bei neuen Feldern ergänzen.
 const TOPIC_AREAS = [
@@ -69,6 +88,18 @@ Astro.response.headers.set(
     >
       Alle Ausgaben
     </a>
+  </section>
+
+  {/* Leser-Nutzen, Kurzfassung. Steht nach den Ausgaben und vor dem Autor:
+      erst der Beweis, dann was der Leser davon hat, dann wer schreibt.
+      Haarlinie als obere Sektionsgrenze wie bei BeforeSignup. Die orange
+      Überschrift ist eine bewusste Abweichung von §2/§12: das dritte orange
+      Element der Startseite, auf Entscheidung gegen die Spec. */}
+  <section class="mx-auto max-w-[1080px] px-5 pb-16 sm:px-8">
+    <hr class="rule" />
+    <div class="measure mt-6">
+      <ReaderValue items={READER_VALUE} accent />
+    </div>
   </section>
 
   <AuthorCard />

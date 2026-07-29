@@ -3,6 +3,7 @@
 export const prerender = false;
 
 import Layout from "../layouts/Layout.astro";
+import ReaderValue from "../components/ReaderValue.astro";
 import SignupCta from "../components/SignupCta.astro";
 
 // Inhalt ändert sich nur mit Deploys — 1 h CDN-Cache.
@@ -26,6 +27,24 @@ const profileSchema = {
     knowsAbout: ["Bitcoin"],
   },
 };
+
+// Leser-Nutzen (§6.5-Ledger-Muster): drei Paare, kein „wir", keine
+// Abonnentenzahlen (§10). Jede Zeile nennt den Nutzen und belegt ihn,
+// statt ihn zu behaupten.
+const benefits = [
+  {
+    title: "Du verstehst, was die Meldung bedeutet",
+    body: "Nachrichten gibt es überall. Hier steht, was ein Ereignis für Bitcoin und für dein Geld tatsächlich ändert, und was nur laut war.",
+  },
+  {
+    title: "Du weißt, wo ich stehe",
+    body: "Ich sage dir, was ich von einem Thema halte, und markiere die Stellen, an denen ich mir nicht sicher bin. Du musst zwischen den Zeilen nichts suchen.",
+  },
+  {
+    title: "Dein Postfach bleibt ruhig",
+    body: "Eine Mail pro Woche, freitags, in vier Minuten gelesen. Kein Kursalarm, keine Sonderausgabe, kein Verkaufstrichter.",
+  },
+] as const;
 ---
 
 <Layout
@@ -37,20 +56,14 @@ const profileSchema = {
     is:inline
     set:html={JSON.stringify(profileSchema)}
   />
-  {/* Gleicher Container und gleiche linke Kante wie alle Seiten (§4).
-      Längere Fassung des Autoren-Absatzes (§7): erste Person, kein Lebenslauf,
-      keine Qualifikationsbehauptung. Das Foto ist eine der drei erlaubten
-      Bild-Ausnahmen (§5). Kein Orange außer dem Signup-Button am Ende (§2). */}
   <section class="mx-auto max-w-[1080px] px-5 pt-16 pb-16 sm:px-8">
-    {/* Kopf im AuthorCard-Muster: Portrait links, Text rechts, mobil
-        gestapelt. Eine Ebene tiefer beginnt die Prosa auf Satzbreite. */}
     <div class="about__head">
       <img
         src="/author.png"
         alt="Vincent, Autor von Bits&Satoshis"
         class="about__photo"
-        width="112"
-        height="112"
+        width="400"
+        height="400"
         loading="eager"
       />
 
@@ -68,6 +81,14 @@ const profileSchema = {
 
     {/* Ressortgrenzen wie auf der Startseite: Haarlinie über den vollen
         Container, 24px, dann die H2. 64px Abstand vor jeder Linie. */}
+    <hr class="rule about__rule" />
+    <div class="measure">
+      {/* Leser-Nutzen als Zeitungs-Ledger wie §6.5. Steht bewusst vor
+          „Wie ich arbeite" — erst was der Leser davon hat, dann meine
+          Methode. Keine Abonnentenzahl, keine Testimonials (§10). */}
+      <ReaderValue items={benefits} accent />
+    </div>
+
     <hr class="rule about__rule" />
     <div class="measure">
       <h2 class="h2 about__heading">Wie ich arbeite</h2>
@@ -108,13 +129,10 @@ const profileSchema = {
     </div>
   </section>
 
-  {/* Formular am Ende (§7), Spec-Text „Nächste Ausgabe: Freitag." (§6.6).
-      SignupCta bringt den #newsletter-Anker für die Navbar-Links mit. */}
   <SignupCta />
 </Layout>
 
 <style>
-  /* Kopf im AuthorCard-Muster: Portrait links, Text rechts (§6.4). */
   .about__head {
     display: flex;
     align-items: flex-start;
@@ -130,8 +148,8 @@ const profileSchema = {
 
   .about__photo {
     flex-shrink: 0;
-    width: 112px;
-    height: 112px;
+    width: 240px;
+    height: 240px;
     display: block;
     object-fit: cover;
     /* Kreis ist erlaubt: Portrait, kein UI-Element (§6.4) */

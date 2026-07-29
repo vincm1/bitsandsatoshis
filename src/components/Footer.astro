@@ -21,7 +21,6 @@ const links = [
   { href: "/ueber", label: "Über mich" },
   { href: "/impressum", label: "Impressum" },
   { href: "/datenschutz", label: "Datenschutz" },
-  { href: "/abmelden", label: "Abmelden" },
 ];
 
 // Wissensseiten (§7): SEO-Eingänge. Der Footer ist ihr einziger fester
@@ -80,7 +79,12 @@ const wissenLinks = [
 
       <p class="meta mt-10">
         Keine Anlageberatung. Was hier steht, ist meine Einschätzung, kein
-        Angebot und keine Empfehlung zum Kauf oder Verkauf.
+        Angebot und keine Empfehlung zum Kauf oder Verkauf. Newsletter
+        jederzeit <a
+          href="/abmelden"
+          class="underline decoration-dust underline-offset-[3px] hover:decoration-ink"
+          >abmelden</a
+        >.
       </p>
 
       <p class="meta mt-2">© {year} Bits&Satoshis · Vincent Michler</p>

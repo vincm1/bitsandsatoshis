@@ -12,6 +12,7 @@
  */
 import { track } from "@vercel/analytics";
 import { computed, ref } from "vue";
+import SignupSuccess from "./SignupSuccess.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -46,25 +47,30 @@ const successBody = computed(() =>
   message.value.replace(/^Fast fertig\.\s*/, ""),
 );
 
-// Kontext jedes Signup-Events: welches Formular auf welcher Seite. Beantwortet,
-// welcher CTA trägt. Die E-Mail-Adresse geht bewusst nicht mit.
-const trackingContext = () => ({
-  form: props.formId,
-  path: window.location.pathname,
-});
+const NETWORK_ERROR =
+  "Die Anmeldung ist gerade nicht durchgegangen. Prüf deine Verbindung und versuch es noch einmal.";
+
+/** Warum ein Versuch gescheitert ist. Landet als Property am Analytics-Event. */
+type FailureReason =
+  | "invalid_email"
+  | "rejected"
+  | "server_error"
+  | "network";
+
+/** Ergebnis eines Versuchs. Ein abgelehnter Request ist kein Sonderfall, sondern ein Ergebnis mit Grund. */
+type SubmitResult =
+  | { ok: true; message: string }
+  | { ok: false; message: string; reason: FailureReason };
 
 /** Status-Codes aus /api/subscribe: 400 ungültig, 200 mit ok:false abgelehnt, 502 Serverfehler. */
-const failureReason = (status: number) =>
-  status === 400 ? "invalid_email" : status === 200 ? "rejected" : "server_error";
+function failureReason(status: number): FailureReason {
+  if (status === 400) return "invalid_email";
+  if (status === 200) return "rejected";
+  return "server_error";
+}
 
-async function onSubmit(event: Event) {
-  if (sending.value) return;
-  sending.value = true;
-  message.value = "";
-
-  const form = event.target as HTMLFormElement;
-  const payload = new FormData(form);
-  submittedEmail.value = String(payload.get("email") ?? "");
+/** Kapselt den Transport: wirft nicht, sondern übersetzt jeden Ausgang in ein SubmitResult. */
+async function postSignup(payload: FormData): Promise<SubmitResult> {
   try {
     const res = await fetch("/api/subscribe", {
       method: "POST",
@@ -72,46 +78,52 @@ async function onSubmit(event: Event) {
       body: payload,
     });
     const data = (await res.json()) as { ok: boolean; message: string };
-    done.value = data.ok;
-    message.value = data.message;
-
-    if (data.ok) {
-      track("Signup", trackingContext());
-    } else {
-      track("Signup Failed", {
-        ...trackingContext(),
-        reason: failureReason(res.status),
-      });
-    }
+    return data.ok
+      ? { ok: true, message: data.message }
+      : { ok: false, message: data.message, reason: failureReason(res.status) };
   } catch {
-    message.value =
-      "Die Anmeldung ist gerade nicht durchgegangen. Prüf deine Verbindung und versuch es noch einmal.";
-    track("Signup Failed", { ...trackingContext(), reason: "network" });
-  } finally {
-    sending.value = false;
+    return { ok: false, message: NETWORK_ERROR, reason: "network" };
   }
+}
+
+// Genau ein Event pro Versuch, mit Formular und Seite: beantwortet, welcher CTA
+// trägt und woran die anderen scheitern. Die E-Mail-Adresse geht bewusst nicht mit.
+function trackOutcome(result: SubmitResult) {
+  const context = { form: props.formId, path: window.location.pathname };
+  if (result.ok) {
+    track("Signup", context);
+  } else {
+    track("Signup Failed", { ...context, reason: result.reason });
+  }
+}
+
+async function onSubmit(event: Event) {
+  if (sending.value) return;
+  sending.value = true;
+  message.value = "";
+
+  const payload = new FormData(event.target as HTMLFormElement);
+  submittedEmail.value = String(payload.get("email") ?? "");
+
+  const result = await postSignup(payload);
+  done.value = result.ok;
+  message.value = result.message;
+  sending.value = false;
+
+  trackOutcome(result);
 }
 </script>
 
 <template>
-  <!-- Erfolg ersetzt das Formular: Ink-Rahmen statt Farbfläche (§4/§5),
-       Display-Headline macht den Zustand unübersehbar. -->
-  <div v-if="done" class="mt-6 border border-ink p-6" role="status">
-    <p class="font-display text-[17px] uppercase leading-none text-ink">
-      Fast fertig.
-    </p>
-    <p class="mt-3 text-[16px] leading-[1.65] text-ink">{{ successBody }}</p>
-    <p v-if="submittedEmail" class="mt-3 text-[16px] leading-[1.65] text-ink">
-      Wir haben geschrieben an
-      <span class="font-medium">{{ submittedEmail }}</span>.
-      <button type="button" class="reset-link" @click="reset">
-        Nicht deine Adresse?
-      </button>
-    </p>
-    <p class="meta mt-3">
-      Keine Mail? Schau im Spam-Ordner nach und zieh sie ins Hauptpostfach.
-    </p>
-  </div>
+  <!-- Erfolg ersetzt das Formular. Markup in SignupSuccess.vue, weil der
+       No-JS-Weg in Hero.astro denselben Block zeigen muss. -->
+  <SignupSuccess
+    v-if="done"
+    :body="successBody"
+    :email="submittedEmail"
+    show-reset
+    @reset="reset"
+  />
 
   <form
     v-else
@@ -199,27 +211,6 @@ async function onSubmit(event: Event) {
   outline: 1px solid var(--c-ink);
   outline-offset: 0;
   border-color: var(--c-ink);
-}
-
-/**
- * Rückweg aus dem Erfolgs-Block. Ein <button> und kein <a>, weil nichts
- * navigiert wird; die Affordanz ist trotzdem die der übrigen Textlinks
- * (Dust-Unterstrich, Hover Ink), damit die Seite nur eine Link-Sprache hat.
- */
-.reset-link {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: var(--c-dust);
-  text-underline-offset: 3px;
-}
-
-.reset-link:hover {
-  text-decoration-color: var(--c-ink);
 }
 
 /** Dieselbe Affordanz wie jeder Textlink der Seite (§2). */

@@ -1,0 +1,113 @@
+---
+/**
+ * Leser-Nutzen als Zeitungs-Ledger — dieselbe Form wie BeforeSignup (§6.5):
+ * links der Nutzen (Display, 17px), rechts der Beleg (Satoshi, 15px),
+ * Haarlinien in Dust dazwischen. Keine Karten, keine Icons.
+ *
+ * Zwei Fassungen aus einer Datei: /ueber zeigt die lange (ein Satz plus
+ * Begründung), die Startseite die Kurzfassung. Die Copy kommt als Prop von
+ * der Seite, damit hier keine zweite Textquelle entsteht.
+ *
+ * Bringt bewusst keinen Container mit (wie IssueList) — die Seite setzt
+ * Sektion, Haarlinie und Satzbreite.
+ */
+interface Props {
+  /** Überschrift der Sektion (H2). */
+  title?: string;
+  /** Nutzen-Paare: links die Zeile, rechts der Beleg. */
+  items: readonly { title: string; body: string }[];
+  /**
+   * Überschrift in Orange. Bewusste Abweichung von §2 (Orange nur als
+   * Button-Hintergrund) und §12 (zwei orange Elemente auf der Startseite),
+   * auf beiden Seiten gesetzt.
+   */
+  accent?: boolean;
+}
+
+const { title = "Was du davon hast", items, accent = false } = Astro.props;
+---
+
+<h2 class:list={["h2", "reader-value__title", accent && "reader-value__title--accent"]}>
+  {title}
+</h2>
+
+<dl class="reader-value__list">
+  {
+    items.map((item, index) => (
+      <div
+        class:list={["reader-value__row", index > 0 && "reader-value__row--ruled"]}
+      >
+        <dt class="reader-value__term">{item.title}</dt>
+        <dd class="reader-value__desc">{item.body}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  /* Größe und Schnitt kommen aus .h2 (§3) — hier nur der Abstand. */
+  .reader-value__title {
+    margin-top: 0;
+  }
+
+  /* Bewusste Abweichung von §2: Orange sonst nur als Button-Hintergrund.
+     Bleibt der einzige farbige Text der Marke, sonst verlieren die
+     Signup-Buttons ihre Sonderstellung. */
+  .reader-value__title--accent {
+    color: var(--c-orange);
+  }
+
+  .reader-value__list {
+    margin: var(--sp-2) 0 0;
+    padding: 0;
+  }
+
+  .reader-value__row {
+    padding: var(--sp-3) 0;
+  }
+
+  /* Die Überschrift bringt den Abstand nach oben schon mit */
+  .reader-value__row:first-child {
+    padding-top: 0;
+  }
+
+  .reader-value__row--ruled {
+    border-top: 1px solid var(--c-dust);
+  }
+
+  /* Ledger ab sm: Nutzen links in fester Spalte, Beleg rechts.
+     Gesamtbreite bleibt innerhalb der 620px-Satzbreite (§4). */
+  @media (min-width: 640px) {
+    .reader-value__row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      column-gap: var(--sp-4);
+      align-items: start;
+    }
+  }
+
+  /* 17px ist die Untergrenze für die Display-Schrift (§3) */
+  .reader-value__term {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--c-ink);
+  }
+
+  /* Fließtext ist immer Ink, nie Stone (§2) */
+  .reader-value__desc {
+    font-family: var(--f-body);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--c-ink);
+    margin: var(--sp-1) 0 0;
+  }
+
+  @media (min-width: 640px) {
+    .reader-value__desc {
+      margin-top: 0;
+    }
+  }
+</style>

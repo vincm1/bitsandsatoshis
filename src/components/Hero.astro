@@ -9,6 +9,8 @@
  * hierher zurückleitet.
  */
 import SignupIsland from "./SignupIsland.vue";
+// SFC ohne client-Direktive: rendert statisch, lädt kein Vue in den Browser.
+import SignupSuccess from "./SignupSuccess.vue";
 import Angebotskurve from "./Angebotskurve.vue";
 
 // No-JS-Rückläufer + UTM aus der aktuellen URL (Seite läuft SSR).
@@ -27,40 +29,20 @@ const utm = Object.fromEntries(
 ) as Record<string, string>;
 ---
 
-<!-- Exakt derselbe Container wie der Header (1080px, px-5 sm:px-8), damit
-     Wortmarke und H1 auf derselben linken Kante sitzen. Textblock darin
-     linksbündig, nie zentriert, 620px Satzbreite (§4).
-
-     pt-16 = 64px Abstand zwischen Haarlinie und Eyebrow. -->
 <section class="mx-auto max-w-[1080px] px-5 sm:px-8">
-  <!-- Ab lg zwei Spalten: Text 58 %, Grafik 42 %. Die Textspalte bleibt damit
-       bei rund 590px und somit unter der 620px-Satzbreite aus §4 — die
-       Ein-Spalten-Regel gilt dem Lesefluss, nicht dem Beiwerk daneben.
-
-       Unter lg stapelt es. Die Grafik steht im DOM nach dem Formular, damit
-       sie es auf 375px nicht unter die Falte drückt (§12). -->
   <div
     class="grid gap-10 pt-16 pb-16 lg:grid-cols-[minmax(0,58%)_minmax(0,42%)] lg:items-center lg:gap-10"
   >
     <div class="max-w-[620px]">
       <p class="eyebrow">Bitcoin, Geld und Politik · jeden Freitag</p>
 
-      <!-- Der Umbruch ist gesetzt, nicht berechnet: die Pointe steht auf einer
-           eigenen Zeile, sonst verliert sie ihren Absatz. -->
       <h1 class="h1 h1-hero mt-2 text-balance">
         <span class="text-orange">Bitcoin</span> besitzen ist einfach.<br
         />Verstehen nicht.
       </h1>
 
-      <!-- Byline wie in einer Zeitung: macht das „Ich" der Subline zum
-           benannten Absender, bevor der Autor-Block weiter unten vertieft. -->
       <p class="meta mt-2">Von Vincent Michler</p>
 
-      <!-- Subline auf 480px (§6.2), Formular auf voller Satzbreite. Ein
-           schmaleres Formular sieht aufgeräumter aus, macht aber das einzige
-           Element kleiner, auf das die Seite hinarbeitet (§1).
-           Text: Zielgruppe (schon mit Bitcoin beschäftigt, will Tiefe) +
-           Ergebnis + Differenzierung „mit klarer Meinung" — nicht Prozess. -->
       <p class="mt-4 max-w-[480px] text-[15px] leading-[1.65] text-ink text-pretty">
         Du weißt, was Bitcoin ist. Jetzt willst du wissen, was es bedeutet.
         Jeden Freitag ein Thema, zu Ende gedacht, mit klarer Meinung.
@@ -68,27 +50,13 @@ const utm = Object.fromEntries(
 
       {
         success ? (
-          <div class="mt-6 border border-ink p-6" role="status">
-            <p class="font-display text-[17px] uppercase leading-none text-ink">
-              Fast fertig.
-            </p>
-            <p class="mt-3 text-[16px] leading-[1.65] text-ink">
-              Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist.
-            </p>
-            <p class="meta mt-3">
-              Keine Mail? Schau im Spam-Ordner nach — und zieh sie ins
-              Hauptpostfach.
-            </p>
-          </div>
+          <SignupSuccess body="Bestätige die Anmeldung in der Mail, die gerade rausgegangen ist." />
         ) : (
           <SignupIsland client:idle utm={utm} initialError={noJsError} />
         )
       }
     </div>
 
-    <!-- startJahr kommt vom Server, damit SSR und Hydrierung denselben Wert
-         sehen. client:visible, weil die Grafik ohne Interaktion vollständig
-         als SVG dasteht — das JS wird erst gebraucht, wenn jemand zieht. -->
     <Angebotskurve client:visible kompakt startJahr={new Date().getFullYear()} />
   </div>
 </section>
