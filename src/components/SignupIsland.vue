@@ -10,6 +10,7 @@
  *
  * Ein Feld, ein oranges Element (Button-BG), border-radius 0, Fokus-Ring Ink.
  */
+import { track } from "@vercel/analytics";
 import { computed, ref } from "vue";
 
 const props = withDefaults(
@@ -45,6 +46,17 @@ const successBody = computed(() =>
   message.value.replace(/^Fast fertig\.\s*/, ""),
 );
 
+// Kontext jedes Signup-Events: welches Formular auf welcher Seite. Beantwortet,
+// welcher CTA trägt. Die E-Mail-Adresse geht bewusst nicht mit.
+const trackingContext = () => ({
+  form: props.formId,
+  path: window.location.pathname,
+});
+
+/** Status-Codes aus /api/subscribe: 400 ungültig, 200 mit ok:false abgelehnt, 502 Serverfehler. */
+const failureReason = (status: number) =>
+  status === 400 ? "invalid_email" : status === 200 ? "rejected" : "server_error";
+
 async function onSubmit(event: Event) {
   if (sending.value) return;
   sending.value = true;
@@ -62,9 +74,19 @@ async function onSubmit(event: Event) {
     const data = (await res.json()) as { ok: boolean; message: string };
     done.value = data.ok;
     message.value = data.message;
+
+    if (data.ok) {
+      track("Signup", trackingContext());
+    } else {
+      track("Signup Failed", {
+        ...trackingContext(),
+        reason: failureReason(res.status),
+      });
+    }
   } catch {
     message.value =
       "Die Anmeldung ist gerade nicht durchgegangen. Prüf deine Verbindung und versuch es noch einmal.";
+    track("Signup Failed", { ...trackingContext(), reason: "network" });
   } finally {
     sending.value = false;
   }
